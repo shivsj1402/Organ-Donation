@@ -21,12 +21,12 @@ RUN apk add --update build-base gcc python-dev \
 
 # Copying required files
 COPY ./setup.py /home/organdonation/
-COPY ./runserver.py /home/organdonation/
-COPY ./frontend /home/organdonation/frontend
+COPY ./app.py /home/organdonation/
+COPY ./organdonationwebapp /home/organdonation/organdonationwebapp
 
 # Running initial setup
 WORKDIR /home/organdonation
 
 ENTRYPOINT ["python"]
-CMD ["runserver.py"]
+CMD ["app.py"]
 
