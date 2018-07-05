@@ -7,11 +7,11 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <title> Receiver Profile</title>
+    <title>Request Page</title>
 </head>
 <body style="background-color:#f1f2f6">
 <div class="container" style="text-align: center">
-<h4>Receiver Profile</h4>
+<h4>Request Page</h4>
 </div>
 <div class= "container" >
     <div class="row justify-content-md-center">
@@ -69,7 +69,7 @@
                                  </div>
                                 <div class="col-xs-9 col-sm-9 col-md-9">
                                     <div class="form-group">
-                                        <input type="text" name="Organ" id="Organ" class="form-control" placeholder="Dummy Organ    ">
+                                        <input type="text" name="Organ" id="Organ" class="form-control" placeholder="Dummy Organ">
                                     </div>
                                  </div>
                                 <div class="col-xs-3 col-sm-3 col-md-3">
@@ -85,38 +85,54 @@
                                     </div>
 					             </div>
                                 <div class="form-group">
-                                   <button type="submit" class="btn btn-primary">Submit</button>
+                                  <input type="button" class="btn btn-primary" value="Delete Request" onclick="location.href='#'"/>
                                 </div>
                             </div>
                         </div>
                      </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="form-group">
-                            <label>Recommended Donors</label>
-                            <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <label>Item 1</label>
+                            <label>Contact Donor</label>
+                             <div class="row">
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <label>Send Email :</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" name="Demail" id="Demail" class="form-control" placeholder="Dummy Email">
+                                    </div>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                     <input type="button" class="btn btn-primary" value="Send Email" onclick="location.href='#'"/>
+                                </div>
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <label>Contact Phone :</label>
+                                </div>
+                                <div class="col-xs-9 col-sm-9 col-md-9">
+                                    <div class="form-group">
+                                        <input type="text" name="Dphone" id="Dphone" class="form-control" placeholder="Dummy Phone Number">
+                                    </div>
+                                 </div>
                             </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
+
+                             <div class="row">
+                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                    <div class="form-group">
+                                        <label>Medical Reports:</label>
+                                    </div>
+                                 </div>
+                                <div class="col-lg-9">
+                                    <div class="form-group">
+						                <input type="file" id="file1" class="btn button"/>
+                                        <input type="file" id="file1" class="btn button"/>
+                                        <input type="file" id="file1" class="btn button"/>
+                                    </div>
+					             </div>
+                                 <div class="form-group">
+                                  <input type="button" class="btn btn-primary" value="Delete Request" onclick="location.href='#'"/>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <label>Item 2</label>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <label>Item 3</label>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
-                            </div>
-                        </div>
+
                         </div>
                      </div>
                 </div>
