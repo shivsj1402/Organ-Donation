@@ -71,14 +71,41 @@ def Signin():
 				# Fetch all the rows in a list of lists.
 				results = cursor.fetchall()
 				for row in results:
-				userFirstName = row[0]
-				userLastName = row[1]
-				# Now print fetched result
-				print ("userFirstName=%s,userLastName=%s" % (userFirstName, userLastName))
-				print ("New userFirstName=,userLastName=" % (userFirstName, userLastName))
+					userFirstName = row[0]
+					userLastName = row[1]
+					# Now print fetched result
+					print ("userFirstName=%s,userLastName=%s" % (userFirstName, userLastName))
+					print ("New userFirstName=,userLastName=" % (userFirstName, userLastName))
 			except:
 				print (“Value Fetch properly”)
 
+
+@app.route("/DonorReceiverRequest.html", methods=['GET','POST'])
+def DonorReceiverRequest():
+    if request.method == 'GET':
+        try:
+        	emailID = request.form['emailID']
+        	password = request.form['password']
+            # Open database connection
+            db = MySQLdb.connect("db-5308.cs.dal.ca","CSCI5308_16_DEVINT_USER","CSCI5308_16_DEVINT_16175","CSCI5308_16_DEVINT")
+
+			# prepare a cursor object using cursor() method
+			cursor = db.cursor()
+
+			# Select Query Example :- Selecting data from the table.
+			sql = "SELECT * FROM user WHERE emailID = %s"
+			try:
+				# Execute the SQL command
+				cursor.execute(sql)
+				# Fetch all the rows in a list of lists.
+				results = cursor.fetchall()
+				for row in results:
+					userFirstName = row[0]
+					# Now print fetched result
+					print ("emailID=%s" % (emailID))
+					print ("New password=" % (password))
+			except:
+				print (“Value Fetch properly”)
 
 
 # Launching server

@@ -21,3 +21,7 @@ def takeToAdmin():
 @app.route('/signup', methods=['GET'])
 def registerHospital():
     return render_template('signup.html')
+
+@app.route('/hospitaldonor', methods=['GET'])
+def hospitalDonorPage():
+    return render_template('DonorReceiverRequest.html')
