@@ -1,6 +1,6 @@
-# Organ Donation (Group16)
+# Organ Donation (Group16) 
 
-# OverView
+## OverView
 
 "Half of all Canadians are fit to donate blood, but only 1 in 60 Canadians gave blood last year. Our organ donation rates are also lower than many countries, including the United States."[1] This fact alone tells the reality of organ donation in Canada. The truth about organ donation is same in the rest of the world. In 2016, 260 people died in Canada due to lack of the organ transplant [1]. One of the primary reason behind 260 deaths, is lack of the centralised system that covers hospitals in pan Canada with information of organ donors and receivers. There are many government and non-profit organisation which survey the Canadian and found that ninety percent are in agreement to donate an organ. However, only twenty percent have pledged to register for the organ donation. According to doctors a single donor can save more than eight lives and benefit 75 other people. In 2016, 1717 fatal road accidents occurred in 2016[2], organs from these people could have saved many lives.
 
