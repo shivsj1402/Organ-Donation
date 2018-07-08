@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, session, url_for, g
 import mysql.connector
 from organdonationwebapp import app
 
@@ -24,51 +24,49 @@ def donorReceiverRequest():
 
 @app.route('/hospitalHome', methods=['GET'])
 def hospitalHome():
-    return render_template('hospitalHome.html')
+    if g.user:
+        if request.method == 'GET':
+            sqlcnx = mysql.connector.connect(user='CSCI5308_16_DEVINT_USER',password='CSCI5308_16_DEVINT_16175',host='db-5308.cs.dal.ca',database='CSCI5308_16_DEVINT')
+            cursor2 = sqlcnx.cursor()
+            query2 = """SELECT  * FROM user where donationType='d'"""
+            cursor2.execute(query2)
+            res2 = cursor2.fetchall()
+            cursor3 = sqlcnx.cursor()
+            query3 = """SELECT  * FROM user where donationType='r'"""
+            cursor3.execute(query3)
+            res3 = cursor3.fetchall()
+        return render_template('hospitalHome.html',donor=res2, receiver=res3)
+    return redirect(url_for('hospitalLogin'))
 
-@app.route('/hospitalLogin', methods=['GET','POST'])
+@app.route('/loginPage', methods=['GET','POST'])
 def hospitalLogin():
     if request.method == 'POST':
         hospitaldata = request.form
         email =hospitaldata['hemail']
         password =hospitaldata['hpassword']
-
+        session.pop('user', None)
         sqlcnx = mysql.connector.connect(user='CSCI5308_16_DEVINT_USER',password='CSCI5308_16_DEVINT_16175',host='db-5308.cs.dal.ca',database='CSCI5308_16_DEVINT')
         cursor1 = sqlcnx.cursor()
         query = """SELECT  * FROM hospital where emailID=%s  AND password=%s"""
         cursor1.execute(query,(email, password))
         res = cursor1.fetchone()
-        cursor2 = sqlcnx.cursor()
-        query2 = """SELECT  * FROM user where donationType='d'"""
-        cursor2.execute(query2)
-        res2 = cursor2.fetchall()
-        cursor3 = sqlcnx.cursor()
-        query3 = """SELECT  * FROM user where donationType='r'"""
-        cursor3.execute(query3)
-        res3 = cursor3.fetchall()
-
         if(res):
-            return render_template('hospitalHome.html',result=res, donor=res2, receiver=res3)
+            session['user']= email
+            return redirect(url_for('hospitalHome'))
         else:   
             return "Please register"
-    return render_template('hospitalLogin.html')
+    return render_template('loginPage.html')
 
-# @app.route('/retrival')
-# def retrival():
-#     sqlcnx = mysql.connector.connect(user='CSCI5308_16_DEVINT_USER',password='CSCI5308_16_DEVINT_16175',host='db-5308.cs.dal.ca',database='CSCI5308_16_DEVINT')
-#     cursor1 = sqlcnx.cursor()
-#     query = """SELECT  * FROM hospital"""
-#     result = cursor1.execute(query)
-#     hospitaldata = cursor1.fetchall()
-#     return render_template('retrival.html',hospitaldata=hospitaldata )
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
+
 
 @app.route('/hospitalRegestration', methods=['GET'])
 def hospitalRegestration():
     return render_template('hospitalRegestration.html')
-
-@app.route('/loginPage', methods=['GET'])
-def loginPage():
-    return render_template('loginPage.html')
 
 @app.route('/receiverList', methods=['GET'])
 def receiverList():
