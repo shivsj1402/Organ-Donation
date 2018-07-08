@@ -1,13 +1,6 @@
-from flask import Flask, render_template
-from organdonationwebapp import app
-
-@app.route('/helloworld', methods=['GET'])
-def takeToHelloWorld():
-    return "<p>hello world whats up? hello</p>"
-
-@app.route('/adminLogin', methods=['GET'])
-def adminPortalLogin():
-    return render_template('adminLogin.html')
+from flask import Flask, render_template, request, redirect, url_for
+from organdonationwebapp import app, sc
+import mysql.connector
 
 @app.route('/adminHome', methods=['GET'])
 def adminPortalHome():
@@ -49,6 +42,30 @@ def receiverProfile():
 def requestFinal():
     return render_template('requestFinal.html')
 
-@app.route('/signUp', methods=['GET'])
-def signUp():
-    return render_template('signUp.html')
+@app.route('/signup', methods=['GET'])
+def registerHospital():
+    return render_template('signup.html')
+
+@app.route('/hospitaldonor', methods=['GET'])
+def hospitalDonorPage():
+    return render_template('DonorReceiverRequest.html')
+
+@app.route('/adminlogin', methods=['GET','POST'])
+def adminLoginPage():
+    if request.method == 'POST':
+        hospitaldata = request.form
+        email =hospitaldata['emailID']
+        password =hospitaldata['password']
+        user = sc.adminLoginAuthentication(email, password)
+        if(user):
+            return redirect(url_for('adminHomepage', username=user))
+        else:
+            return 'Authentication failed!!'
+    return render_template('adminlogin.html')
+
+@app.route('/adminhome/<username>', methods=['GET','POST'])
+def adminHomepage(username=None):
+    hospitallist = sc.getHospitalList()
+    if(hospitallist):
+        return render_template('adminhome.html', list=hospitallist,username=username)
+    return render_template('adminhome.html', username=username)

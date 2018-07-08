@@ -1,6 +1,7 @@
 #Load up the app
 from organdonationwebapp import app
 
+
 # Launching server
 if __name__ == '__main__':
     import os
