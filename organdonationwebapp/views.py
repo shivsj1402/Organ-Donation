@@ -1,18 +1,12 @@
 from flask import Flask, render_template, request, redirect, session, url_for, g
+from organdonationwebapp import app, sc
 import mysql.connector
-from organdonationwebapp import app
 
-@app.route('/helloworld', methods=['GET'])
-def takeToHelloWorld():
-    return "<p>hello world</p>"
-
-@app.route('/adminLogin', methods=['GET'])
-def adminPortalLogin():
-    return render_template('adminLogin.html')
-
-@app.route('/adminHome', methods=['GET'])
-def adminPortalHome():
-    return render_template('adminHome.html')
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
 
 @app.route('/donorList', methods=['GET'])
 def donorList():
@@ -21,48 +15,6 @@ def donorList():
 @app.route('/donorReceiverRequest', methods=['GET'])
 def donorReceiverRequest():
     return render_template('donorReceiverRequest.html')
-
-@app.route('/hospitalHome', methods=['GET'])
-def hospitalHome():
-    if g.user:
-        if request.method == 'GET':
-            sqlcnx = mysql.connector.connect(user='CSCI5308_16_DEVINT_USER',password='CSCI5308_16_DEVINT_16175',host='db-5308.cs.dal.ca',database='CSCI5308_16_DEVINT')
-            cursor2 = sqlcnx.cursor()
-            query2 = """SELECT  * FROM user where donationType='d'"""
-            cursor2.execute(query2)
-            res2 = cursor2.fetchall()
-            cursor3 = sqlcnx.cursor()
-            query3 = """SELECT  * FROM user where donationType='r'"""
-            cursor3.execute(query3)
-            res3 = cursor3.fetchall()
-        return render_template('hospitalHome.html',donor=res2, receiver=res3)
-    return redirect(url_for('hospitalLogin'))
-
-@app.route('/loginPage', methods=['GET','POST'])
-def hospitalLogin():
-    if request.method == 'POST':
-        hospitaldata = request.form
-        email =hospitaldata['hemail']
-        password =hospitaldata['hpassword']
-        session.pop('user', None)
-        sqlcnx = mysql.connector.connect(user='CSCI5308_16_DEVINT_USER',password='CSCI5308_16_DEVINT_16175',host='db-5308.cs.dal.ca',database='CSCI5308_16_DEVINT')
-        cursor1 = sqlcnx.cursor()
-        query = """SELECT  * FROM hospital where emailID=%s  AND password=%s"""
-        cursor1.execute(query,(email, password))
-        res = cursor1.fetchone()
-        if(res):
-            session['user']= email
-            return redirect(url_for('hospitalHome'))
-        else:   
-            return "Please register"
-    return render_template('loginPage.html')
-
-@app.before_request
-def before_request():
-    g.user = None
-    if 'user' in session:
-        g.user = session['user']
-
 
 @app.route('/hospitalRegestration', methods=['GET'])
 def hospitalRegestration():
@@ -80,6 +32,54 @@ def receiverProfile():
 def requestFinal():
     return render_template('requestFinal.html')
 
-@app.route('/signUp', methods=['GET'])
-def signUp():
-    return render_template('signUp.html')
+@app.route('/signup', methods=['GET'])
+def registerHospital():
+    return render_template('signup.html')
+
+@app.route('/hospitaldonor', methods=['GET'])
+def hospitalDonorPage():
+    return render_template('DonorReceiverRequest.html')
+
+@app.route('/adminlogin', methods=['GET','POST'])
+def adminLoginPage():
+    if request.method == 'POST':
+        hospitaldata = request.form
+        email =hospitaldata['emailID']
+        password =hospitaldata['password']
+        user = sc.adminLoginAuthentication(email, password)
+        if(user):
+            return redirect(url_for('adminHomepage', username=user))
+        else:
+            return 'Authentication failed!!'
+    return render_template('adminlogin.html')
+
+@app.route('/adminhome/<username>', methods=['GET','POST'])
+def adminHomepage(username=None):
+    hospitallist = sc.getHospitalList()
+    if(hospitallist):
+        return render_template('adminhome.html', list=hospitallist,username=username)
+    return render_template('adminhome.html', username=username)
+
+@app.route('/hospitalHome', methods=['GET'])
+def hospitalHome():
+    if g.user:
+        if request.method == 'GET':
+            res2 = sc.getHospitalDonorList()
+            res3 = sc.getHospitalReceiverList()
+        return render_template('hospitalHome.html',donor=res2, receiver=res3)
+    return redirect(url_for('hospitalLogin'))
+
+@app.route('/loginPage', methods=['GET','POST'])
+def hospitalLogin():
+    if request.method == 'POST':
+        hospitaldata = request.form
+        email =hospitaldata['hemail']
+        password =hospitaldata['hpassword']
+        session.pop('user', None)
+        res = sc.hospitalLoginAuthentication(email,password)
+        if(res):
+            session['user']= email
+            return redirect(url_for('hospitalHome'))
+        else:   
+            return "Please register"
+    return render_template('loginPage.html')
