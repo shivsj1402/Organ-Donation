@@ -26,7 +26,3 @@ COPY ./organdonationwebapp /home/organdonation/organdonationwebapp
 
 # Running initial setup
 WORKDIR /home/organdonation
-
-ENTRYPOINT ["python"]
-CMD ["app.py"]
-
