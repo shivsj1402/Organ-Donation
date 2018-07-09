@@ -1,5 +1,5 @@
 #Load up the app
-from organdonationwebapp import app
+from organdonationwebapp import app, sc
 
 
 # Launching server
@@ -10,4 +10,11 @@ if __name__ == '__main__':
         PORT = int(os.environ.get('SERVER_PORT', '5000'))
     except ValueError:
         PORT = 5555
-    app.run(HOST, PORT, debug=True)
+    try:
+    	app.run(HOST, PORT, debug=True)
+    except Exception as err:
+    	sc.closeDBConnection()
+    	print ("Something went wrong running the app")
+    finally:
+    	sc.closeDBConnection()
+    	print ("Closing Database connection suucessfully")

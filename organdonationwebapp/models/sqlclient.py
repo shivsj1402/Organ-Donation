@@ -15,13 +15,18 @@ class SqlClient(object):
             print("Successfully connected to Database")
             return 
         except Exception as err:
-            print("Error in connecting to Database")
+            print("Error connecting to Database")
             exit(1)
 
     def adminLoginAuthentication(self,email,password):
         query = """SELECT emailID FROM admin WHERE emailID= %s AND password= %s"""
         self.cursor.execute(query,(email, password))
         user1 = self.cursor.fetchone()
+        #self.cursor.close()
+        if not self.connection.is_connected():
+            print("Database connection closed successfully - adminLoginAuthentication")
+        else:
+            print("Database connection is active - adminLoginAuthentication")
         if(user1):
             return user1[0]
         else:
@@ -31,7 +36,17 @@ class SqlClient(object):
         query = """SELECT emailID FROM hospital"""
         self.cursor.execute(query)
         hospitallist = self.cursor.fetchall()
+        #self.cursor.close()
+        if not self.connection.is_connected():
+            print("Database connection closed successfully - getHospitalList")
+        else:
+            print("Database connection is active - getHospitalList")
         if(hospitallist):
             return hospitallist
         else:
             return None
+
+
+    def closeDBConnection(self):
+        self.cursor.close()
+        self.connection.close()
