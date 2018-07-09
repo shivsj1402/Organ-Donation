@@ -1,4 +1,3 @@
-#Load up the app
 from organdonationwebapp import app
 
 # Launching server

@@ -13,6 +13,11 @@
 <div class="container" style="text-align: center">
 <h4>Admin Home</h4>
 </div>
+
+<div class="container" style="text-align: center">
+<h4>Welcome, {{username}}</h4>
+</div>
+
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-12">
@@ -66,37 +71,16 @@
                         </div>
                      </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <label>Hospital1</label>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="btn btn-primary" value="Delete" onclick="location.href='#'"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <label>Hospital2</label>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="btn btn-primary" value="Delete" onclick="location.href='#'"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <label>Hospital3</label>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="btn btn-primary" value="Delete" onclick="location.href='#'"/>
-                            </div>
-                        </div>
-                     </div>
+                        <ol>
+                            {% for item in list %}
+                                <li> {{ item[0] }} </li>
+                            {% endfor %}
+                        </ol>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
-
 </body>
 </html>
