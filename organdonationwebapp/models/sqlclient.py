@@ -35,3 +35,30 @@ class SqlClient(object):
             return hospitallist
         else:
             return None
+    
+    def getHospitalDonorList(self):
+        query = """SELECT  * FROM user where donationType='d'"""
+        self.cursor.execute(query)
+        donorlist= self.cursor.fetchall()
+        if(donorlist):
+            return donorlist
+        else:
+            return None
+
+    def getHospitalReceiverList(self):
+        query = """SELECT  * FROM user where donationType='r'"""
+        self.cursor.execute(query)
+        receiverlist= self.cursor.fetchall()
+        if(receiverlist):
+            return receiverlist
+        else:
+            return None
+
+    def hospitalLoginAuthentication(self,hemail,hpassword):
+        query = """SELECT  * FROM hospital where emailID=%s  AND password=%s"""
+        self.cursor.execute(query,(hemail, hpassword))
+        result = self.cursor.fetchone()
+        if(result):
+            return result
+        else:
+            return None

@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, session, url_for, g
 from organdonationwebapp import app, sc
 import mysql.connector
 
-@app.route('/adminHome', methods=['GET'])
-def adminPortalHome():
-    return render_template('adminHome.html')
+@app.before_request
+def before_request():
+    g.user = None
+    if 'user' in session:
+        g.user = session['user']
 
 @app.route('/donorList', methods=['GET'])
 def donorList():
@@ -14,21 +16,9 @@ def donorList():
 def donorReceiverRequest():
     return render_template('donorReceiverRequest.html')
 
-@app.route('/hospitalHome', methods=['GET'])
-def hospitalHome():
-    return render_template('hospitalHome.html')
-
-@app.route('/hospitalLogin', methods=['GET'])
-def hospitalLogin():
-    return render_template('hospitalLogin.html')
-
 @app.route('/hospitalRegestration', methods=['GET'])
 def hospitalRegestration():
     return render_template('hospitalRegestration.html')
-
-@app.route('/loginPage', methods=['GET'])
-def loginPage():
-    return render_template('loginPage.html')
 
 @app.route('/receiverList', methods=['GET'])
 def receiverList():
@@ -69,3 +59,27 @@ def adminHomepage(username=None):
     if(hospitallist):
         return render_template('adminhome.html', list=hospitallist,username=username)
     return render_template('adminhome.html', username=username)
+
+@app.route('/hospitalHome', methods=['GET'])
+def hospitalHome():
+    if g.user:
+        if request.method == 'GET':
+            res2 = sc.getHospitalDonorList()
+            res3 = sc.getHospitalReceiverList()
+        return render_template('hospitalHome.html',donor=res2, receiver=res3)
+    return redirect(url_for('hospitalLogin'))
+
+@app.route('/loginPage', methods=['GET','POST'])
+def hospitalLogin():
+    if request.method == 'POST':
+        hospitaldata = request.form
+        email =hospitaldata['hemail']
+        password =hospitaldata['hpassword']
+        session.pop('user', None)
+        res = sc.hospitalLoginAuthentication(email,password)
+        if(res):
+            session['user']= email
+            return redirect(url_for('hospitalHome'))
+        else:   
+            return "Please register"
+    return render_template('loginPage.html')
