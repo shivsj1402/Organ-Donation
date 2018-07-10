@@ -10,7 +10,11 @@ def before_request():
 
 @app.route('/donorList', methods=['GET'])
 def donorList():
-    return render_template('donorList.html')
+    if g.user:
+        if request.method == 'GET':
+            dlist= sc.getDonorList()
+            return render_template('donorList.html', dlist=dlist)
+    return redirect(url_for('hospitalLogin'))
 
 @app.route('/donorReceiverRequest', methods=['GET'])
 def donorReceiverRequest():
@@ -22,7 +26,11 @@ def hospitalRegistration():
 
 @app.route('/receiverList', methods=['GET'])
 def receiverList():
-    return render_template('receiverList.html')
+    if g.user:
+        if request.method == 'GET':
+            rlist= sc.getReceiverList()
+            return render_template('receiverList.html', rlist=rlist)
+    return redirect(url_for('hospitalLogin'))
 
 @app.route('/receiverProfile', methods=['GET'])
 def receiverProfile():
@@ -60,14 +68,18 @@ def adminHomepage(username=None):
         return render_template('adminhome.html', list=hospitallist,username=username)
     return render_template('adminhome.html', username=username)
 
-@app.route('/hospitalHome', methods=['GET'])
+@app.route('/hospitalHome', methods=['GET','POST'])
 def hospitalHome():
     if g.user:
         hemail=g.user
         hname=sc.getHospitalName(hemail)
-        if request.method == 'GET':
-            res2 = sc.getHospitalDonorList(hname[0])
-            res3 = sc.getHospitalReceiverList(hname[0])
+        if request.method == 'POST':
+            if(request.form['submit']=='View Donor List'):
+                return redirect(url_for('donorList'))
+            elif(request.form['submit']=='View Receiver List'):
+                return redirect(url_for('receiverList'))
+        res2 = sc.getHospitalDonorList(hname[0])
+        res3 = sc.getHospitalReceiverList(hname[0])
         return render_template('hospitalHome.html',donor=res2, receiver=res3)
     return redirect(url_for('hospitalLogin'))
 
