@@ -6,6 +6,8 @@ app = Flask(__name__)
 app.debug=True
 
 from organdonationwebapp.models.sqlclient import SqlClient
-sc = SqlClient()
+sc = None
+if not sc:
+	sc = SqlClient()
 
 import organdonationwebapp.views

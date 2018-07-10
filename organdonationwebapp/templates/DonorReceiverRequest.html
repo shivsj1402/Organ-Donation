@@ -22,57 +22,28 @@
                     <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="form-group">
                             <h5>Receiver Profile</h5>
-                            <div class="row">
-                                <div class="col-xs-3 col-sm-3 col-md-3">
+                                {% for item in recipientdata %}
                                     <div class="form-group">
                                         <label>Name:</label>
+                                        <b>{{item[0]}}</b>
                                     </div>
-                                 </div>
-                                <div class="col-xs-9 col-sm-9 col-md-9">
-                                    <div class="form-group">
-                                        <input type="text" name="Rname" id="Rname" class="form-control" placeholder="Dummy Name">
-                                    </div>
-                                 </div>
-                                <div class="col-xs-3 col-sm-3 col-md-3">
                                     <div class="form-group">
                                         <label>Email:</label>
+                                        <b>{{item[2]}}</b>
                                     </div>
-                                 </div>
-                                <div class="col-xs-9 col-sm-9 col-md-9">
-                                    <div class="form-group">
-                                        <input type="text" name="email" id="email" class="form-control" placeholder="Dummy Email">
-                                    </div>
-                                 </div>
-                                <div class="col-xs-3 col-sm-3 col-md-3">
                                     <div class="form-group">
                                         <label>Birthdate:</label>
+                                        <b>{{item[3]}}</b>
                                     </div>
-                                 </div>
-                                <div class="col-xs-9 col-sm-9 col-md-9">
-                                    <div class="form-group">
-                                        <input type="text" name="Bdate" id="Bdate" class="form-control" placeholder="Dummy Birthdate">
-                                    </div>
-                                 </div>
-                                <div class="col-xs-3 col-sm-3 col-md-3">
                                     <div class="form-group">
                                         <label>Sex:</label>
+                                        <b>{{item[4]}}</b>
                                     </div>
-                                 </div>
-                                <div class="col-xs-9 col-sm-9 col-md-9">
                                     <div class="form-group">
-                                        <input type="text" name="Sex" id="Sex" class="form-control" placeholder="Dummy Sex">
+                                        <label>Organ:</label>
+                                        <b>{{item[5]}}</b>
                                     </div>
-                                 </div>
-                                <div class="col-xs-3 col-sm-3 col-md-3">
-                                    <div class="form-group">
-                                        <label>Receiving Organ:</label>
-                                    </div>
-                                 </div>
-                                <div class="col-xs-9 col-sm-9 col-md-9">
-                                    <div class="form-group">
-                                        <input type="text" name="Organ" id="Organ" class="form-control" placeholder="Dummy Organ">
-                                    </div>
-                                 </div>
+                                {% endfor %}
                                 <div class="col-xs-3 col-sm-3 col-md-3">
                                     <div class="form-group">
                                         <label>Medical Reports:</label>
@@ -88,9 +59,8 @@
                                 <div class="form-group">
                                   <input type="button" class="btn btn-primary" value="Delete Request" onclick="location.href='#'"/>
                                 </div>
-                            </div>
-                        </div>
                      </div>
+                 </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="form-group">
                             <h5>Contact Donor</h5>

@@ -1,6 +1,5 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from organdonationwebapp import app, sc
-import mysql.connector
 
 @app.route('/adminHome', methods=['GET'])
 def adminPortalHome():
@@ -64,8 +63,32 @@ def adminLoginPage():
     return render_template('adminlogin.html')
 
 @app.route('/adminhome/<username>', methods=['GET','POST'])
-def adminHomepage(username=None):
+def adminHomepage(username=None, hospitalEmail=None):
+    if request.method == 'POST':
+        validate_hospital = request.form
+        hospitalEmail = validate_hospital['validate']
+        if(hospitalEmail != " "):
+            hospitalEmail = sc.validateHospital(hospitalEmail)
     hospitallist = sc.getHospitalList()
     if(hospitallist):
         return render_template('adminhome.html', list=hospitallist,username=username)
     return render_template('adminhome.html', username=username)
+
+
+@app.route('/dummyrequest', methods=['GET', 'POST'])
+def dummyRequest():
+    if request.method == 'POST':
+        recipientdata = request.form
+        recipientEmail = recipientdata['recipientemail']
+        if(recipientEmail):
+            return redirect(url_for('donorHospitalRequestPage', recipientEmail=recipientEmail))
+    return render_template('dummyrequests.html')
+
+
+@app.route('/donorhospitalrequest/<recipientEmail>', methods=['GET','POST'])
+def donorHospitalRequestPage(recipientEmail=None):
+    #print ("Views",(recipientEmail))
+    if(recipientEmail != " "):
+        userdata = sc.donorHospitalShowProfile(recipientEmail)
+        if(userdata):
+            return render_template('donorreceiverrequest.html', recipientdata=userdata)

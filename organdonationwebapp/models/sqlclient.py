@@ -13,7 +13,6 @@ class SqlClient(object):
             self.connection = mysql.connector.connect(user=self.user,password=self.password,host=self.host,database=self.dbname)
             self.cursor = self.connection.cursor()
             print("Successfully connected to Database")
-            return 
         except Exception as err:
             print("Error connecting to Database")
             exit(1)
@@ -22,7 +21,6 @@ class SqlClient(object):
         query = """SELECT emailID FROM admin WHERE emailID= %s AND password= %s"""
         self.cursor.execute(query,(email, password))
         user1 = self.cursor.fetchone()
-        #self.cursor.close()
         if not self.connection.is_connected():
             print("Database connection closed successfully - adminLoginAuthentication")
         else:
@@ -33,16 +31,41 @@ class SqlClient(object):
             return None
 
     def getHospitalList(self):
-        query = """SELECT emailID FROM hospital"""
+        query = """SELECT emailID, validate FROM hospital"""
         self.cursor.execute(query)
         hospitallist = self.cursor.fetchall()
-        #self.cursor.close()
+        for row in hospitallist:
+            hospitalEmail = row[0]
+            validateFlag = row[1]
         if not self.connection.is_connected():
             print("Database connection closed successfully - getHospitalList")
         else:
             print("Database connection is active - getHospitalList")
         if(hospitallist):
             return hospitallist
+        else:
+            return None
+
+    def validateHospital(self, hospitalEmail):
+        query = """UPDATE hospital SET validate = %s WHERE emailID=%s"""
+        self.cursor.execute(query,(True, hospitalEmail))
+        self.connection.commit()
+
+
+    def donorHospitalShowProfile(self, recipientEmail):
+        #print ("SQL",(recipientEmail))
+        query = """SELECT userFirstName, userLastName, emailID, dob, sex, organ FROM user WHERE emailID=%s"""
+        self.cursor.execute(query,(recipientEmail,))
+        userdata = self.cursor.fetchall()
+        for row in userdata:
+            firstname = row[0]
+            lastname = row[1]
+            email = row[2]
+            date_of_birth = row[3]
+            sex = row[4]
+            organ = row[5]
+        if(userdata):
+            return userdata
         else:
             return None
 
