@@ -18,7 +18,7 @@
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-10">
-             <form action="login.html" method="post">
+             <form method="post">
                 <div class="row">
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -27,7 +27,7 @@
                      </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="first_name" id="first_name" class="form-control" placeholder="Hospital Name">
+                            <input type="text" name="hospitalName" id="first_name" class="form-control" placeholder="Hospital Name">
                         </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -37,7 +37,7 @@
                      </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="email" id="email" class="form-control" placeholder="Email">
+                            <input type="text" name="emailID" id="email" class="form-control" placeholder="Email">
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -47,7 +47,7 @@
                      </div>
                     <div class="col-xs-7 col-sm-7 col-md-7">
                         <div class="form-group">
-                            <input type="text" name="phone_number" id="pnone_number" class="form-control input-sm" placeholder="Phone Number">
+                            <input type="text" name="phone" id="pnone_number" class="form-control input-sm" placeholder="Phone Number">
                         </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -67,7 +67,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" id="province">
+                             <select class="form-control" name="province" id="province">
                             <option>ON</option>
                             <option>QC</option>
                             <option>BC</option>
@@ -91,7 +91,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" id="province">
+                             <select class="form-control" name="city" id="province">
                             <option>Halifax</option>
                             <option>Montreal</option>
                             <option>Toronto</option>
@@ -115,7 +115,7 @@
                     </div>
                      <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="rpassword" id="rpassword" class="form-control" placeholder="Re-enter your Password">
+                            <input type="text" name="cpassword" id="rpassword" class="form-control" placeholder="Re-enter your Password">
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -124,9 +124,7 @@
                         </div>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">
-
-                            <input type="button" class="btn btn-primary" value="Upload Certificate" onclick="location.href='#'"/>
-
+                     <input type="file" name="certificate" id="certificate" enctype="multipart/form-data" class="form-control">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
