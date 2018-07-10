@@ -32,9 +32,8 @@
                     <input type="checkbox" class="form-check-input">
                      <label class="form-check-label">Remember me</label>
                  </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <input type="button" class="btn btn-primary" value="Back" onclick="location.href='#'"/>
-            </form>
+                <input type="submit" name="submit" class="btn btn-primary" value="submit" />
+                <input type="button" class="btn btn-primary" value="cancel" onclick="location.href='#'"/>
         </div>
     </div>
 </div>
@@ -49,18 +48,15 @@
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-6">
-	     <form>
              <label>Signup As Donor/Recipient Right here</label>
              <div class="form-group">
               <label>Select Here:</label>
-              <select class="form-control" id="sel1">
+              <select class="form-control" name="type">
                 <option>Donor/Receiver</option>
                 <option>Hospital</option>
               </select>
                  <br>
-                 <input type="button" class="btn btn-primary"value="Sign Up"/>
-                <input type="button" class="btn btn-primary" value="Back" onclick="location.href='#'"/>
-
+                 <input type="submit" name="submit" class="btn btn-primary" value="SignUp"/>
             </div>
          </form>
         </div>

@@ -10,19 +10,44 @@ def before_request():
 
 @app.route('/donorList', methods=['GET'])
 def donorList():
-    return render_template('donorList.html')
+    if g.user:
+        if request.method == 'GET':
+            dlist= sc.getDonorList()
+            return render_template('donorList.html', dlist=dlist)
+    return redirect(url_for('hospitalLogin'))
 
 @app.route('/donorReceiverRequest', methods=['GET'])
 def donorReceiverRequest():
     return render_template('donorReceiverRequest.html')
 
-@app.route('/hospitalRegestration', methods=['GET'])
-def hospitalRegestration():
-    return render_template('hospitalRegestration.html')
+@app.route('/hospitalregistration', methods=['GET','POST'])
+def hospitalRegistration():
+    if request.method == 'POST':
+        hospitalName = request.form['hospitalName']
+        emailID = request.form['emailID']
+        phone = request.form['phone']
+        address = request.form['address']
+        province = request.form['province']
+        city = request.form['city']
+        password = request.form['password']
+        # data = request.files['certificate']
+        # certificate=data.read()
+
+        message = sc.hospitalRegistrattion(hospitalName,emailID,phone,address,province,city,password)
+        if(message=="Done"):
+            return redirect(url_for('hospitalLogin'))
+        else:
+            print("Error Inserting Data")
+        
+    return render_template('hospitalregistration.html')
 
 @app.route('/receiverList', methods=['GET'])
 def receiverList():
-    return render_template('receiverList.html')
+    if g.user:
+        if request.method == 'GET':
+            rlist= sc.getReceiverList()
+            return render_template('receiverList.html', rlist=rlist)
+    return redirect(url_for('hospitalLogin'))
 
 @app.route('/receiverProfile', methods=['GET'])
 def receiverProfile():
@@ -32,8 +57,27 @@ def receiverProfile():
 def requestFinal():
     return render_template('requestFinal.html')
 
-@app.route('/signup', methods=['GET'])
-def registerHospital():
+@app.route('/signup', methods=['GET','POST'])
+def registerUser():
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        phone_number = request.form['phone_number']
+        email = request.form['email']
+        sex = request.form['sex']
+        dob = request.form['dob']
+        address = request.form['address']
+        province = request.form['province']
+        city = request.form['city']
+        hospital = request.form['hname']
+        bloodgroup = request.form['bloodgroup']
+        usertype = request.form['usertype']
+        organ = request.form['organ']
+        message= sc.userRegistration(first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, organ)
+        if(message=="Done"):
+            print("User Registered")
+        else:
+            print("Error Inserting Data")
     return render_template('signup.html')
 
 @app.route('/hospitaldonor', methods=['GET'])
@@ -60,12 +104,18 @@ def adminHomepage(username=None):
         return render_template('adminhome.html', list=hospitallist,username=username)
     return render_template('adminhome.html', username=username)
 
-@app.route('/hospitalHome', methods=['GET'])
+@app.route('/hospitalHome', methods=['GET','POST'])
 def hospitalHome():
     if g.user:
-        if request.method == 'GET':
-            res2 = sc.getHospitalDonorList()
-            res3 = sc.getHospitalReceiverList()
+        hemail=g.user
+        hname=sc.getHospitalName(hemail)
+        if request.method == 'POST':
+            if(request.form['submit']=='View Donor List'):
+                return redirect(url_for('donorList'))
+            elif(request.form['submit']=='View Receiver List'):
+                return redirect(url_for('receiverList'))
+        res2 = sc.getHospitalDonorList(hname[0])
+        res3 = sc.getHospitalReceiverList(hname[0])
         return render_template('hospitalHome.html',donor=res2, receiver=res3)
     return redirect(url_for('hospitalLogin'))
 
@@ -75,11 +125,18 @@ def hospitalLogin():
         hospitaldata = request.form
         email =hospitaldata['hemail']
         password =hospitaldata['hpassword']
+        usertype = hospitaldata['type']
         session.pop('user', None)
-        res = sc.hospitalLoginAuthentication(email,password)
-        if(res):
-            session['user']= email
-            return redirect(url_for('hospitalHome'))
-        else:   
-            return "Please register"
+        if(request.form['submit']=='submit'):
+            res = sc.hospitalLoginAuthentication(email,password)
+            if(res):
+                session['user']= email
+                return redirect(url_for('hospitalHome'))
+            else:   
+                return "Please register"
+        elif(request.form['submit']=='SignUp'):
+            if(usertype =="Donor/Receiver"):
+                return redirect(url_for('registerUser'))
+            else:
+                return redirect(url_for('hospitalRegistration'))
     return render_template('loginPage.html')
