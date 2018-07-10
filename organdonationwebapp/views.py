@@ -16,9 +16,9 @@ def donorList():
 def donorReceiverRequest():
     return render_template('donorReceiverRequest.html')
 
-@app.route('/hospitalRegestration', methods=['GET'])
-def hospitalRegestration():
-    return render_template('hospitalRegestration.html')
+@app.route('/hospitalregistration', methods=['GET'])
+def hospitalRegistration():
+    return render_template('hospitalregistration.html')
 
 @app.route('/receiverList', methods=['GET'])
 def receiverList():
@@ -33,7 +33,7 @@ def requestFinal():
     return render_template('requestFinal.html')
 
 @app.route('/signup', methods=['GET'])
-def registerHospital():
+def registerUser():
     return render_template('signup.html')
 
 @app.route('/hospitaldonor', methods=['GET'])
@@ -63,9 +63,11 @@ def adminHomepage(username=None):
 @app.route('/hospitalHome', methods=['GET'])
 def hospitalHome():
     if g.user:
+        hemail=g.user
+        hname=sc.getHospitalName(hemail)
         if request.method == 'GET':
-            res2 = sc.getHospitalDonorList()
-            res3 = sc.getHospitalReceiverList()
+            res2 = sc.getHospitalDonorList(hname[0])
+            res3 = sc.getHospitalReceiverList(hname[0])
         return render_template('hospitalHome.html',donor=res2, receiver=res3)
     return redirect(url_for('hospitalLogin'))
 
@@ -75,11 +77,18 @@ def hospitalLogin():
         hospitaldata = request.form
         email =hospitaldata['hemail']
         password =hospitaldata['hpassword']
+        usertype = hospitaldata['type']
         session.pop('user', None)
-        res = sc.hospitalLoginAuthentication(email,password)
-        if(res):
-            session['user']= email
-            return redirect(url_for('hospitalHome'))
-        else:   
-            return "Please register"
+        if(request.form['submit']=='submit'):
+            res = sc.hospitalLoginAuthentication(email,password)
+            if(res):
+                session['user']= email
+                return redirect(url_for('hospitalHome'))
+            else:   
+                return "Please register"
+        elif(request.form['submit']=='SignUp'):
+            if(usertype =="Donor/Receiver"):
+                return redirect(url_for('registerUser'))
+            else:
+                return redirect(url_for('hospitalRegistration'))
     return render_template('loginPage.html')
