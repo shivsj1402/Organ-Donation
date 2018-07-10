@@ -89,3 +89,15 @@ class SqlClient(object):
             return receiverlist
         else:
             return None
+
+    def hospitalRegistrattion(self,hospitalName,emailID,phone,address,province,city,password):
+        query = """INSERT INTO hospital(hospitalName,emailID,phone,address,province,city,password) VALUES (%s,%s,%s,%s,%s,%s,%s)"""
+        self.cursor.execute(query,(hospitalName,emailID,phone,address,province,city,password))
+        self.connection.commit()
+        return "Done"
+    
+    def userRegistration(self,first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, organ):
+        query = """INSERT INTO user(userFirstName,userLastName,phone,emailID,sex,dob,address,province,city,hospital,bloodGroup,userType,organ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+        self.cursor.execute(query,(first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, organ))
+        self.connection.commit()
+        return "Done"

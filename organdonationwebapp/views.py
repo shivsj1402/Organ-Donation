@@ -20,8 +20,25 @@ def donorList():
 def donorReceiverRequest():
     return render_template('donorReceiverRequest.html')
 
-@app.route('/hospitalregistration', methods=['GET'])
+@app.route('/hospitalregistration', methods=['GET','POST'])
 def hospitalRegistration():
+    if request.method == 'POST':
+        hospitalName = request.form['hospitalName']
+        emailID = request.form['emailID']
+        phone = request.form['phone']
+        address = request.form['address']
+        province = request.form['province']
+        city = request.form['city']
+        password = request.form['password']
+        # data = request.files['certificate']
+        # certificate=data.read()
+
+        message = sc.hospitalRegistrattion(hospitalName,emailID,phone,address,province,city,password)
+        if(message=="Done"):
+            return redirect(url_for('hospitalLogin'))
+        else:
+            print("Error Inserting Data")
+        
     return render_template('hospitalregistration.html')
 
 @app.route('/receiverList', methods=['GET'])
@@ -40,8 +57,27 @@ def receiverProfile():
 def requestFinal():
     return render_template('requestFinal.html')
 
-@app.route('/signup', methods=['GET'])
+@app.route('/signup', methods=['GET','POST'])
 def registerUser():
+    if request.method == 'POST':
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        phone_number = request.form['phone_number']
+        email = request.form['email']
+        sex = request.form['sex']
+        dob = request.form['dob']
+        address = request.form['address']
+        province = request.form['province']
+        city = request.form['city']
+        hospital = request.form['hname']
+        bloodgroup = request.form['bloodgroup']
+        usertype = request.form['usertype']
+        organ = request.form['organ']
+        message= sc.userRegistration(first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, organ)
+        if(message=="Done"):
+            print("User Registered")
+        else:
+            print("Error Inserting Data")
     return render_template('signup.html')
 
 @app.route('/hospitaldonor', methods=['GET'])
