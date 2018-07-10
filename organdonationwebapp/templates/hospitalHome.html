@@ -18,7 +18,7 @@
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-12">
-             <form method ="POST action="">
+             <form method="post">
                 <div class="row">
                     <div class="col-xs-4 col-sm-4 col-md-4">
                         <div class="form-group">
@@ -66,18 +66,28 @@
                     <div class="col-xs-4 col-sm-4 col-md-4">
                         <ol>
                             {% for item in donor %}
-                            <li> {{ item[3] }} </li>
+                            <li> {{ item[4] }} </li>
                             {% endfor %}
                         </ol>
                     </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                             <ol>
-                                {% for item in donor %}
-                                <li> {{ item[3] }} </li>
+                                {% for item in receiver %}
+                                <li> {{ item[4] }} </li>
                                 {% endfor %}
                             </ol>
-                        </div>
+                       </div>
                      </div>
+                     <div class="row">
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-4">
+                                    <input type="submit" name="submit" class="btn btn-primary" value="View Donor List" />
+                            </div>
+                            <div class="col-md-4">
+                                    <input type="submit" name="submit" class="btn btn-primary" value="View Receiver List" />
+                            </div>
+                        </div>
                 </div>
             </form>
         </div>

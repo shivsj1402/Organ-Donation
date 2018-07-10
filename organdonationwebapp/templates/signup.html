@@ -19,7 +19,7 @@
     <div class="row justify-content-md-center">
         <div class="col-md-10">
 
-            <form action="login.html" method="post">
+            <form method="post">
                 <div class="row">
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -68,7 +68,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" id="sex">
+                             <select class="form-control" name="sex" id="sex">
                             <option>Male</option>
                             <option>Female</option>
                           </select>
@@ -81,7 +81,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input class="form-control" id="date" name="date" placeholder="MM/DD/YYY" type="text"/>
+                            <input class="form-control" id="date" name="dob" placeholder="MM/DD/YYY" type="text"/>
                           </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -101,7 +101,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" id="province">
+                             <select class="form-control" name="province" id="province">
                             <option>ON</option>
                             <option>QC</option>
                             <option>BC</option>
@@ -125,7 +125,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" id="province">
+                             <select class="form-control" name="city" id="province">
                             <option>Halifax</option>
                             <option>Montreal</option>
                             <option>Toronto</option>
@@ -139,7 +139,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" id="province">
+                             <select class="form-control" name="hname"id="province">
                             <option>Hospital1</option>
                             <option>Hospital2</option>
                           </select>
@@ -152,7 +152,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" id="bloodgroup">
+                             <select class="form-control" name="bloodgroup" id="bloodgroup">
                             <option>A+</option>
                             <option>A-</option>
                             <option>B+</option>
@@ -172,10 +172,10 @@
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-primary active">
-                                <input type="radio" name="options" id="opt1" autocomplete="off" checked /> Donor
+                                <input type="radio" name="usertype" id="opt1" autocomplete="off" checked /> Donor
                             </label>
                             <label class="btn btn-primary">
-                                <input type="radio" name="options" id="opt2" autocomplete="off" /> Receiver
+                                <input type="radio" name="usertype" id="opt2" autocomplete="off" /> Receiver
                             </label>
                         </div>
                     </div>
@@ -187,16 +187,16 @@
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="btn-group" data-toggle="buttons">
                             <label class="btn btn-primary active">
-                                <input type="checkbox"  id="organ1" autocomplete="off" checked /> Liver(Live or Deceased)
+                                <input type="checkbox" name="organ" id="organ1" autocomplete="off" checked /> Liver(Live or Deceased)
                             </label>
                             <label class="btn btn-primary">
-                                <input type="checkbox" id="organ2" autocomplete="off" /> Kidney(Live or Deceased)
+                                <input type="checkbox"  name="organ2" id="organ2" autocomplete="off" /> Kidney(Live or Deceased)
                             </label>
                             <label class="btn btn-primary">
-                                <input type="checkbox" id="organ3" autocomplete="off" /> Heart(Deceased)
+                                <input type="checkbox" name="organ3" id="organ3" autocomplete="off" /> Heart(Deceased)
                             </label>
                             <label class="btn btn-primary">
-                                <input type="checkbox" id="organ4" autocomplete="off" /> Eyes(Deceased)
+                                <input type="checkbox" name="organ4" id="organ4" autocomplete="off" /> Eyes(Deceased)
                             </label>
                         </div>
                     </div>
