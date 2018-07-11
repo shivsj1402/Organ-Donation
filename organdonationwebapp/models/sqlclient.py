@@ -52,20 +52,62 @@ class SqlClient(object):
         self.connection.commit()
 
 
-    def donorHospitalShowProfile(self, recipientEmail):
-        #print ("SQL",(recipientEmail))
-        query = """SELECT userFirstName, userLastName, emailID, dob, sex, organ FROM user WHERE emailID=%s"""
-        self.cursor.execute(query,(recipientEmail,))
+    def organRequest(self, requestID):
+        print(requestID)
+        query = """SELECT donorID, recipientID, organRequested FROM requestdata WHERE requestID=%s"""
+        self.cursor.execute(query,(requestID,))
+        requestdata = self.cursor.fetchone()
+        print("Hello",(requestdata))
+        if(requestdata):
+            return requestdata
+        else:
+            return None
+
+
+    def donorHospitalShowReceiverProfile(self, recipientEmail):
+        query = """SELECT userFirstName, userLastName, emailID, dob, sex, organ FROM user WHERE emailID=%s AND donationType=%s"""
+        self.cursor.execute(query,(recipientEmail,"r"))
         userdata = self.cursor.fetchall()
-        for row in userdata:
-            firstname = row[0]
-            lastname = row[1]
-            email = row[2]
-            date_of_birth = row[3]
-            sex = row[4]
-            organ = row[5]
         if(userdata):
             return userdata
+        else:
+            return None
+
+    def donorHospitalShowDonorProfile(self, donorEmail):
+        query = """SELECT * FROM user WHERE emailID=%s AND donationType=%s"""
+        self.cursor.execute(query,(donorEmail,"d"))
+        userdata = self.cursor.fetchall()
+        if(userdata):
+            return userdata
+        else:
+            return None
+
+    def receiverHospitalShowProfile(self, recipientEmail):
+        query = """SELECT userFirstName, userLastName, emailID, dob, sex FROM user WHERE emailID=%s AND donationType=%s"""
+        self.cursor.execute(query,(recipientEmail,"r"))
+        userdata = self.cursor.fetchall()
+        if(userdata):
+            return userdata
+        else:
+            return None
+
+    def receiverHospitalShowOrgan(self, recipientEmail):
+        query = """SELECT organ FROM user WHERE emailID=%s AND donationType=%s"""
+        self.cursor.execute(query,(recipientEmail,"r"))
+        userdata_organ = self.cursor.fetchall()
+        for row in userdata_organ:
+            organ = row[0]
+        if(userdata_organ):
+            return userdata_organ
+        else:
+            return None
+
+    def recommendedDonorList(self, organ):
+        query = """SELECT emailID, organ FROM user WHERE organ=%s AND donationType=%s"""
+        self.cursor.execute(query,(organ,"d"))
+        organ_data = self.cursor.fetchall()
+        if(organ_data):
+            return organ_data
         else:
             return None
 

@@ -22,28 +22,28 @@
                     <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="form-group">
                             <h5>Receiver Profile</h5>
-                                {% for item in recipientdata %}
                                     <div class="form-group">
                                         <label>Name:</label>
-                                        <b>{{item[0]}}</b>
+                                        <b>{{recipientdata[0][0]}}</b>
                                     </div>
                                     <div class="form-group">
                                         <label>Email:</label>
-                                        <b>{{item[2]}}</b>
+                                        <b>{{recipientdata[0][2]}}</b>
                                     </div>
                                     <div class="form-group">
                                         <label>Birthdate:</label>
-                                        <b>{{item[3]}}</b>
+                                        <b>{{recipientdata[0][3]}}</b>
                                     </div>
                                     <div class="form-group">
                                         <label>Sex:</label>
-                                        <b>{{item[4]}}</b>
+                                        <b>{{recipientdata[0][4]}}</b>
                                     </div>
                                     <div class="form-group">
                                         <label>Organ:</label>
-                                        <b>{{item[5]}}</b>
+                                        {% for item in organ %}
+                                        <b>{{ item[0] }}</b>
+                                        {% endfor %}
                                     </div>
-                                {% endfor %}
                                 <div class="col-xs-3 col-sm-3 col-md-3">
                                     <div class="form-group">
                                         <label>Medical Reports:</label>
@@ -68,22 +68,20 @@
                                 <div class="col-xs-3 col-sm-3 col-md-3">
                                     <label>Send Email :</label>
                                 </div>
+                                <div class="form-group col-xs-3 col-sm-3 col-md-3">
+                                        <b>{{donordata[0][4]}}</b>
+                                </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6">
-                                    <div class="form-group">
-                                        <input type="text" name="Demail" id="Demail" class="form-control" placeholder="Dummy Email">
-                                    </div>
-                                </div>
-                                <div class="col-xs-3 col-sm-3 col-md-3">
                                      <input type="button" class="btn btn-primary" value="Send Email" onclick="location.href='#'"/>
-                                </div>
+                                </div><br><br>
                                 <div class="col-xs-3 col-sm-3 col-md-3">
                                     <label>Contact Phone :</label>
                                 </div>
                                 <div class="col-xs-9 col-sm-9 col-md-9">
                                     <div class="form-group">
-                                        <input type="text" name="Dphone" id="Dphone" class="form-control" placeholder="Dummy Phone Number">
+                                        <b>{{donordata[0][3]}}</b>
                                     </div>
-                                 </div>
+                                </div>
                             </div>
                             </div><br><br><br>
 

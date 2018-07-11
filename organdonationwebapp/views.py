@@ -78,17 +78,49 @@ def adminHomepage(username=None, hospitalEmail=None):
 @app.route('/dummyrequest', methods=['GET', 'POST'])
 def dummyRequest():
     if request.method == 'POST':
-        recipientdata = request.form
-        recipientEmail = recipientdata['recipientemail']
-        if(recipientEmail):
-            return redirect(url_for('donorHospitalRequestPage', recipientEmail=recipientEmail))
+        requestdata = request.form
+        # recipientID = recipientdata['recipientemail']
+        requestID = requestdata['requestID']
+        requestdata = sc.organRequest(requestID)
+        print("View",(requestdata[0]))
+        if(requestdata):
+            return redirect(url_for('donorHospitalRequestPage', donorEmail=requestdata[0],recipientEmail=requestdata[1],organ=requestdata[2]))
     return render_template('dummyrequests.html')
 
 
-@app.route('/donorhospitalrequest/<recipientEmail>', methods=['GET','POST'])
-def donorHospitalRequestPage(recipientEmail=None):
-    #print ("Views",(recipientEmail))
+@app.route('/donorhospitalrequest/<donorEmail>/<recipientEmail>/<organ>', methods=['GET'])
+def donorHospitalRequestPage(donorEmail=None, recipientEmail=None, organ=None):
+    donor_userdata = None
+    recipient_userdata = None
+    print("Donor EMail:", (donorEmail))
+    if(donorEmail):
+        donor_userdata = sc.donorHospitalShowDonorProfile(donorEmail)
+        print("AAAA:",(donor_userdata))
+    if(recipientEmail):
+        recipient_userdata = sc.donorHospitalShowReceiverProfile(recipientEmail)
+        print(recipient_userdata)
+    if(recipient_userdata and donor_userdata):
+        return render_template('donorreceiverrequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ)
+
+@app.route('/receiverhospitalrequest/<recipientEmail>', methods=['GET','POST'])
+def receiverHospitalRequestPage(recipientEmail=None):
     if(recipientEmail != " "):
-        userdata = sc.donorHospitalShowProfile(recipientEmail)
-        if(userdata):
-            return render_template('donorreceiverrequest.html', recipientdata=userdata)
+        userdata = sc.receiverHospitalShowProfile(recipientEmail)
+        userdata_organ = sc.receiverHospitalShowOrgan(recipientEmail)
+        donor_organ_data = []
+        for organ in userdata_organ:
+            donor_organ_data.extend(sc.recommendedDonorList(organ[0]))
+        print (donor_organ_data)
+        if(userdata and userdata_organ):
+            return render_template('receiverprofile.html', recipientdata=userdata, organdata=userdata_organ, donororgandata=donor_organ_data)
+
+
+@app.route('/donorprofile/<donorEmail>', methods=['GET'])
+def donorProfilePage(donorEmail=None):
+    donor_userdata = None
+    print("Donor Email:", (donorEmail))
+    if(donorEmail):
+        donor_userdata = sc.donorHospitalShowDonorProfile(donorEmail)
+        print("AAAA:",(donor_userdata))
+    if(donor_userdata):
+        return render_template('donorprofile.html', donordata=donor_userdata)
