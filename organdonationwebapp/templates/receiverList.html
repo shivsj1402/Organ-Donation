@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <title> Receiver List</title>
+</head>
+<body style="background-color:#f1f2f6">
+<div class="container" style="text-align: center">
+<h4>Receiver List</h4>
+    <form>
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" placeholder="Search" name="srch-term" id="srch-term">
+                <div class="input-group-btn">
+                    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
+                </div>
+            </div>
+        </form>
+</div>
+<div class= "container" >
+    <div class="row justify-content-md-center">
+        <div class="col-md-12">
+             <form>
+                <div class="row">
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <div class="form-group">
+                            <label>Name</label>
+                        </div>
+                     </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <label>Location</label>
+                        </div>
+                     </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <label>Organ</label>
+                        </div>
+                     </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <div class="form-group">
+                            <label>Request Date</label>
+                        </div>
+                     </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <div class="form-group">
+                        </div>
+                     </div>
+                </div>
+
+                {% for item in rlist %}
+                  <div class="row">
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <div class="form-group">
+                            {{item[1]}} {{item[2]}}
+                        </div>
+                     </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <div class="form-group">
+                                {{item[9]}} {{item[8]}}
+                        </div>
+                     </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <div class="form-group">
+                                {{item[14]}}
+                        </div>
+                     </div>
+                    <div class="col-xs-3 col-sm-3 col-md-3">
+                        <div class="form-group">
+                            <label>Dummy Request Date</label>
+                        </div>
+                     </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2">
+                        <div class="form-group">
+                             <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
+                        </div>
+                     </div>
+                </div>
+                {% endfor %}
+
+                 <div class="row">
+                     <div class="col-xs-6 col-sm-6 col-md-6">
+                         <input type="button" class="btn btn-primary" value="Back" onclick="location.href='#'"/>
+                     </div>
+                     <div class="col-xs-6 col-sm-6 col-md-6">
+                         <input type="button" class="btn btn-primary" value="Create new Receiver" onclick="location.href='#'"/>
+                     </div>
+                 </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+
+
+</html>
