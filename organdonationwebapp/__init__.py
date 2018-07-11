@@ -10,4 +10,6 @@ sc = None
 if not sc:
 	sc = SqlClient()
 
+app.secret_key = 'lfjsdlkfjdklsjfkl'
+app.config['SESSION'] = True
 import organdonationwebapp.views

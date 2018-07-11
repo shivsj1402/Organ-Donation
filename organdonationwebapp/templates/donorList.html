@@ -43,20 +43,21 @@
                         </div>
                      </div>
                 </div>
+                {% for item in dlist %}
                   <div class="row">
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <label>Dummy Name</label>
+                            {{item[1]}} {{item[2]}}
                         </div>
                      </div>
                     <div class="col-xs-2 col-sm-2 col-md-2">
                         <div class="form-group">
-                            <label> Dummy Location</label>
+                                {{item[9]}} {{item[8]}}
                         </div>
                      </div>
                     <div class="col-xs-2 col-sm-2 col-md-2">
                         <div class="form-group">
-                            <label> Dummy Data</label>
+                                {{item[14]}}
                         </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -70,6 +71,7 @@
                         </div>
                      </div>
                 </div>
+                {% endfor %}
 
                  <div class="row">
                      <div class="col-xs-6 col-sm-6 col-md-6">
@@ -84,6 +86,4 @@
     </div>
 </div>
 </body>
-
-
 </html>
