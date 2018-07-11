@@ -28,7 +28,7 @@ class SqlClient(object):
             return None
 
     def getHospitalList(self):
-        query = """SELECT emailID FROM hospital"""
+        query = """SELECT * FROM hospital"""
         self.cursor.execute(query)
         hospitallist = self.cursor.fetchall()
         if(hospitallist):
@@ -40,19 +40,13 @@ class SqlClient(object):
         query = """SELECT  * FROM user where donationType='d' AND hospital=%s"""
         self.cursor.execute(query,(hname,))
         donorlist= self.cursor.fetchall()
-        if(donorlist):
-            return donorlist
-        else:
-            return None
+        return donorlist
 
     def getHospitalReceiverList(self,hname):
         query = """SELECT  * FROM user where donationType='r' AND hospital=%s"""
         self.cursor.execute(query,(hname,))
         receiverlist= self.cursor.fetchall()
-        if(receiverlist):
-            return receiverlist
-        else:
-            return None
+        return receiverlist
 
     def hospitalLoginAuthentication(self,hemail,hpassword):
         query = """SELECT  * FROM hospital where emailID=%s  AND password=%s"""
@@ -90,14 +84,14 @@ class SqlClient(object):
         else:
             return None
 
-    def hospitalRegistrattion(self,hospitalName,emailID,phone,address,province,city,password):
-        query = """INSERT INTO hospital(hospitalName,emailID,phone,address,province,city,password) VALUES (%s,%s,%s,%s,%s,%s,%s)"""
-        self.cursor.execute(query,(hospitalName,emailID,phone,address,province,city,password))
+    def hospitalRegistrattion(self,hospitalName,emailID,phone,address,province,city,password,certificate):
+        query = """INSERT INTO hospital(hospitalName,emailID,phone,address,province,city,password,certificate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
+        self.cursor.execute(query,(hospitalName,emailID,phone,address,province,city,password,certificate))
         self.connection.commit()
         return "Done"
     
     def userRegistration(self,first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, organ):
-        query = """INSERT INTO user(userFirstName,userLastName,phone,emailID,sex,dob,address,province,city,hospital,bloodGroup,userType,organ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+        query = """INSERT INTO user(userFirstName,userLastName,phone,emailID,sex,dob,address,province,city,hospital,bloodGroup,donationType,organ) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
         self.cursor.execute(query,(first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, organ))
         self.connection.commit()
         return "Done"
