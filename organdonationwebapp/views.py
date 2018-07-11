@@ -153,3 +153,7 @@ def hospitalLogin():
             else:
                 return redirect(url_for('hospitalRegistration'))
     return render_template('loginPage.html')
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('PageNotFound.html'), 404
