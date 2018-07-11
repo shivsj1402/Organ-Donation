@@ -41,12 +41,6 @@ def hospitalRegistration():
             print("Error Inserting Data")  
     return render_template('hospitalregistration.html')
 
-# @app.route('/download')
-# def download():
-#     hemail1="hospital1@gmail.com"
-#     file_data=sc.getHospitalName(hemail1)
-#     return print(file_data)
-
 @app.route('/receiverList', methods=['GET'])
 def receiverList():
     if g.user:
@@ -132,7 +126,7 @@ def hospitalHome():
         return render_template('hospitalHome.html',donor=res2, receiver=res3)
     return redirect(url_for('hospitalLogin'))
 
-@app.route('/loginPage', methods=['GET','POST'])
+@app.route('/', methods=['GET','POST'])
 def hospitalLogin():
     if request.method == 'POST':
         hospitaldata = request.form
@@ -152,4 +146,4 @@ def hospitalLogin():
                 return redirect(url_for('registerUser'))
             else:
                 return redirect(url_for('hospitalRegistration'))
-    return render_template('loginPage.html')
+    return render_template('loginpage.html')
