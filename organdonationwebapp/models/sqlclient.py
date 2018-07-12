@@ -124,10 +124,10 @@ class SqlClient(object):
         receiverlist= self.cursor.fetchall()
         return receiverlist
 
-    def hospitalLoginAuthentication(self,hemail):
-        result = self.cursor.callproc('hospitallogin',[hemail,0])
+    def hospitalLoginAuthentication(self,hemail,hpass):
+        result = self.cursor.callproc('hospitallogin',[hemail,hpass,0])
         print(result)
-        if(result[1]):
+        if(result[2]):
             return result
         else:
             return None

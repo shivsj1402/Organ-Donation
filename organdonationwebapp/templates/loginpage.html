@@ -33,6 +33,17 @@
                  </div>
                 <input type="submit" name="submit" class="btn btn-primary" value="submit" />
                 <input type="reset" class="btn btn-primary" value="cancel" />
+
+                {% with messages = get_flashed_messages() %}
+         {% if messages %}
+           <div>
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+           </div>
+               
+         {% endif %}
+      {% endwith %}
             </form>  
             <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>

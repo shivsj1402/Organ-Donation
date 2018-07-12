@@ -189,14 +189,15 @@ def hospitalLogin():
         # usertype = hospitaldata['type']
         session.pop('user', None)
         if(request.form['submit']=='submit'):
-            res = sc.hospitalLoginAuthentication(email)
+            res = sc.hospitalLoginAuthentication(email,password)
             if(res):
                 session['user']= email
                 logging.info("User " + session['user'] + " has logged in")
                 return redirect(url_for('hospitalHome'))
             else:   
                 logging.error("Invalid user")
-                return "please Register"
+                flash("Not an existing user. Please Register!!")
+                return render_template('loginpage.html')
         elif(request.form['submit']=='SignUp'):
             if(usertype =="Donor/Receiver"):
                 return redirect(url_for('registerUser'))
