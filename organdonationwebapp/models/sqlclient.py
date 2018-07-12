@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
+import logging
+logging.basicConfig(filename='file.log',level=logging.DEBUG)
 
 class SqlClient(object):
     def __init__(self):
@@ -12,9 +14,9 @@ class SqlClient(object):
         try:
             self.connection = mysql.connector.connect(user=self.user,password=self.password,host=self.host,database=self.dbname)
             self.cursor = self.connection.cursor()
-            print("Successfully connected to Database")
+            logging.info("Successfully connected to Database")
         except Exception as err:
-            print("Error connecting to Database")
+            logging.error("Error connecting to Database")
             exit(1)
 
     def adminLoginAuthentication(self,email,password):
@@ -22,9 +24,9 @@ class SqlClient(object):
         self.cursor.execute(query,(email, password))
         user1 = self.cursor.fetchone()
         if not self.connection.is_connected():
-            print("Database connection closed successfully - adminLoginAuthentication")
+            logging.info("Database connection closed successfully - adminLoginAuthentication")
         else:
-            print("Database connection is active - adminLoginAuthentication")
+            logging.info("Database connection is active - adminLoginAuthentication")
         if(user1):
             return user1[0]
         else:
@@ -122,11 +124,10 @@ class SqlClient(object):
         receiverlist= self.cursor.fetchall()
         return receiverlist
 
-    def hospitalLoginAuthentication(self,hemail,hpassword):
-        query = """SELECT  * FROM hospital where emailID=%s  AND password=%s"""
-        self.cursor.execute(query,(hemail, hpassword))
-        result = self.cursor.fetchone()
-        if(result):
+    def hospitalLoginAuthentication(self,hemail):
+        result = self.cursor.callproc('hospitallogin',[hemail,0])
+        print(result)
+        if(result[1]):
             return result
         else:
             return None

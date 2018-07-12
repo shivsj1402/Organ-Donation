@@ -28,7 +28,7 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="First Name">
+                            <input type="text" data-validation="length" data-validation-length="max20" name="first_name" id="first_name" class="form-control input-sm" placeholder="First Name" required pattern="^(a-zA-Z)$" required="required">
                         </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -38,7 +38,7 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="Last Name">
+                            <input type="text" data-validation="length" data-validation-lenght="max20" name="last_name" id="last_name" class="form-control input-sm" placeholder="Last Name" required pattern="^(a-zA-Z)$" required="required">
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -48,7 +48,7 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input type="text" name="phone_number" id="pnone_number" class="form-control input-sm" placeholder="Phone Number">
+                            <input type="text" data-validation= "number" name="phone_number" id="pnone_number" class="form-control input-sm" placeholder="Phone Number" required="required" pattern="^(0-9)$">
                         </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -58,7 +58,7 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input type="text" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
+                            <input type="text" data-validation="email" data-validation="max100" name="email" id="email" class="form-control input-sm" placeholder="Email Address" required="required">
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -68,9 +68,11 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" name="sex" id="sex">
-                            <option>Male</option>
-                            <option>Female</option>
+                             <select type="text" list"Sex" class="form-control" name="sex">
+                                <datalist id="sex">
+                                <option>Male</option>
+                                <option>Female</option>
+                                </datalist>>
                           </select>
                          </div>
                     </div>
@@ -81,7 +83,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input class="form-control" id="date" name="dob" placeholder="MM/DD/YYY" type="text"/>
+                            <input class="form-control" id="date" name="dob" placeholder="MM/DD/YYY" type="text" data-validation="date" data-validation-format="dd/mm/yyyy"required="required"/>
                           </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -91,7 +93,7 @@
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="address" id="address" class="form-control" placeholder="Address">
+                            <input type="text" name="address" id="address" class="form-control" placeholder="Address" required="required" data-validation="alphanumeric">
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -101,7 +103,8 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" name="province" id="province">
+                             <input class="form-control" name="province" list="province">
+                             <datalist id="province">
                             <option>ON</option>
                             <option>QC</option>
                             <option>BC</option>
@@ -115,7 +118,8 @@
                             <option>NT</option>
                             <option>YT</option>
                             <option>NU</option>
-                          </select>
+                             </datalist>
+                             </input>
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -125,11 +129,13 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" name="city" id="province">
+                             <input class="form-control" name="city" list="city">
+                            <datalist id="city">                                 
                             <option>Halifax</option>
                             <option>Montreal</option>
                             <option>Toronto</option>
-                          </select>
+                            </datalist>
+                            </input>
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -154,7 +160,8 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" name="bloodgroup" id="bloodgroup">
+                             <input class="form-control" name="bloodgroup" list="bloodgroup">
+                             <datalist id-"bloodgroup">
                             <option>A+</option>
                             <option>A-</option>
                             <option>B+</option>
@@ -163,7 +170,8 @@
                             <option>AB-</option>
                             <option>O+</option>
                             <option>O-</option>
-                          </select>
+                             </datalist>
+                         </input>
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -172,7 +180,7 @@
                         </div>
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
-                        <div class="btn-group" data-toggle="buttons">
+                        <div class="btn-group" data-toggle="buttons" >
                             <label class="btn btn-primary active">
                                 <input type="radio" name="usertype" id="opt1"  value="d"> Donor</input>
                             </label>

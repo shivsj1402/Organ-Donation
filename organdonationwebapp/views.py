@@ -1,7 +1,10 @@
-from flask import Flask, render_template, request, redirect, session, url_for, g, send_file,flash
+from flask import Flask, render_template, request, redirect, session, url_for, g, send_file,flash, jsonify
 from organdonationwebapp import app, sc
 from io import BytesIO
 import mysql.connector
+import logging
+
+logging.basicConfig(filename='file.log',level=logging.DEBUG)
 
 @app.before_request
 def before_request():
@@ -38,7 +41,7 @@ def hospitalRegistration():
         if(message=="Done"):
             return redirect(url_for('hospitalLogin'))
         else:
-            print("Error Inserting Data")  
+            logging.warning("Error Inserting Data")  
     return render_template('hospitalregistration.html')
 
 @app.route('/receiverList', methods=['GET'])
@@ -78,9 +81,9 @@ def registerUser():
         for item in organ:
             message= sc.userRegistration(first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, item)
             if(message=="Done"):
-                print("User Registered")
+                logging.info("User Registered")
             else:
-                print("Error Inserting Data")
+                logging.warning("Error Inserting Data")
     return render_template('signup.html', hlist=hlist)
 
 @app.route('/hospitaldonor', methods=['GET'])
@@ -97,7 +100,7 @@ def adminLoginPage():
         if(user):
             return redirect(url_for('adminHomepage', username=user))
         else:
-            return 'Authentication failed!!'
+            logging.warning ('Authentication failed!!')
     return render_template('adminlogin.html')
 
 @app.route('/adminhome/<username>', methods=['GET','POST'])
@@ -166,9 +169,7 @@ def donorProfilePage(donorEmail=None):
 def hospitalHome():
     if g.user:
         hemail=g.user
-        print(hemail)
         hname=sc.getHospitalName(hemail)
-        print(hname)
         if request.method == 'POST':
             if(request.form['submit']=='View Donor List'):
                 return redirect(url_for('donorList'))
@@ -185,22 +186,30 @@ def hospitalLogin():
         hospitaldata = request.form
         email =hospitaldata['hemail']
         password =hospitaldata['hpassword']
-        usertype = hospitaldata['type']
+        # usertype = hospitaldata['type']
         session.pop('user', None)
         if(request.form['submit']=='submit'):
-            res = sc.hospitalLoginAuthentication(email,password)
+            res = sc.hospitalLoginAuthentication(email)
             if(res):
                 session['user']= email
+                logging.info("User " + session['user'] + " has logged in")
                 return redirect(url_for('hospitalHome'))
             else:   
-                return "Please register"
+                logging.error("Invalid user")
+                return "please Register"
         elif(request.form['submit']=='SignUp'):
             if(usertype =="Donor/Receiver"):
                 return redirect(url_for('registerUser'))
             else:
                 return redirect(url_for('hospitalRegistration'))
-    return render_template('loginPage.html')
+    return render_template('loginpage.html')
 
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('PageNotFound.html'), 404
+
+@app.route('/log')
+def log():
+    with open("file.log", "r") as f:
+        content = f.read()
+    return render_template('log.html', content=content)

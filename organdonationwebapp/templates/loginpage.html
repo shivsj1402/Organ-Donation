@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+
     <title> Login page</title>
 </head>
 
@@ -18,53 +17,37 @@
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-6">
-	        <h2> Login as Hospital:</h2>
+            <h2> Login as Hospital:</h2>
             <form method="post">
                 <div class="form-group">
                     <label>Email address</label>
-                    <input type="email" name="hemail" class="form-control" id="InputEmail1" placeholder="Enter email">
+                    <input type="text" data-validation="email" name="hemail" class="form-control" id="InputEmail1" placeholder="Enter email" required="required">
                  </div>
                 <div class="form-group">
                     <label>Password</label>
-                <input type="password" name="hpassword" class="form-control" id="InputPassword1" placeholder="Password">
+                <input type="password" name="hpassword" class="form-control" id="InputPassword1" placeholder="Password" required>
                  </div>
                  <div class="form-check">
                     <input type="checkbox" class="form-check-input">
                      <label class="form-check-label">Remember me</label>
                  </div>
                 <input type="submit" name="submit" class="btn btn-primary" value="submit" />
-                <input type="button" class="btn btn-primary" value="cancel" onclick="location.href='#'"/>
+                <input type="reset" class="btn btn-primary" value="cancel" />
+            </form>  
+            <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-form-validator/2.3.26/jquery.form-validator.min.js"></script>
+<script>
+  $.validate({
+    modules : 'html5'
+  });
+</script>
         </div>
     </div>
 </div>
 
-<div class= "container" >
-    <div class="row justify-content-md-center">
-        <div class="col-md-1">
-	        <h1> OR</h1>
-        </div>
-    </div>
-</div>
-<div class= "container" >
-    <div class="row justify-content-md-center">
-        <div class="col-md-6">
-             <label>Signup As Donor/Recipient Right here</label>
-             <div class="form-group">
-              <label>Select Here:</label>
-              <select class="form-control" name="type">
-                <option>Donor/Receiver</option>
-                <option>Hospital</option>
-              </select>
-                 <br>
-                 <input type="submit" name="submit" class="btn btn-primary" value="SignUp"/>
-            </div>
-         </form>
-        </div>
-    </div>
-</div>
-
-
-
+<!-- <a href="/hospitalregistration.html">Register As Hospital</a>
+<br>
+<a href="/signup.html">Register As Donor/Receiver</a> -->
 
 </body>
 </html>
