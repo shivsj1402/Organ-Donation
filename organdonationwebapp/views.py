@@ -3,6 +3,7 @@ from organdonationwebapp import app, sc
 from io import BytesIO
 import mysql.connector
 import logging
+import binascii
 
 logging.basicConfig(filename='file.log',level=logging.DEBUG)
 
@@ -36,8 +37,9 @@ def hospitalRegistration():
         password = request.form['password']
         data = request.files['certificate']
         certificate=data.read()
+        bcertificate =binascii.hexlify(certificate)
 
-        message = sc.hospitalRegistrattion(hospitalName,emailID,phone,address,province,city,password,certificate)
+        message = sc.hospitalRegistrattion(hospitalName,emailID,phone,address,province,city,password,bcertificate)
         if(message=="Done"):
             return redirect(url_for('hospitalLogin'))
         else:
@@ -111,8 +113,8 @@ def adminHomepage(username=None, hospitalEmail=None):
         if(hospitalEmail != " "):
             hospitalEmail = sc.validateHospital(hospitalEmail)
     hospitallist = sc.getHospitalList()
-    #print(hospitallist[6][7])
-    #return send_file(BytesIO(hospitallist[6][7]), attachment_filename='certificate.pdf', as_attachment=True)
+    # print(hospitallist[1][7])
+    # return send_file(BytesIO(hospitallist[1][7]), attachment_filename='certificate.pdf', as_attachment=True)
     if(hospitallist):
         return render_template('adminhome.html', list=hospitallist,username=username)
     return render_template('adminhome.html', username=username)
@@ -122,11 +124,11 @@ def dummyRequest():
     if request.method == 'POST':
         requestdata = request.form
         # recipientID = recipientdata['recipientemail']
-        requestID = requestdata['requestID']
-        requestdata = sc.organRequest(requestID)
+        requestID= requestdata['requestID']
+        requestdata = sc.organRequest(requestID[0])
         print("View",(requestdata[0]))
         if(requestdata):
-            return redirect(url_for('receiverHospitalRequestPage', donorEmail=requestdata[0],recipientEmail=requestdata[1],organ=requestdata[2]))
+            return redirect(url_for('receiverHospitalRequestPage', donorEmail=requestdata[0][0],recipientEmail=requestdata[0][1],organ=requestdata[0][2]))
     return render_template('dummyrequests.html')
 
 @app.route('/donorhospitalrequest/<donorEmail>/<recipientEmail>/<organ>', methods=['GET'])
@@ -188,21 +190,15 @@ def hospitalLogin():
         password =hospitaldata['hpassword']
         # usertype = hospitaldata['type']
         session.pop('user', None)
-        if(request.form['submit']=='submit'):
-            res = sc.hospitalLoginAuthentication(email,password)
-            if(res):
-                session['user']= email
-                logging.info("User " + session['user'] + " has logged in")
-                return redirect(url_for('hospitalHome'))
-            else:   
-                logging.error("Invalid user")
-                flash("Not an existing user. Please Register!!")
-                return render_template('loginpage.html')
-        elif(request.form['submit']=='SignUp'):
-            if(usertype =="Donor/Receiver"):
-                return redirect(url_for('registerUser'))
-            else:
-                return redirect(url_for('hospitalRegistration'))
+        res = sc.hospitalLoginAuthentication(email,password)
+        if(res):
+            session['user']= email
+            logging.info("User " + session['user'] + " has logged in")
+            return redirect(url_for('hospitalHome'))
+        else:   
+            logging.error("Invalid user")
+            flash("Not an existing user. Please Register!!")
+            return render_template('loginpage.html')
     return render_template('loginpage.html')
 
 @app.errorhandler(404)
