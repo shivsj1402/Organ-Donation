@@ -26,8 +26,13 @@ class SqlClient(object):
             return result
         else:
             return None
-
-
+    
+    def hospitalexist(self, hemail):
+        res = self.cursor.callproc('hospitalexist',[hemail,0])
+        if(res[1]):
+            return "Exist"
+        else:
+            return "NotExist"
     def adminLoginAuthentication(self,email,password):
         user1 = self.cursor.callproc('adminlogin',[email,password,0])
         #print(user1)

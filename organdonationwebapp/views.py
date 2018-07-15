@@ -1,11 +1,57 @@
 from flask import Flask, render_template, request, redirect, session, url_for, g, send_file,flash, jsonify
 from organdonationwebapp import app, sc
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SelectField, RadioField, widgets, SelectMultipleField
+from wtforms.fields.html5 import DateField
+from wtforms.validators import InputRequired, Email, Length, Regexp, EqualTo
 from io import BytesIO
 import mysql.connector
 import logging
 import binascii
 
 logging.basicConfig(filename='file.log',level=logging.DEBUG)
+
+class hospitalLoginForm(FlaskForm):
+    username = StringField('username', validators=[InputRequired(),(Email( message="Please enter in valid email format"))])
+    password = PasswordField('password', validators=[InputRequired(message="password is required")])
+
+class adminLoginForm(FlaskForm):
+    username = StringField('username', validators=[InputRequired(),(Email( message="Please enter in valid email format"))])
+    password = PasswordField('password', validators=[InputRequired(message="password is required")])
+
+class hospitalSignupForm(FlaskForm):
+    hospitalname = StringField('hospitalname',validators=[InputRequired(), Regexp('^[a-zA-Z ]*$',message="Please input only characters"),(Length(min=5, max= 20, message="Should be between 5 to 20 Characters."))])
+    hospitalemail= StringField('hospitalemail', validators=[InputRequired(), (Email(message="Enter Email in a vaid format"))])
+    phonenumber= StringField('phonenumber', validators=[InputRequired(), Regexp('^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$',message="Please input only characters")])
+    address = StringField('address', validators=[InputRequired(),Regexp('^\\d+ [a-zA-Z ]+$', message="Enter Address in valid format")])
+    province= SelectField('province',choices=[('NS','NS'), ('ON', 'ON'), ('AB', 'AB'), ('NB', 'NB')])
+    city= SelectField('city',choices=[('Halifax', 'Halifax'), ('Tornoto', 'Toronto'), ('Vancouver', 'Vancouver'), ('Fedrection', 'Fedrection')])
+    password = PasswordField('password', validators=[InputRequired(),(Length(min=8, message="shoule be atlease 8 characters"))])
+    cpassword= PasswordField('cpassword', validators=[InputRequired(), EqualTo('password', message="Shoule be same as password"), Length(min=8, message="shoule be atlease 8 characters")])
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+
+class userSignup(FlaskForm):
+    userfirstname= StringField('userfirstname',validators=[InputRequired(), Regexp('^[a-zA-Z ]*$',message="Please input only characters"),(Length(min=5, max= 20, message="Should be between 5 to 20 Characters."))])
+    userlastname = StringField('userlastname', validators=[InputRequired(), Regexp('^([a-zA-Z]+[\-]?[a-zA-Z]+[ ]?)+$',message="Please input only characters"),(Length(min=5, max= 20, message="Should be between 5 to 20 Characters."))])
+    phonenumber= StringField('phonenumber', validators=[InputRequired(), Regexp('^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$',message="Please input only characters")])
+    useremail= StringField('useremail', validators=[InputRequired(), (Email(message="Enter Email in a vaid format"))])
+    sex= SelectField('sex',choices=[('M', 'Male'), ('F', 'Female')])
+    dob = DateField('dob', format='%Y-%m-%d', validators=[InputRequired()])
+    address = StringField('address',validators=[InputRequired(),Regexp('^\\d+ [a-zA-Z ]+$', message="Enter Address in valid format")])
+    province= SelectField('province',choices=[('NS','NS'), ('ON', 'ON'), ('AB', 'AB'), ('NB', 'NB')])
+    city= SelectField('city',choices=[('Halifax', 'Halifax'), ('Tornoto', 'Toronto'), ('Vancouver', 'Vancouver'), ('Fedrection', 'Fedrection')])
+    bloodgroup= SelectField('bloodgroup',choices=[('A+','A+'), ('A-', 'A-'), ('B+', 'B+'), ('B-', 'B-'), ('AB+', 'AB+'), ('AB-', 'AB-'), ('O+', 'O+'), ('O-', 'O-')])
+    
+    usertype =RadioField('usertype', choices=[('d','Donor'),('r','Receiver')])
+    string_of_files = ['liver\r\nheart\r\neyes\r\nlidney\r\n']
+    list_of_files = string_of_files[0].split()
+    files = [(x, x) for x in list_of_files]
+    organ = MultiCheckboxField('Label', choices=files, validators=[InputRequired()])
+
+
 
 @app.before_request
 def before_request():
@@ -27,24 +73,36 @@ def donorReceiverRequest():
 
 @app.route('/hospitalregistration', methods=['GET','POST'])
 def hospitalRegistration():
-    if request.method == 'POST':
-        hospitalName = request.form['hospitalName']
-        emailID = request.form['emailID']
-        phone = request.form['phone']
-        address = request.form['address']
-        province = request.form['province']
-        city = request.form['city']
-        password = request.form['password']
+    form = hospitalSignupForm()
+    if form.validate_on_submit():
+        hospitalName = form.hospitalname.data
+        emailID = form.hospitalemail.data
+        phone = form.phonenumber.data
+        address = form.address.data
+        province = form.province.data
+        city = form.city.data
+        password = form.password.data
         data = request.files['certificate']
-        certificate=data.read()
-        bcertificate =binascii.hexlify(certificate)
-
-        message = sc.hospitalRegistrattion(hospitalName,emailID,phone,address,province,city,password,bcertificate)
-        if(message=="Done"):
-            return redirect(url_for('hospitalLogin'))
+        mes =sc.hospitalexist(emailID)
+        print(mes)
+        if(mes== "NotExist"):
+            # if(data):
+            certificate=data.read()
+            bcertificate =binascii.hexlify(certificate)
+            message = sc.hospitalRegistrattion(hospitalName,emailID,phone,address,province,city,password,bcertificate)
+            if(message=="Done"):
+                flash("Registered Sucessfully")
+                return redirect(url_for('hospitalLogin'))
+            else:
+                logging.warning("Error Inserting Data")  
+                return render_template('hospitalregistration.html', form = form)
+            # else:
+            #     flash("please provide a valid certificate")
+            #     return render_template('hospitalregistration.html', form = form)
         else:
-            logging.warning("Error Inserting Data")  
-    return render_template('hospitalregistration.html')
+            flash("email already exists")
+            return render_template('hospitalregistration.html', form = form)
+    return render_template('hospitalregistration.html', form = form)
 
 @app.route('/receiverList', methods=['GET'])
 def receiverList():
@@ -64,29 +122,36 @@ def requestFinal():
 
 @app.route('/signup', methods=['GET','POST'])
 def registerUser():
-    organ =[]
     hlist=sc.getHospitalList()
-    if request.method == 'POST':
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        phone_number = request.form['phone_number']
-        email = request.form['email']
-        sex = request.form['sex']
-        dob = request.form['dob']
-        address = request.form['address']
-        province = request.form['province']
-        city = request.form['city']
+    organ =[]
+    form = userSignup()
+    if form.validate_on_submit():
+        first_name = form.userfirstname.data
+        last_name = form.userlastname.data
+        phone_number = form.phonenumber.data
+        email = form.useremail.data
+        sex = form.sex.data
+        dob = form.dob.data
+        address = form.address.data
+        province = form.province.data
+        city = form.city.data
+        bloodgroup = form.bloodgroup.data
+        usertype = form.usertype.data
+        organ = form.organ.data
         hospital = request.form['hname']
-        bloodgroup = request.form['bloodgroup']
-        usertype = request.form['usertype']
-        organ = request.form.getlist('organ')
         for item in organ:
             message= sc.userRegistration(first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, item)
             if(message=="Done"):
                 logging.info("User Registered")
+                flash("User registered")
+                redirect(url_for('hospitalLogin'))
             else:
                 logging.warning("Error Inserting Data")
-    return render_template('signup.html', hlist=hlist)
+                flash('error occoured!')
+                return render_template('signup.html', form=form, hlist=hlist)  
+        return render_template('signup.html', form = form, hlist=hlist,)       
+    print("validation issue")
+    return render_template('signup.html',form = form ,hlist=hlist)
 
 @app.route('/hospitaldonor', methods=['GET'])
 def hospitalDonorPage():
@@ -94,16 +159,18 @@ def hospitalDonorPage():
 
 @app.route('/adminlogin', methods=['GET','POST'])
 def adminLoginPage():
-    if request.method == 'POST':
-        hospitaldata = request.form
-        email =hospitaldata['emailID']
-        password =hospitaldata['password']
+    form = adminLoginForm()
+    if form.validate_on_submit():
+        email =form.username.data
+        password =form.password.data
         user = sc.adminLoginAuthentication(email, password)
         if(user):
             return redirect(url_for('adminHomepage', username=user))
         else:
             logging.warning ('Authentication failed!!')
-    return render_template('adminlogin.html')
+            flash("Please Enter Correct Details!!")
+            return render_template('adminlogin.html', form= form)
+    return render_template('adminlogin.html', form= form)
 
 @app.route('/adminhome/<username>', methods=['GET','POST'])
 def adminHomepage(username=None, hospitalEmail=None):
@@ -184,11 +251,10 @@ def hospitalHome():
 
 @app.route('/', methods=['GET','POST'])
 def hospitalLogin():
-    if request.method == 'POST':
-        hospitaldata = request.form
-        email =hospitaldata['hemail']
-        password =hospitaldata['hpassword']
-        # usertype = hospitaldata['type']
+    form = hospitalLoginForm()
+    if form.validate_on_submit():
+        email =form.username.data
+        password =form.password.data
         session.pop('user', None)
         res = sc.hospitalLoginAuthentication(email,password)
         if(res):
@@ -198,8 +264,8 @@ def hospitalLogin():
         else:   
             logging.error("Invalid user")
             flash("Not an existing user. Please Register!!")
-            return render_template('loginpage.html')
-    return render_template('loginpage.html')
+            return render_template('loginpage.html', form= form)
+    return render_template('loginpage.html', form= form)
 
 @app.errorhandler(404)
 def page_not_found(e):

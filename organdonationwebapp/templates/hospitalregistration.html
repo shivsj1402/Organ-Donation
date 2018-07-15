@@ -19,6 +19,7 @@
     <div class="row justify-content-md-center">
         <div class="col-md-10">
              <form method="post" enctype="multipart/form-data">
+                {{ form.csrf_token }}
                 <div class="row">
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -27,8 +28,13 @@
                      </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="hospitalName" id="first_name" class="form-control" placeholder="Hospital Name">
-                        </div>
+                            {{form.hospitalname (class_="form-control")}}
+                            <ul>
+                                {% for err in form.hospitalname.errors %}
+                                <li style="color:red;" >{{ err }}</li>
+                                {% endfor %}
+                            </ul> 
+                         </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -37,7 +43,12 @@
                      </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="emailID" id="email" class="form-control" placeholder="Email">
+                            {{form.hospitalemail (class_="form-control")}}
+                            <ul>
+                                {% for err in form.hospitalemail.errors %}
+                                <li style="color:red;" >{{ err }}</li>
+                                {% endfor %}
+                            </ul> 
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -47,7 +58,12 @@
                      </div>
                     <div class="col-xs-7 col-sm-7 col-md-7">
                         <div class="form-group">
-                            <input type="text" name="phone" id="pnone_number" class="form-control input-sm" placeholder="Phone Number">
+                            {{form.phonenumber (class_="form-control")}}
+                            <ul>
+                                {% for err in form.phonenumber.errors %}
+                                <li style="color:red;" >{{ err }}</li>
+                                {% endfor %}
+                            </ul> 
                         </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -57,7 +73,12 @@
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="address" id="address" class="form-control" placeholder="Address">
+                            {{form.address (class_="form-control")}}
+                            <ul>
+                                {% for err in form.address.errors %}
+                                <li style="color:red;" >{{ err }}</li>
+                                {% endfor %}
+                            </ul> 
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -67,21 +88,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" name="province" id="province">
-                            <option>ON</option>
-                            <option>QC</option>
-                            <option>BC</option>
-                             <option>AB</option>
-                            <option>MB</option>
-                            <option>SK</option>
-                            <option>NS</option>
-                            <option>NB</option>
-                            <option>NL</option>
-                             <option>PE</option>
-                            <option>NT</option>
-                            <option>YT</option>
-                            <option>NU</option>
-                          </select>
+                            {{form.province (class_="form-control")}}
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -91,11 +98,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select class="form-control" name="city" id="province">
-                            <option>Halifax</option>
-                            <option>Montreal</option>
-                            <option>Toronto</option>
-                          </select>
+                            {{form.city (class_="form-control")}} 
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -105,8 +108,13 @@
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="password" id="password" class="form-control" placeholder="Enter your Password">
-                        </div>
+                            {{form.password (class_="form-control")}}
+                            <ul>
+                                {% for err in form.password.errors %}
+                                <li style="color:red;" >{{ err }}</li>
+                                {% endfor %}
+                            </ul> 
+                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -115,8 +123,13 @@
                     </div>
                      <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="cpassword" id="rpassword" class="form-control" placeholder="Re-enter your Password">
-                        </div>
+                            {{form.cpassword (class_="form-control")}}
+                            <ul>
+                                {% for err in form.cpassword.errors %}
+                                <li style="color:red;" >{{ err }}</li>
+                                {% endfor %}
+                            </ul> 
+                            </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -125,6 +138,16 @@
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">
                      <input type="file" name="certificate"  class="form-control">
+                     {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <script>
+                            var messages = {{ messages | safe }};
+                            for (var i=0; i<messages.length; i++) {
+                            alert(messages[i]);
+                            }
+                        </script>
+                        {% endif %}
+                    {% endwith %}
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>

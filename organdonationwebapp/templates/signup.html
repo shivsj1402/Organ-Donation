@@ -18,8 +18,8 @@
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-10">
-
             <form method="post">
+                    {{ form.csrf_token }}
                 <div class="row">
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -28,8 +28,13 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input type="text" data-validation="length"  name="first_name" id="first_name" class="form-control input-sm" placeholder="First Name" required="required">
-                        </div>
+                                {{form.userfirstname (class_="form-control")}}
+                                <ul>
+                                    {% for err in form.userfirstname.errors %}
+                                    <li style="color:red;" >{{ err }}</li>
+                                    {% endfor %}
+                                </ul> 
+                          </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -38,8 +43,13 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input type="text" data-validation="length" data-validation-lenght="max20" name="last_name" id="last_name" class="form-control input-sm" placeholder="Last Name" required="required">
-                        </div>
+                                {{form.userlastname (class_="form-control")}}
+                                <ul>
+                                    {% for err in form.userlastname.errors %}
+                                    <li style="color:red;" >{{ err }}</li>
+                                    {% endfor %}
+                                </ul>
+                                </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -48,8 +58,13 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input type="tel" data-validation= "number" name="phone_number" id="pnone_number" class="form-control input-sm" placeholder="Phone Number" required="required">
-                        </div>
+                                {{form.phonenumber (class_="form-control")}}
+                                <ul>
+                                    {% for err in form.phonenumber.errors %}
+                                    <li style="color:red;" >{{ err }}</li>
+                                    {% endfor %}
+                                </ul> 
+                                </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -58,8 +73,13 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input type="text" data-validation="email" name="email" id="email" class="form-control input-sm" placeholder="Email Address" required="required">
-                        </div>
+                                {{form.useremail (class_="form-control")}}
+                                <ul>
+                                    {% for err in form.useremail.errors %}
+                                    <li style="color:red;" >{{ err }}</li>
+                                    {% endfor %}
+                                </ul>
+                                </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -68,12 +88,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <select type="text" list"Sex" class="form-control" name="sex">
-                                <datalist id="sex">
-                                <option>Male</option>
-                                <option>Female</option>
-                                </datalist>>
-                          </select>
+                                {{form.sex (class_="form-control")}}
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -83,8 +98,13 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                            <input class="form-control" id="date" name="dob" placeholder="MM/DD/YYY" type="text" data-validation="date" data-validation-format="dd/mm/yyyy"required="required"/>
-                          </div>
+                        {{ form.dob (class_='datepicker')}}
+                        <ul>
+                                {% for err in form.address.errors %}
+                                <li style="color:red;" >{{ err }}</li>
+                                {% endfor %}
+                            </ul> 
+                        </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -93,8 +113,13 @@
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="address" id="address" class="form-control" placeholder="Address" required="required" data-validation="alphanumeric">
-                        </div>
+                                {{form.address (class_="form-control")}}
+                                <ul>
+                                    {% for err in form.address.errors %}
+                                    <li style="color:red;" >{{ err }}</li>
+                                    {% endfor %}
+                                </ul> 
+                                </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -103,23 +128,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <input class="form-control" name="province" list="province">
-                             <datalist id="province">
-                            <option>ON</option>
-                            <option>QC</option>
-                            <option>BC</option>
-                             <option>AB</option>
-                            <option>MB</option>
-                            <option>SK</option>
-                            <option>NS</option>
-                            <option>NB</option>
-                            <option>NL</option>
-                             <option>PE</option>
-                            <option>NT</option>
-                            <option>YT</option>
-                            <option>NU</option>
-                             </datalist>
-                             </input>
+                                {{form.province (class_="form-control")}}
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -129,13 +138,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <input class="form-control" name="city" list="city">
-                            <datalist id="city">                                 
-                            <option>Halifax</option>
-                            <option>Montreal</option>
-                            <option>Toronto</option>
-                            </datalist>
-                            </input>
+                                {{form.city (class_="form-control")}} 
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -144,15 +147,14 @@
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
-                         <div class="form-group">
-                             <select class="form-control" name="hname"id="province">
-                             {% for item in hlist %}
-                            <option>{{item[0]}}</option>
-                            {% endfor %}
-                          </select>
-                         </div>
-                    </div>
-                    
+                            <div class="form-group">
+                                <select class="form-control" name="hname"id="province">
+                                {% for item in hlist %}
+                               <option>{{item[0]}}</option>
+                               {% endfor %}
+                             </select>
+                            </div>
+                       </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
                             <label>Blood Group:</label>
@@ -160,18 +162,7 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                             <input class="form-control" name="bloodgroup" list="bloodgroup">
-                             <datalist id-"bloodgroup">
-                            <option>A+</option>
-                            <option>A-</option>
-                            <option>B+</option>
-                             <option>B-</option>
-                            <option>AB+</option>
-                            <option>AB-</option>
-                            <option>O+</option>
-                            <option>O-</option>
-                             </datalist>
-                         </input>
+                                {{form.bloodgroup (class_="form-control")}} 
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -181,12 +172,7 @@
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="btn-group" data-toggle="buttons" >
-                            <label class="btn btn-primary active">
-                                <input type="radio" name="usertype" id="opt1"  value="d"> Donor</input>
-                            </label>
-                            <label class="btn btn-primary">
-                                <input type="radio" name="usertype" id="opt2" value="r"/> Receiver
-                            </label>
+                           {{form.usertype (class_="btn btn-primary")}}
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -195,26 +181,23 @@
                         </div>
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
-                        <div class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-primary active">
-                                <input type="checkbox" name="organ" id="organ1" value="liver" checked /> Liver(Live or Deceased)
-                            </label>
-                            <label class="btn btn-primary">
-                                <input type="checkbox"  name="organ" id="organ2" value="kidney"/> Kidney(Live or Deceased)
-                            </label>
-                            <label class="btn btn-primary">
-                                <input type="checkbox" name="organ" id="organ3" value="heart" /> Heart(Deceased)
-                            </label>
-                            <label class="btn btn-primary">
-                                <input type="checkbox" name="organ" id="organ4" value="Eyes" /> Eyes(Deceased)
-                            </label>
-                        </div>
+                        {{form.organ }}
                     </div>
                 </div>
 
 
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <input type="button" class="btn btn-primary" value="Back" onclick="location.href='#'"/>
+                {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                        <script>
+                            var messages = {{ messages | safe }};
+                            for (var i=0; i<messages.length; i++) {
+                            alert(messages[i]);
+                            }
+                        </script>
+                        {% endif %}
+                    {% endwith %}
             </form>
         </div>
     </div>
