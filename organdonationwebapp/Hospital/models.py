@@ -1,4 +1,4 @@
-from organdonationwebapp.models.sqlclient import SqlClient
+from organdonationwebapp.models.SqlClient import SqlClient
 
 class HospitalModel(SqlClient):
     def __init__(self):

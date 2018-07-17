@@ -29,17 +29,20 @@ class SqlClient(object):
         else:
             return None
     
+
     def getHospitalDonorList(self,hname):
         query = """SELECT  * FROM user where donationType='d' AND hospital=%s"""
         self.cursor.execute(query,(hname,))
         donorlist= self.cursor.fetchall()
         return donorlist
 
+
     def getHospitalReceiverList(self,hname):
         query = """SELECT  * FROM user where donationType='r' AND hospital=%s"""
         self.cursor.execute(query,(hname,))
         receiverlist= self.cursor.fetchall()
         return receiverlist
+
 
     def getHospitalName(self,hemail):
         query = """SELECT  * FROM hospital where emailID=%s """
@@ -48,17 +51,8 @@ class SqlClient(object):
         if(hname):
             return hname
         else:
-            return None
+            return None    
 
-    def getDonorList(self):
-        query = """SELECT  * FROM user where donationType='d'"""
-        self.cursor.execute(query)
-        donorlist= self.cursor.fetchall()
-        if(donorlist):
-            return donorlist
-        else:
-            return None
-    
     
     def closeDBConnection(self):
         self.cursor.close()

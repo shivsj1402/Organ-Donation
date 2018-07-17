@@ -6,37 +6,37 @@ app = Flask(__name__)
 app.debug=True
 
 
-from organdonationwebapp.models.sqlclient import SqlClient
+from organdonationwebapp.models.SqlClient import SqlClient
 sc = None
 if not sc:
     sc = SqlClient()
 
 
-from organdonationwebapp.Admin.models import AdminModel
+from organdonationwebapp.Admin.Models import AdminModel
 ac = None
 if not ac:
     ac = AdminModel()
 
 
-from organdonationwebapp.Hospital.models import HospitalModel
+from organdonationwebapp.Hospital.Models import HospitalModel
 hc = None
 if not hc:
     hc = HospitalModel()
 
 
-from organdonationwebapp.User.models import UserModel
+from organdonationwebapp.User.Models import UserModel
 uc = None
 if not uc:
     uc = UserModel()
 
 
-from organdonationwebapp.User.Donor.models import DonorModel
+from organdonationwebapp.User.Donor.Models import DonorModel
 duc = None
 if not duc:
     duc = DonorModel()
 
 
-from organdonationwebapp.User.Recipient.models import RecipientModel
+from organdonationwebapp.User.Recipient.Models import RecipientModel
 ruc = None
 if not ruc:
     ruc = RecipientModel()

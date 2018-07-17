@@ -1,11 +1,13 @@
 from flask import Flask, render_template, request, redirect, session, url_for, g, send_file,flash, jsonify
 from organdonationwebapp import app, sc
-import organdonationwebapp.Admin.admin as ao
-import organdonationwebapp.Hospital.hospital as ho
+import organdonationwebapp.Admin.Admin as ao
+import organdonationwebapp.Hospital.Hospital as ho
 import organdonationwebapp.Hospital.ValidateHospital as vho
 import organdonationwebapp.Hospital.HospitalList as hlo
-import organdonationwebapp.User.user as us
-import organdonationwebapp.User.Donor.donor as do
+import organdonationwebapp.User.User as us
+import organdonationwebapp.User.Donor.Donor as do
+import organdonationwebapp.User.Donor.DonorProfile as dop
+import organdonationwebapp.User.Donor.DonorListDetails as dlo
 import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Recipient.RecipientListDetails as rlo
 import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
@@ -20,17 +22,11 @@ def before_request():
     if 'user' in session:
         g.user = session['user']
 
-@app.route('/donorList', methods=['GET'])
-def donorList():
-    if g.user:
-        if request.method == 'GET':
-            dlist= sc.getDonorList()
-            return render_template('donorList.html', dlist=dlist)
-    return redirect(url_for('hospitalLogin'))
 
 @app.route('/donorReceiverRequest', methods=['GET'])
 def donorReceiverRequest():
     return render_template('donorReceiverRequest.html')
+
 
 @app.route('/hospitalregistration', methods=['GET','POST'])
 def hospitalRegistration():
@@ -68,6 +64,7 @@ def hospitalLogin():
                 return redirect(url_for('hospitalRegistration'))
     return render_template('loginPage.html')
 
+
 @app.route('/adminlogin', methods=['GET','POST'])
 def adminLoginPage():
     if request.method == 'POST':
@@ -77,7 +74,6 @@ def adminLoginPage():
         if(admin_json['submit']=='submit'):
             admin = ao.Admin(admin_json)
             session.pop('user', None)
-            print(admin.loginAdmin())
             if(admin.loginAdmin()):
                 session['user']= admin_json['emailID']
                 print(session['user'])
@@ -92,9 +88,11 @@ def adminLoginPage():
 def receiverProfile():
     return render_template('receiverProfile.html')
 
+
 @app.route('/requestFinal', methods=['GET'])
 def requestFinal():
     return render_template('requestFinal.html')
+
 
 @app.route('/signup', methods=['GET','POST'])
 def registerUser():
@@ -112,6 +110,7 @@ def registerUser():
         else:
             return "<h2> Registration failed </h2>"
     return render_template('signup.html', hlist=hlist)
+
 
 @app.route('/hospitaldonor', methods=['GET'])
 def hospitalDonorPage():
@@ -141,7 +140,6 @@ def dummyRequest():
         requestdata = request.form
         requestID = requestdata['requestID']
         requestdata = sc.organRequest(requestID)
-        print("View",(requestdata[0]))
         if(requestdata):
             return redirect(url_for('receiverHospitalRequestPage', donorEmail=requestdata[0],recipientEmail=requestdata[1],organ=requestdata[2]))
     return render_template('dummyrequests.html')
@@ -171,6 +169,16 @@ def receiverList():
     return redirect(url_for('hospitalLogin'))
 
 
+@app.route('/donorList', methods=['GET'])
+def donorList():
+    if g.user:
+        donorList = dlo.DonorListDetails(g.user)
+        don_list_details = donorList.getDonorList()
+        if(rec_list_details):
+            return render_template('donorList.html', dlist=don_list_details)
+    return redirect(url_for('hospitalLogin'))
+
+
 @app.route('/receiverhospitalrequest/<recipientEmail>', methods=['GET','POST'])
 def receiverHospitalRequestPage(recipientEmail=None):
     if(recipientEmail != " "):
@@ -189,12 +197,13 @@ def receiverHospitalRequestPage(recipientEmail=None):
 @app.route('/donorprofile/<donorEmail>', methods=['GET'])
 def donorProfilePage(donorEmail=None):
     donor_userdata = None
-    print("Donor Email:", (donorEmail))
     if(donorEmail):
-        donor_userdata = sc.donorHospitalShowDonorProfile(donorEmail)
-        print("AAAA:",(donor_userdata))
+        donorprofile = dop.DonorProfile(donorEmail)
+        donor_userdata = donorprofile.getDonorProfile()
+        print("donor_userdata",(donor_userdata))
     if(donor_userdata):
         return render_template('donorprofile.html', donordata=donor_userdata)
+
 
 @app.route('/hospitalHome', methods=['GET','POST'])
 def hospitalHome():
@@ -212,6 +221,7 @@ def hospitalHome():
         res3 = sc.getHospitalReceiverList(hname[0])
         return render_template('hospitalHome.html',donor=res2, receiver=res3)
     return redirect(url_for('hospitalLogin'))
+
 
 @app.errorhandler(404)
 def page_not_found(e):

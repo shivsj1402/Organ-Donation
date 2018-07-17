@@ -1,4 +1,4 @@
-from organdonationwebapp.models.sqlclient import SqlClient
+from organdonationwebapp.models.SqlClient import SqlClient
 
 class DonorModel(SqlClient):
     def __init__(self):
@@ -28,4 +28,14 @@ class DonorModel(SqlClient):
             else:
                 return None
         except Exception as err:
+            return None
+
+
+    def getDonorList(self):
+        query = """SELECT  * FROM user where donationType='d'"""
+        self.cursor.execute(query)
+        donorlist= self.cursor.fetchall()
+        if(donorlist):
+            return donorlist
+        else:
             return None
