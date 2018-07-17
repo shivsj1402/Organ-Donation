@@ -51,21 +51,12 @@ class userSignup(FlaskForm):
     files = [(x, x) for x in list_of_files]
     organ = MultiCheckboxField('Label', choices=files, validators=[InputRequired()])
 
-
-
 @app.before_request
 def before_request():
     g.user = None
     if 'user' in session:
         g.user = session['user']
 
-@app.route('/donorList', methods=['GET'])
-def donorList():
-    if g.user:
-        if request.method == 'GET':
-            dlist= sc.getDonorList()
-            return render_template('donorList.html', dlist=dlist)
-    return redirect(url_for('hospitalLogin'))
 
 @app.route('/donorReceiverRequest', methods=['GET'])
 def donorReceiverRequest():
@@ -103,14 +94,6 @@ def hospitalRegistration():
             flash("email already exists")
             return render_template('hospitalregistration.html', form = form)
     return render_template('hospitalregistration.html', form = form)
-
-@app.route('/receiverList', methods=['GET'])
-def receiverList():
-    if g.user:
-        if request.method == 'GET':
-            rlist= sc.getReceiverList()
-            return render_template('receiverList.html', rlist=rlist)
-    return redirect(url_for('hospitalLogin'))
 
 @app.route('/receiverProfile', methods=['GET'])
 def receiverProfile():
@@ -150,7 +133,6 @@ def registerUser():
                 flash('error occoured!')
                 return render_template('signup.html', form=form, hlist=hlist)  
         return render_template('signup.html', form = form, hlist=hlist,)       
-    print("validation issue")
     return render_template('signup.html',form = form ,hlist=hlist)
 
 @app.route('/hospitaldonor', methods=['GET'])
@@ -202,7 +184,7 @@ def dummyRequest():
 def donorHospitalRequestPage(donorEmail=None, recipientEmail=None, organ=None):
     donor_userdata = None
     recipient_userdata = None
-    print("Donor EMail:", (donorEmail))
+    print("Donor Email:", (donorEmail))
     if(donorEmail):
         donor_userdata = sc.donorHospitalShowDonorProfile(donorEmail)
         print("AAAA:",(donor_userdata))
@@ -244,9 +226,31 @@ def hospitalHome():
                 return redirect(url_for('donorList'))
             elif(request.form['submit']=='View Receiver List'):
                 return redirect(url_for('receiverList'))
+        res1= sc.getRequestList(hemail)
         res2 = sc.getHospitalDonorList(hname[0])
         res3 = sc.getHospitalReceiverList(hname[0])
-        return render_template('hospitalHome.html',donor=res2, receiver=res3)
+        return render_template('hospitalHome.html',request= res1 ,donor=res2, receiver=res3)
+    return redirect(url_for('hospitalLogin'))
+
+
+@app.route('/donorList', methods=['GET'])
+def donorList():
+    if g.user:
+        hemail=g.user
+        hname=sc.getHospitalName(hemail)
+        if request.method == 'GET':
+            dlist= sc.getHospitalDonorList(hname[0])
+            return render_template('donorList.html', dlist=dlist)
+    return redirect(url_for('hospitalLogin'))
+
+@app.route('/receiverList', methods=['GET'])
+def receiverList():
+    if g.user:
+        hemail=g.user
+        hname=sc.getHospitalName(hemail)
+        if request.method == 'GET':
+            rlist= sc.getHospitalReceiverList(hname[0])
+            return render_template('receiverList.html', rlist=rlist)
     return redirect(url_for('hospitalLogin'))
 
 @app.route('/', methods=['GET','POST'])
@@ -266,6 +270,7 @@ def hospitalLogin():
             flash("Not an existing user. Please Register!!")
             return render_template('loginpage.html', form= form)
     return render_template('loginpage.html', form= form)
+
 
 @app.errorhandler(404)
 def page_not_found(e):

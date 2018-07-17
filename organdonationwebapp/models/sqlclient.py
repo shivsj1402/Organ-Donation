@@ -162,24 +162,13 @@ class SqlClient(object):
             else:
                 return None
 
-    def getDonorList(self):
-        self.cursor.callproc('getreceiverlist')
+    def getRequestList(self, emailID):
+        self.cursor.callproc('requestlist', [emailID])
         res = self.cursor.stored_results()
         for result in res:
-            donorlist= result.fetchall()
-            if(donorlist):
-                return donorlist
-            else:
-                return None
-
-    def getReceiverList(self):
-        self.cursor.callproc('getreceiverlist')
-        res = self.cursor.stored_results()
-        for result in res:
-            receiverlist= result.fetchall()
-            print(receiverlist)
-            if(receiverlist):
-                return receiverlist
+            requestlist= result.fetchall()
+            if(requestlist):
+                return requestlist
             else:
                 return None
 
