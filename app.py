@@ -13,6 +13,7 @@ if __name__ == '__main__':
         app.run(HOST, PORT, debug=True)
     except Exception as err:
         sc.closeDBConnection()
+        print (err)
         print ("Something went wrong running the app")
     finally:
         sc.closeDBConnection()
