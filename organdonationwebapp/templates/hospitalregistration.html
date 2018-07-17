@@ -137,7 +137,12 @@
                         </div>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">
-                     <input type="file" name="certificate"  class="form-control">
+                     {{form.certificate()}}
+                     <ul>
+                        {% for err in form.certificate.errors %}
+                        <li style="color:red;" >{{ err }}</li>
+                        {% endfor %}
+                    </ul> 
                      {% with messages = get_flashed_messages() %}
                         {% if messages %}
                         <script>

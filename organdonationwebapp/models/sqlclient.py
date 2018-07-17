@@ -19,13 +19,16 @@ class SqlClient(object):
             logging.error("Error connecting to Database")
             exit(1)
 
-    def hospitalLoginAuthentication(self,hemail,hpass):
-        result = self.cursor.callproc('hospitallogin',[hemail,hpass,0])
-        #print(result)
-        if(result[2]):
-            return result
-        else:
-            return None
+    def hospitalLoginAuthentication(self,hemail):
+        self.cursor.callproc('hospitallogin',[hemail])
+        res = self.cursor.stored_results()
+        for result in res:
+            hospitalauth= result.fetchall()
+            #print(result)
+            if(hospitalauth):
+                return hospitalauth
+            else:
+                return None
     
     def hospitalexist(self, hemail):
         res = self.cursor.callproc('hospitalexist',[hemail,0])
@@ -167,10 +170,7 @@ class SqlClient(object):
         res = self.cursor.stored_results()
         for result in res:
             requestlist= result.fetchall()
-            if(requestlist):
-                return requestlist
-            else:
-                return None
+            return requestlist
 
     def hospitalRegistrattion(self,hospitalName,emailID,phone,address,province,city,password,certificate):
         self.cursor.callproc('hospitalregistration',[hospitalName,emailID,phone,address,province,city,password,certificate])

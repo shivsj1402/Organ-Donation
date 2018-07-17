@@ -1,15 +1,17 @@
 from flask import Flask, render_template, request, redirect, session, url_for, g, send_file,flash, jsonify
 from organdonationwebapp import app, sc
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SelectField, RadioField, widgets, SelectMultipleField
+from wtforms import StringField, PasswordField, SelectField, RadioField, widgets, SelectMultipleField,FileField
 from wtforms.fields.html5 import DateField
 from wtforms.validators import InputRequired, Email, Length, Regexp, EqualTo
+# from werkzeug.security import generate_password_hash, check_password_hash
 from io import BytesIO
-import mysql.connector
+import bcrypt
 import logging
 import binascii
 
 logging.basicConfig(filename='file.log',level=logging.DEBUG)
+FILE_TYPES = set([ 'pdf', 'PDF'])
 
 class hospitalLoginForm(FlaskForm):
     username = StringField('username', validators=[InputRequired(),(Email( message="Please enter in valid email format"))])
@@ -28,6 +30,7 @@ class hospitalSignupForm(FlaskForm):
     city= SelectField('city',choices=[('Halifax', 'Halifax'), ('Tornoto', 'Toronto'), ('Vancouver', 'Vancouver'), ('Fedrection', 'Fedrection')])
     password = PasswordField('password', validators=[InputRequired(),(Length(min=8, message="shoule be atlease 8 characters"))])
     cpassword= PasswordField('cpassword', validators=[InputRequired(), EqualTo('password', message="Shoule be same as password"), Length(min=8, message="shoule be atlease 8 characters")])
+    certificate = FileField('certificate', validators=[InputRequired()])
 
 class MultiCheckboxField(SelectMultipleField):
     widget = widgets.ListWidget(prefix_label=False)
@@ -73,25 +76,27 @@ def hospitalRegistration():
         province = form.province.data
         city = form.city.data
         password = form.password.data
-        data = request.files['certificate']
-        mes =sc.hospitalexist(emailID)
-        print(mes)
-        if(mes== "NotExist"):
-            # if(data):
-            certificate=data.read()
-            bcertificate =binascii.hexlify(certificate)
-            message = sc.hospitalRegistrattion(hospitalName,emailID,phone,address,province,city,password,bcertificate)
-            if(message=="Done"):
-                flash("Registered Sucessfully")
-                return redirect(url_for('hospitalLogin'))
+        enpassword =bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        file_name = form.certificate.data.filename
+        data = form.certificate.data
+        if '.' in file_name and file_name.rsplit('.', 1)[1] in FILE_TYPES:
+            mes =sc.hospitalexist(emailID)
+            if(mes== "NotExist"):
+                certificate=data.read()
+                bcertificate =binascii.hexlify(certificate)
+                
+                message = sc.hospitalRegistrattion(hospitalName,emailID,phone,address,province,city,enpassword,bcertificate)
+                if(message=="Done"):
+                    flash("Registered Sucessfully")
+                    return redirect(url_for('hospitalLogin'))
+                else:
+                    logging.warning("Error Inserting Data")  
+                    return render_template('hospitalregistration.html', form = form)
             else:
-                logging.warning("Error Inserting Data")  
+                flash("email already exists")
                 return render_template('hospitalregistration.html', form = form)
-            # else:
-            #     flash("please provide a valid certificate")
-            #     return render_template('hospitalregistration.html', form = form)
         else:
-            flash("email already exists")
+            flash("please provide a valid certificate in pdf format")
             return render_template('hospitalregistration.html', form = form)
     return render_template('hospitalregistration.html', form = form)
 
@@ -124,15 +129,14 @@ def registerUser():
         hospital = request.form['hname']
         for item in organ:
             message= sc.userRegistration(first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, item)
-            if(message=="Done"):
-                logging.info("User Registered")
-                flash("User registered")
-                redirect(url_for('hospitalLogin'))
-            else:
-                logging.warning("Error Inserting Data")
-                flash('error occoured!')
-                return render_template('signup.html', form=form, hlist=hlist)  
-        return render_template('signup.html', form = form, hlist=hlist,)       
+        if(message=="Done"):
+            logging.info("User Registered")
+            flash("user registered")
+            return redirect(url_for('hospitalLogin'))
+        else:
+            logging.warning("Error Inserting Data")
+            flash('error occoured!')
+            return render_template('signup.html', form=form, hlist=hlist)      
     return render_template('signup.html',form = form ,hlist=hlist)
 
 @app.route('/hospitaldonor', methods=['GET'])
@@ -260,11 +264,19 @@ def hospitalLogin():
         email =form.username.data
         password =form.password.data
         session.pop('user', None)
-        res = sc.hospitalLoginAuthentication(email,password)
+        res = sc.hospitalLoginAuthentication(email)
         if(res):
-            session['user']= email
-            logging.info("User " + session['user'] + " has logged in")
-            return redirect(url_for('hospitalHome'))
+            # password = generate_password_hash(password)
+            print(password)
+            dbpass= res[0][6]
+            print(dbpass)
+            if (bcrypt.checkpw(password.encode('utf-8'), dbpass.encode('utf-8'))):
+                session['user']= email
+                logging.info("User " + session['user'] + " has logged in")
+                return redirect(url_for('hospitalHome'))
+            else:
+                flash("UserID and password does not match")
+                return render_template('loginpage.html', form= form)
         else:   
             logging.error("Invalid user")
             flash("Not an existing user. Please Register!!")
