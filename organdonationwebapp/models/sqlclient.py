@@ -36,6 +36,7 @@ class SqlClient(object):
             return "Exist"
         else:
             return "NotExist"
+            
     def adminLoginAuthentication(self,email,password):
         user1 = self.cursor.callproc('adminlogin',[email,password,0])
         #print(user1)
@@ -49,7 +50,6 @@ class SqlClient(object):
             return None
 
     def getHospitalList(self):
-
         self.cursor.callproc('hospitallist')
         res = self.cursor.stored_results()
         for result in res:
