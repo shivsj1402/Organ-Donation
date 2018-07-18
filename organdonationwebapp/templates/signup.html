@@ -18,8 +18,8 @@
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-10">
+
             <form method="post">
-                    {{ form.csrf_token }}
                 <div class="row">
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -28,13 +28,8 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                                {{form.userfirstname (class_="form-control")}}
-                                <ul>
-                                    {% for err in form.userfirstname.errors %}
-                                    <li style="color:red;" >{{ err }}</li>
-                                    {% endfor %}
-                                </ul> 
-                          </div>
+                            <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="First Name">
+                        </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -43,13 +38,8 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                                {{form.userlastname (class_="form-control")}}
-                                <ul>
-                                    {% for err in form.userlastname.errors %}
-                                    <li style="color:red;" >{{ err }}</li>
-                                    {% endfor %}
-                                </ul>
-                                </div>
+                            <input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="Last Name">
+                        </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -58,13 +48,8 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                                {{form.phonenumber (class_="form-control")}}
-                                <ul>
-                                    {% for err in form.phonenumber.errors %}
-                                    <li style="color:red;" >{{ err }}</li>
-                                    {% endfor %}
-                                </ul> 
-                                </div>
+                            <input type="text" name="phone_number" id="pnone_number" class="form-control input-sm" placeholder="Phone Number">
+                        </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -73,13 +58,8 @@
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                                {{form.useremail (class_="form-control")}}
-                                <ul>
-                                    {% for err in form.useremail.errors %}
-                                    <li style="color:red;" >{{ err }}</li>
-                                    {% endfor %}
-                                </ul>
-                                </div>
+                            <input type="text" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
+                        </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -88,7 +68,10 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                                {{form.sex (class_="form-control")}}
+                             <select class="form-control" name="sex" id="sex">
+                            <option>Male</option>
+                            <option>Female</option>
+                          </select>
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -98,13 +81,8 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
-                        {{ form.dob (class_='datepicker')}}
-                        <ul>
-                                {% for err in form.address.errors %}
-                                <li style="color:red;" >{{ err }}</li>
-                                {% endfor %}
-                            </ul> 
-                        </div>
+                            <input class="form-control" id="date" name="dob" placeholder="MM/DD/YYY" type="text"/>
+                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -113,13 +91,8 @@
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                                {{form.address (class_="form-control")}}
-                                <ul>
-                                    {% for err in form.address.errors %}
-                                    <li style="color:red;" >{{ err }}</li>
-                                    {% endfor %}
-                                </ul> 
-                                </div>
+                            <input type="text" name="address" id="address" class="form-control" placeholder="Address">
+                        </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
@@ -128,7 +101,21 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                                {{form.province (class_="form-control")}}
+                             <select class="form-control" name="province" id="province">
+                            <option>ON</option>
+                            <option>QC</option>
+                            <option>BC</option>
+                             <option>AB</option>
+                            <option>MB</option>
+                            <option>SK</option>
+                            <option>NS</option>
+                            <option>NB</option>
+                            <option>NL</option>
+                             <option>PE</option>
+                            <option>NT</option>
+                            <option>YT</option>
+                            <option>NU</option>
+                          </select>
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -138,7 +125,11 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                                {{form.city (class_="form-control")}} 
+                             <select class="form-control" name="city" id="province">
+                            <option>Halifax</option>
+                            <option>Montreal</option>
+                            <option>Toronto</option>
+                          </select>
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -147,14 +138,15 @@
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
-                            <div class="form-group">
-                                <select class="form-control" name="hname"id="province">
-                                {% for item in hlist %}
-                               <option>{{item[0]}}</option>
-                               {% endfor %}
-                             </select>
-                            </div>
-                       </div>
+                         <div class="form-group">
+                             <select class="form-control" name="hname"id="province">
+                             {% for item in hlist %}
+                            <option>{{item[0]}}</option>
+                            {% endfor %}
+                          </select>
+                         </div>
+                    </div>
+                    
                     <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
                             <label>Blood Group:</label>
@@ -162,7 +154,16 @@
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
                          <div class="form-group">
-                                {{form.bloodgroup (class_="form-control")}} 
+                             <select class="form-control" name="bloodgroup" id="bloodgroup">
+                            <option>A+</option>
+                            <option>A-</option>
+                            <option>B+</option>
+                             <option>B-</option>
+                            <option>AB+</option>
+                            <option>AB-</option>
+                            <option>O+</option>
+                            <option>O-</option>
+                          </select>
                          </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -171,8 +172,13 @@
                         </div>
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
-                        <div class="btn-group" data-toggle="buttons" >
-                           {{form.usertype (class_="btn btn-primary")}}
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-primary active">
+                                <input type="radio" name="usertype" id="opt1"  value="d"> Donor</input>
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="radio" name="usertype" id="opt2" value="r"/> Receiver
+                            </label>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -181,27 +187,29 @@
                         </div>
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
-                        {{form.organ }}
+                        <div class="btn-group" data-toggle="buttons">
+                            <label class="btn btn-primary active">
+                                <input type="checkbox" name="organ" id="organ1" value="liver" checked /> Liver(Live or Deceased)
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="checkbox"  name="organ" id="organ2" value="kidney"/> Kidney(Live or Deceased)
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="checkbox" name="organ" id="organ3" value="heart" /> Heart(Deceased)
+                            </label>
+                            <label class="btn btn-primary">
+                                <input type="checkbox" name="organ" id="organ4" value="Eyes" /> Eyes(Deceased)
+                            </label>
+                        </div>
                     </div>
                 </div>
 
 
                 <button type="submit" class="btn btn-primary">Submit</button>
                 <input type="button" class="btn btn-primary" value="Back" onclick="location.href='#'"/>
-                {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                        <script>
-                            var messages = {{ messages | safe }};
-                            for (var i=0; i<messages.length; i++) {
-                            alert(messages[i]);
-                            }
-                        </script>
-                        {% endif %}
-                    {% endwith %}
             </form>
         </div>
     </div>
-</div>
 </div>
 
 </body>
