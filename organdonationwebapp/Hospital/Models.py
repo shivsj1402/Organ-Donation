@@ -28,6 +28,18 @@ class HospitalModel(SqlClient):
         except Exception as err:
             return None        
 
+    def getHospitalName(self,hemail):
+        try:
+            query = """SELECT  * FROM hospital where emailID=%s """
+            self.cursor.execute(query,(hemail,))
+            hname = self.cursor.fetchone()
+            if(hname):
+                return hname
+            else:
+                return None
+        except Exception as err:
+            return None
+
 
     def validateHospital(self, hospitalEmail):
         try:
@@ -53,3 +65,17 @@ class HospitalModel(SqlClient):
                 return None
         except Exception as err:
             return None
+
+
+    def getHospitalDonorList(self,hname):
+        query = """SELECT  * FROM user where donationType='d' AND hospital=%s"""
+        self.cursor.execute(query,(hname,))
+        donorlist= self.cursor.fetchall()
+        return donorlist
+
+
+    def getHospitalRecipientList(self,hname):
+        query = """SELECT  * FROM user where donationType='r' AND hospital=%s"""
+        self.cursor.execute(query,(hname,))
+        receiverlist= self.cursor.fetchall()
+        return receiverlist

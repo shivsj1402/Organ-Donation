@@ -4,6 +4,9 @@ import organdonationwebapp.Admin.Admin as ao
 import organdonationwebapp.Hospital.Hospital as ho
 import organdonationwebapp.Hospital.ValidateHospital as vho
 import organdonationwebapp.Hospital.HospitalList as hlo
+import organdonationwebapp.Hospital.HospitalHome as hho
+import organdonationwebapp.Hospital.HospitalDonorList as hdl
+import organdonationwebapp.Hospital.HospitalRecipientList as hrl
 import organdonationwebapp.User.User as us
 import organdonationwebapp.User.Donor.Donor as do
 import organdonationwebapp.User.Donor.DonorProfile as dop
@@ -54,7 +57,7 @@ def hospitalLogin():
             if(hospital.loginHospital()):
                 print("12344",(hospital.loginHospital()))
                 session['user']= hospital_json['emailID']
-                return redirect(url_for('hospitalHome'))
+                return redirect(url_for('hospitalHome', emailID=session['user']))
             else:   
                 return "Please register"
         elif(hospital_json['submit']=='SignUp'):
@@ -64,6 +67,27 @@ def hospitalLogin():
             else:
                 return redirect(url_for('hospitalRegistration'))
     return render_template('loginPage.html')
+
+
+@app.route('/hospitalHome/<emailID>', methods=['GET','POST'])
+def hospitalHome(emailID=None):
+    if g.user:
+        hemail=g.user
+        print(hemail)
+        hospitalhome = hho.HospitalHome(emailID)
+        hospital_name = hospitalhome.getHospitalName()
+        print("1234",hospital_name)
+        if request.method == 'POST':
+            if(request.form['submit']=='View Donor List'):
+                return redirect(url_for('donorList'))
+            elif(request.form['submit']=='View Receiver List'):
+                return redirect(url_for('receiverList'))
+        donorlist = hdl.HospitalDonorList(hospital_name[0])
+        donor_list = donorlist.getDonorList()
+        recipientlist = hrl.HospitalRecipientList(hospital_name[0])
+        recipient_list = recipientlist.getRecipientList()
+        return render_template('hospitalHome.html',donor=donor_list, receiver=recipient_list)
+    return redirect(url_for('hospitalLogin', emailID=emailID))
 
 
 @app.route('/adminlogin', methods=['GET','POST'])
@@ -142,7 +166,7 @@ def dummyRequest():
         requestID = requestdata['requestID']
         requestdata = sc.organRequest(requestID)
         if(requestdata):
-            return redirect(url_for('donorHospitalRequestPage', donorEmail=requestdata[0],recipientEmail=requestdata[1],organ=requestdata[2]))
+            return redirect(url_for('receiverHospitalRequestPage', donorEmail=requestdata[0],recipientEmail=requestdata[1],organ=requestdata[2]))
     return render_template('dummyrequests.html')
 
 
@@ -204,24 +228,6 @@ def donorProfilePage(donorEmail=None):
         print("donor_userdata",(donor_userdata))
     if(donor_userdata):
         return render_template('donorprofile.html', donordata=donor_userdata)
-
-
-@app.route('/hospitalHome', methods=['GET','POST'])
-def hospitalHome():
-    if g.user:
-        hemail=g.user
-        print(hemail)
-        hname=sc.getHospitalName(hemail)
-        print(hname)
-        if request.method == 'POST':
-            if(request.form['submit']=='View Donor List'):
-                return redirect(url_for('donorList'))
-            elif(request.form['submit']=='View Receiver List'):
-                return redirect(url_for('receiverList'))
-        res2 = sc.getHospitalDonorList(hname[0])
-        res3 = sc.getHospitalReceiverList(hname[0])
-        return render_template('hospitalHome.html',donor=res2, receiver=res3)
-    return redirect(url_for('hospitalLogin'))
 
 
 @app.errorhandler(404)
