@@ -1,4 +1,5 @@
 from organdonationwebapp import hc
+import bcrypt
 
 class Hospital(object):
     def __init__(self,hospitalJson,certificateFile=None):
@@ -13,14 +14,17 @@ class Hospital(object):
 
 
     def registerHospital(self):
-        if(hc.hospitalRegistration(self.hospitalName, self.emailID, self.phone, self.address, self.province, self.city, self.password, self.data)):
+        self.encrypted_password = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
+        if(hc.hospitalRegistration(self.hospitalName, self.emailID, self.phone, self.address, self.province, self.city, self.encrypted_password, self.data)):
             return True
         else:
             return False
             
 
     def loginHospital(self):
-        if(hc.hospitalLoginAuthentication(self.emailID, self.password)):
-            return True
-        else:
-            return False
+        result = hc.hospitalLoginAuthentication(self.emailID)
+        if(result):
+            if(bcrypt.checkpw(self.password.encode('utf-8'), result[0][6].encode('utf-8'))):
+                return result
+            else:
+                return None

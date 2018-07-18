@@ -13,17 +13,20 @@ class HospitalModel(SqlClient):
         except Exception as err:
             return False
 
-    def hospitalLoginAuthentication(self,emailID,password):
+    def hospitalLoginAuthentication(self,hemail):
         try:
-            query = """SELECT  * FROM hospital where emailID=%s  AND password=%s"""
-            self.cursor.execute(query,(emailID, password))
-            result = self.cursor.fetchone()
-            if(result):
-                return result
-            else:
-                return None
+            self.cursor.callproc('hospitallogin',[hemail])
+            res = self.cursor.stored_results()
+            for result in res:
+                hospitalauth= result.fetchall()
+                hospitalpassword=hospitalauth[0][6]
+                #print(result)
+                if(hospitalauth):
+                    return hospitalauth
+                else:
+                    return None
         except Exception as err:
-            return None
+            return None        
 
 
     def validateHospital(self, hospitalEmail):

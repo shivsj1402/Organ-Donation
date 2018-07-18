@@ -52,6 +52,7 @@ def hospitalLogin():
             hospital = ho.Hospital(hospital_json)
             session.pop('user', None)
             if(hospital.loginHospital()):
+                print("12344",(hospital.loginHospital()))
                 session['user']= hospital_json['emailID']
                 return redirect(url_for('hospitalHome'))
             else:   
@@ -141,7 +142,7 @@ def dummyRequest():
         requestID = requestdata['requestID']
         requestdata = sc.organRequest(requestID)
         if(requestdata):
-            return redirect(url_for('receiverHospitalRequestPage', donorEmail=requestdata[0],recipientEmail=requestdata[1],organ=requestdata[2]))
+            return redirect(url_for('donorHospitalRequestPage', donorEmail=requestdata[0],recipientEmail=requestdata[1],organ=requestdata[2]))
     return render_template('dummyrequests.html')
 
 
@@ -174,7 +175,7 @@ def donorList():
     if g.user:
         donorList = dlo.DonorListDetails(g.user)
         don_list_details = donorList.getDonorList()
-        if(rec_list_details):
+        if(don_list_details):
             return render_template('donorList.html', dlist=don_list_details)
     return redirect(url_for('hospitalLogin'))
 
