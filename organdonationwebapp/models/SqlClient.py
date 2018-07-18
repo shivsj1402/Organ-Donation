@@ -33,35 +33,6 @@ class SqlClient(object):
             else:
                 return None
     
-
-    def getHospitalDonorList(self,hname):
-        self.cursor.callproc('gethospitaldonorlist',[hname])
-        res = self.cursor.stored_results()
-        for result in res:
-            donorlist= result.fetchall()
-            return donorlist
-
-
-    def getHospitalReceiverList(self,hname):
-        self.cursor.callproc('gethospitalreceiverlist',[hname])
-        res = self.cursor.stored_results()
-        for result in res:
-            receiverlist= result.fetchall()
-            return receiverlist
-
-
-    def getHospitalName(self,hemail):
-        self.cursor.callproc('gethospitalname',[hemail])
-        res = self.cursor.stored_results()
-        for result in res:
-            hname= result.fetchall()
-            print(hname)
-            if(hname):
-                return hname[0][0]
-            else:
-                return None    
-
-    
     def closeDBConnection(self):
         self.cursor.close()
         self.connection.close()
