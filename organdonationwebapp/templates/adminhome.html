@@ -43,8 +43,8 @@
                                 <li>
                                     {{ item[0] }}
                                     <input type="submit" class="btn btn-primary" name = "viewcertificate" value="View Ceritficate" onclick=""/>
-                                    {% if item[1] != 1 %}
-                                        <button type="submit" class="btn btn-primary" name = "validate" id="validate" value="{{ item[0] }} "> Validate</button>
+                                    {% if item[8] != 1 %}
+                                        <button type="submit" class="btn btn-primary" name = "validate" id="validate" value="{{ item[1] }}"> Validate</button>
                                     {% endif %}
                                 </li>
                                 <br>

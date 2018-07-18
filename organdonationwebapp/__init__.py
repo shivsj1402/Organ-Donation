@@ -5,11 +5,44 @@ from flask import Flask
 app = Flask(__name__)
 app.debug=True
 
-from organdonationwebapp.models.sqlclient import SqlClient
+
+from organdonationwebapp.models.SqlClient import SqlClient
 sc = None
 if not sc:
-	sc = SqlClient()
+    sc = SqlClient()
+
+
+from organdonationwebapp.Admin.Models import AdminModel
+ac = None
+if not ac:
+    ac = AdminModel()
+
+
+from organdonationwebapp.Hospital.Models import HospitalModel
+hc = None
+if not hc:
+    hc = HospitalModel()
+
+
+from organdonationwebapp.User.Models import UserModel
+uc = None
+if not uc:
+    uc = UserModel()
+
+
+from organdonationwebapp.User.Donor.Models import DonorModel
+duc = None
+if not duc:
+    duc = DonorModel()
+
+
+from organdonationwebapp.User.Recipient.Models import RecipientModel
+ruc = None
+if not ruc:
+    ruc = RecipientModel()
+
 
 app.secret_key = 'lfjsdlkfjdklsjfkl'
 app.config['SESSION'] = True
-import organdonationwebapp.views
+import organdonationwebapp.API.views
+# import organdonationwebapp.Hospital.hospital as ho

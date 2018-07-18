@@ -19,50 +19,62 @@
     <div class="row justify-content-md-center">
         <div class="col-md-12">
              <form method="post">
-                    <div class="row">
-                            <div class="col-xs-4 col-sm-4 col-md-4">
-                                Request Available
-                            </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4">
-                                    Donors Available
-                            </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4">
-                                    Receivers Available
-                            </div>
-                    </div>
                 <div class="row">
                     <div class="col-xs-4 col-sm-4 col-md-4">
-                        <ul>
-                            {% if request|length > 0 %}
-                            {% for item in request %}
-                            <li>Request ID :{{ item[0] }} 
-                            <input type="button" class="btn btn-primary" value="View Request" /></li>
-                            {% endfor %}
-                            {% else %}
-                            <p>No Requests Available</p>
-                            {% endif %}
-                        </ul>
+                        <div class="form-group">
+                            <label>Pending Request</label>
+                        </div>
+                     </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label>Donor List</label>
+                        </div>
+                     </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            <label>Receiver List</label>
+                        </div>
+                     </div>
+                </div>
+                  <div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <label>Request1</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <label>Request2</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <label>Request3</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
+                            </div>
+                        </div>
                      </div>
                     <div class="col-xs-4 col-sm-4 col-md-4">
                         <ol>
-                            {% if donor|length > 0 %}
                             {% for item in donor %}
                             <li> {{ item[4] }} </li>
                             {% endfor %}
-                            {% else %}
-                            <p>No Donor Available</p>
-                            {% endif %}
                         </ol>
                     </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                             <ol>
-                                {% if donor|length > 0 %}
                                 {% for item in receiver %}
                                 <li> {{ item[4] }} </li>
                                 {% endfor %}
-                                {% else %}
-                                <p>No Receiver Available</p>
-                                {% endif %}
                             </ol>
                        </div>
                      </div>
