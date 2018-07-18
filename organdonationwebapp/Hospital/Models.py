@@ -25,6 +25,7 @@ class HospitalModel(SqlClient):
                 else:
                     return None
         except Exception as err:
+            print(err)
             return None        
 
     def getHospitalName(self,hemail):
@@ -81,3 +82,17 @@ class HospitalModel(SqlClient):
         for result in res:
             receiverlist= result.fetchall()
             return receiverlist
+
+    def getHospitalRequestList(self,emailID):
+        self.cursor.callproc('requestlist', [emailID])
+        res = self.cursor.stored_results()
+        for result in res:
+            requestlist= result.fetchall()
+            return requestlist
+
+    def hospitalexist(self, hemail):
+        res = self.cursor.callproc('hospitalexist',[hemail,0])
+        if(res[1]):
+            return "Exist"
+        else:
+            return "NotExist"

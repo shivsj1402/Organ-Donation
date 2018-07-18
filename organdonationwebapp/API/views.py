@@ -7,6 +7,7 @@ import organdonationwebapp.Hospital.HospitalList as hlo
 import organdonationwebapp.Hospital.HospitalHome as hho
 import organdonationwebapp.Hospital.HospitalDonorList as hdl
 import organdonationwebapp.Hospital.HospitalRecipientList as hrl
+import organdonationwebapp.Hospital.HospitalRequestList as hprl
 import organdonationwebapp.User.User as us
 import organdonationwebapp.User.Donor.Donor as do
 import organdonationwebapp.User.Donor.DonorProfile as dop
@@ -74,20 +75,22 @@ def hospitalLogin():
 def hospitalHome(emailID=None):
     if g.user:
         hemail=g.user
-        print(hemail)
+        # print(hemail)
         hospitalhome = hho.HospitalHome(emailID)
         hospital_name = hospitalhome.getHospitalName()
-        print("1234",hospital_name)
+        # print("1234",hospital_name)
         if request.method == 'POST':
             if(request.form['submit']=='View Donor List'):
                 return redirect(url_for('donorList'))
             elif(request.form['submit']=='View Receiver List'):
                 return redirect(url_for('receiverList'))
+        requestlist = hprl.HospitalRequestList(hemail)
+        request_list = requestlist.getPendingRequestList()
         donorlist = hdl.HospitalDonorList(hospital_name[0])
         donor_list = donorlist.getDonorList()
         recipientlist = hrl.HospitalRecipientList(hospital_name[0])
         recipient_list = recipientlist.getRecipientList()
-        return render_template('hospitalHome.html',donor=donor_list, receiver=recipient_list)
+        return render_template('hospitalHome.html',request = request_list,donor = donor_list, receiver = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))
 
 @app.route('/adminlogin', methods=['GET','POST'])
@@ -101,7 +104,6 @@ def adminLoginPage():
             session.pop('user', None)
             if(admin.loginAdmin()):
                 session['user']= admin_json['emailID']
-                print(session['user'])
                 user = session['user']
                 return redirect(url_for('adminHomepage', username=user))
             else:
@@ -217,7 +219,7 @@ def receiverHospitalRequestPage(recipientEmail=None):
         for organ in recipient_organ_data:
             donor_data = dpo.ShowRecommendedDonors(organ[0])
             donor_organ_data.extend(donor_data.getrecommendedDonorList())
-        print (donor_organ_data)
+        # print (donor_organ_data)
         if(recipient_profile and recipient_organ_data):
             return render_template('receiverprofile.html', recipientdata=recipient_profile, organdata=recipient_organ_data, donororgandata=donor_organ_data)
 
@@ -228,7 +230,7 @@ def donorProfilePage(donorEmail=None):
     if(donorEmail):
         donorprofile = dop.DonorProfile(donorEmail)
         donor_userdata = donorprofile.getDonorProfile()
-        print("donor_userdata",(donor_userdata))
+        # print("donor_userdata",(donor_userdata))
     if(donor_userdata):
         return render_template('donorprofile.html', donordata=donor_userdata)
 

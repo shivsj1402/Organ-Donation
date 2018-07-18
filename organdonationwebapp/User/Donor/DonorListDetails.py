@@ -15,5 +15,4 @@ class DonorListDetails(object):
     def getHName(self, Email):
         self.Email = Email
         hname= sc.getHospitalName(self.Email)
-        print(hname)
         return hname

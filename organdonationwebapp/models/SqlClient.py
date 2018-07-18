@@ -22,12 +22,12 @@ class SqlClient(object):
 
 
     def organRequest(self, requestID):
-        print(requestID)
+        # print(requestID)
         self.cursor.callproc('organrequest',[requestID])
         res = self.cursor.stored_results()
         for result in res:
             requestdata= result.fetchall()
-            print("Hello",(requestdata))
+            # print("Hello",(requestdata))
             if(requestdata):
                 return requestdata
             else:

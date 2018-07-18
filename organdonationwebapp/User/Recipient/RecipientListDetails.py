@@ -15,5 +15,5 @@ class RecipientListDetails(object):
     def getHName(self, Email):
         self.Email = Email
         hname= sc.getHospitalName(self.Email)
-        print(hname)
+        # print(hname)
         return hname

@@ -8,7 +8,6 @@ class AdminModel(SqlClient):
     def adminLoginAuthentication(self,emailID,password):
         try:
             user1 = self.cursor.callproc('adminlogin',[emailID  ,password,0])
-            print(user1)
             if(user1[2]):
                 return user1[2]
             else:
