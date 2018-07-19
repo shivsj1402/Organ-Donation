@@ -74,7 +74,7 @@ def hospitalLogin():
                 return redirect(url_for('registerUser'))
             else:
                 return redirect(url_for('hospitalRegistration'))
-    return render_template('loginPage.html')
+    return render_template('loginpage.html')
 
 
 @app.route('/hospitalHome/<emailID>', methods=['GET','POST'])
