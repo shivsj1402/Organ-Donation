@@ -44,5 +44,9 @@ if not ruc:
 
 app.secret_key = 'lfjsdlkfjdklsjfkl'
 app.config['SESSION'] = True
+import organdonationwebapp.API.AdminViews
+import organdonationwebapp.API.HospitalViews
+import organdonationwebapp.API.DonorRecipientViews
+import organdonationwebapp.API.RecipientViews
+import organdonationwebapp.API.DonorViews
 import organdonationwebapp.API.views
-# import organdonationwebapp.Hospital.hospital as ho

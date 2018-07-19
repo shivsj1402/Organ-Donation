@@ -4,6 +4,7 @@ class HospitalModel(SqlClient):
     def __init__(self):
         super(HospitalModel,self).__init__()
     
+    
     def hospitalRegistration(self,hospitalName,emailID,phone,address,province,city,password,certificate):
         query = """INSERT INTO hospital(hospitalName,emailID,phone,address,province,city,password,certificate) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)"""
         try:
@@ -12,6 +13,7 @@ class HospitalModel(SqlClient):
             return True
         except Exception as err:
             return False
+
 
     def hospitalLoginAuthentication(self,hemail):
         try:
@@ -27,6 +29,7 @@ class HospitalModel(SqlClient):
                     return None
         except Exception as err:
             return None        
+
 
     def getHospitalName(self,hemail):
         try:
@@ -79,3 +82,13 @@ class HospitalModel(SqlClient):
         self.cursor.execute(query,(hname,))
         receiverlist= self.cursor.fetchall()
         return receiverlist
+
+
+    def getPassword(self):
+        try:
+            query = """SELECT  ruleName, ruleValue FROM validatePassword"""
+            self.cursor.execute(query)
+            passwordRules = self.cursor.fetchall()
+            return passwordRules
+        except Exception as err:
+            return None
