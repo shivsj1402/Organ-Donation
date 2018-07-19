@@ -2,7 +2,7 @@ from organdonationwebapp import hc
 import bcrypt
 
 class Hospital(object):
-    def __init__(self,hospitalJson,certificateFile=None):
+    def initialize(self,hospitalJson,certificateFile=None):
         self.hospitalName = hospitalJson['hospitalName'] if 'hospitalName' in hospitalJson else None
         self.emailID = hospitalJson['emailID'] if 'emailID' in hospitalJson else None
         self.phone = hospitalJson['phone'] if 'phone' in hospitalJson else None
@@ -30,3 +30,10 @@ class Hospital(object):
             except Exception as err:
                 print(err)
                 return False
+
+#Adding factory for complex operation of initialization of hospital and validating certificate
+def construct_Hospital(cls,hospitalJson,certificate):
+    hosp = cls()
+    hosp.initialize(hospitalJson,certificate)
+    #validate certificate to add here
+    return hosp

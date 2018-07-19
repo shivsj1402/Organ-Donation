@@ -16,6 +16,7 @@ import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Recipient.RecipientListDetails as rlo
 import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
 import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
+import organdonationwebapp.API.Logger as log
 from io import BytesIO
 import mysql.connector
 import json
@@ -26,6 +27,8 @@ def before_request():
     g.user = None
     if 'user' in session:
         g.user = session['user']
+    g.logger = log.MyLogger.__call__().get_logger()
+    g.logger.debug("Acquired Singleton Logger")
 
 
 @app.route('/donorReceiverRequest', methods=['GET'])
@@ -41,11 +44,12 @@ def hospitalRegistration():
         data = request.files['certificate']
         bcertificate=data.read()
         certificate =binascii.hexlify(bcertificate)
-        hospital = ho.Hospital(hospital_json, certificate)
+        hospital = ho.construct_Hospital(ho.Hospital, hospital_json, certificate)
         if(hospital.registerHospital()):
+            g.logger.info(hospital.registerHospital())
             return redirect(url_for('hospitalLogin'))
         else:
-            print("Error Inserting Data")  
+            g.logger.error("Error Inserting Data")  
     return render_template('hospitalregistration.html')
 
 
@@ -55,12 +59,14 @@ def hospitalLogin():
         hospital_data= json.dumps(request.form.to_dict())
         hospital_json = json.loads(hospital_data)
         if(hospital_json['submit']=='submit'):
-            hospital = ho.Hospital(hospital_json)
+            hospital = ho.construct_Hospital(ho.Hospital, hospital_json, None)
             session.pop('user', None)
             if(hospital.loginHospital()):
                 session['user']= hospital_json['emailID']
+                g.logger.info("Logged in")
                 return redirect(url_for('hospitalHome', emailID=session['user']))
             else:   
+                g.logger.error("User did not register")
                 return "Please register"
         elif(hospital_json['submit']=='SignUp'):
             usertype = hospital_json['type']
