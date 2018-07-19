@@ -19,7 +19,7 @@ class RecipientModel(SqlClient):
             return None
 
 
-    def getRecepientList(self, hname):
+    def getReceiverList(self, hname):
         self.cursor.callproc('gethospitalreceiverlist',[hname])
         res = self.cursor.stored_results()
         for result in res:

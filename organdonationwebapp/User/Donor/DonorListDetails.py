@@ -11,8 +11,3 @@ class DonorListDetails(object):
             return donor_list
         else:
             return None
-
-    def getHName(self, Email):
-        self.Email = Email
-        hname= sc.getHospitalName(self.Email)
-        return hname

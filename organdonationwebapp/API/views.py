@@ -196,9 +196,10 @@ def donorHospitalRequestPage(donorEmail=None, recipientEmail=None, organ=None):
 @app.route('/receiverList', methods=['GET'])
 def receiverList():
     if g.user:
-        recipientList = rlo.RecipientListDetails(g.user)
-        receiverHName = recipientList.getHName(g.user)
-        rec_list_details = recipientList.getRecipientList(receiverHName)
+        hospitalhome = hho.HospitalHome(g.user)
+        hospital_name = hospitalhome.getHospitalName()
+        recipientlist = hrl.HospitalRecipientList(hospital_name[0])
+        rec_list_details = recipientlist.getRecipientList()
         if(rec_list_details):
             return render_template('receiverList.html', rlist=rec_list_details)
     return redirect(url_for('hospitalLogin'))
@@ -207,9 +208,10 @@ def receiverList():
 @app.route('/donorList', methods=['GET'])
 def donorList():
     if g.user:
-        donorList = dlo.DonorListDetails(g.user)
-        donorHName= donorList.getHName(g.user)
-        don_list_details = donorList.getDonorList(donorHName)
+        hospitalhome = hho.HospitalHome(g.user)
+        hospital_name = hospitalhome.getHospitalName()
+        donorlist = hdl.HospitalDonorList(hospital_name[0])
+        don_list_details = donorlist.getDonorList()
         if(don_list_details):
             return render_template('donorList.html', dlist=don_list_details)
     return redirect(url_for('hospitalLogin'))
