@@ -6,54 +6,52 @@ class RecipientModel(SqlClient):
 
 
     def donorHospitalShowReceiverProfile(self, recipientEmail):
-        query = """SELECT userFirstName, userLastName, emailID, dob, sex, organ FROM user WHERE emailID=%s AND donationType=%s"""
         try:
-            self.cursor.execute(query,(recipientEmail,"r"))
-            userdata = self.cursor.fetchall()
-            if(userdata):
-                return userdata
-            else:
-                return None
+            self.cursor.callproc('donorhospitalshowreceiverprofile',[recipientEmail])
+            res = self.cursor.stored_results()
+            for result in res:
+                userdata= result.fetchall()
+                if(userdata):
+                    return userdata
+                else:
+                    return None
         except Exception as err:
             return None
 
 
-    def getReceiverList(self):
-        query = """SELECT  * FROM user where donationType='r'"""
-        try:
-            self.cursor.execute(query)
-            receiverlist= self.cursor.fetchall()
-            if(receiverlist):
-                return receiverlist
-            else:
-                return None
-        except Exception as err:
-            return None
+    def getReceiverList(self, hname):
+        self.cursor.callproc('gethospitalreceiverlist',[hname])
+        res = self.cursor.stored_results()
+        for result in res:
+            recipientlist= result.fetchall()
+            return recipientlist
 
 
     def receiverHospitalShowProfile(self, recipientEmail):
         try: 
-            query = """SELECT userFirstName, userLastName, emailID, dob, sex FROM user WHERE emailID=%s AND donationType=%s"""
-            self.cursor.execute(query,(recipientEmail,"r"))
-            userdata = self.cursor.fetchall()
-            if(userdata):
-                return userdata
-            else:
-                return None
+            self.cursor.callproc('receiverhospitalshowprofile',[recipientEmail])
+            res = self.cursor.stored_results()
+            for result in res:
+                userdata= result.fetchall()
+                if(userdata):
+                    return userdata
+                else:
+                    return None
         except Exception as err:
             return None
 
 
     def receiverHospitalShowOrgan(self, recipientEmail):
         try:
-            query = """SELECT organ FROM user WHERE emailID=%s AND donationType=%s"""
-            self.cursor.execute(query,(recipientEmail,"r"))
-            userdata_organ = self.cursor.fetchall()
-            for row in userdata_organ:
-                organ = row[0]
-            if(userdata_organ):
-                return userdata_organ
-            else:
-                return None
+            self.cursor.callproc('receiverhospitalshoworgan',[recipientEmail])
+            res = self.cursor.stored_results()
+            for result in res:
+                userdata_organ= result.fetchall()
+                for row in userdata_organ:
+                    organ = row[0]
+                if(userdata_organ):
+                    return userdata_organ
+                else:
+                    return None
         except Exception as err:
             return None

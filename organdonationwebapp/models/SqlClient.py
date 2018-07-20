@@ -19,15 +19,14 @@ class SqlClient(object):
 
 
     def organRequest(self, requestID):
-        print(requestID)
-        query = """SELECT donorID, recipientID, organRequested FROM requestdata WHERE requestID=%s"""
-        self.cursor.execute(query,(requestID,))
-        requestdata = self.cursor.fetchone()
-        print("Hello",(requestdata))
-        if(requestdata):
-            return requestdata
-        else:
-            return None
+        self.cursor.callproc('organrequest',[requestID])
+        res = self.cursor.stored_results()
+        for result in res:
+            requestdata= result.fetchall()
+            if(requestdata):
+                return requestdata
+            else:
+                return None
 
     
     def closeDBConnection(self):

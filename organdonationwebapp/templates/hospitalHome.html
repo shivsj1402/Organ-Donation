@@ -37,32 +37,18 @@
                      </div>
                 </div>
                   <div class="row">
-                    <div class="col-xs-4 col-sm-4 col-md-4">
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <label>Request1</label>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <label>Request2</label>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <label>Request3</label>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
-                            </div>
-                        </div>
-                     </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                                <ul>
+                                    {% if request|length > 0 %}
+                                    {% for item in request %}
+                                    <li>Request ID :{{ item[0] }} 
+                                    <input type="button" class="btn btn-primary" value="View Request" /></li>
+                                    {% endfor %}
+                                    {% else %}
+                                    <p>No Requests Available</p>
+                                    {% endif %}
+                                </ul>
+                             </div>
                     <div class="col-xs-4 col-sm-4 col-md-4">
                         <ol>
                             {% for item in donor %}

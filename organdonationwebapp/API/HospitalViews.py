@@ -4,9 +4,12 @@ import organdonationwebapp.Hospital.Hospital as ho
 import organdonationwebapp.Hospital.HospitalHome as hho
 import organdonationwebapp.Hospital.HospitalDonorList as hdl
 import organdonationwebapp.Hospital.HospitalRecipientList as hrl
+import organdonationwebapp.Hospital.HospitalRequestList as hprl
 import organdonationwebapp.Hospital.ValidatePassword as val
 import organdonationwebapp.Hospital.DBValidatePassword as DBval
+import organdonationwebapp.API.Logger as log
 import json
+import binascii
 
 
 @app.before_request
@@ -14,6 +17,8 @@ def before_request():
     g.user = None
     if 'user' in session:
         g.user = session['user']
+    g.logger = log.MyLogger.__call__().get_logger()
+    g.logger.debug("Acquired Singleton Logger")
 
 
 @app.route('/hospitalregistration', methods=['GET','POST'])
@@ -22,17 +27,19 @@ def hospitalRegistration():
         hospital_data= json.dumps(request.form.to_dict())
         hospital_json = json.loads(hospital_data)
         data = request.files['certificate']
-        certificate=data.read()
+        bcertificate=data.read()
+        certificate =binascii.hexlify(bcertificate)
         valPassword = DBval.DBValidatePassword(hospital_json['password'])
         password_value = valPassword.isValid()
         if(password_value):
-            hospital = ho.Hospital(hospital_json, certificate)
+            hospital = ho.construct_Hospital(ho.Hospital, hospital_json, certificate)
             if(hospital.registerHospital()):
+                g.logger.info("Logged in successfully")
                 return redirect(url_for('hospitalLogin'))
             else:
-                print("Error Inserting Data")
+                g.logger.error("Error Inserting Data")
         else:
-            return "Incorrect Password"
+            return "Incorrect Password Value"
     return render_template('hospitalregistration.html')
 
 
@@ -42,12 +49,14 @@ def hospitalLogin():
         hospital_data= json.dumps(request.form.to_dict())
         hospital_json = json.loads(hospital_data)
         if(hospital_json['submit']=='submit'):
-            hospital = ho.Hospital(hospital_json)
+            hospital = ho.construct_Hospital(ho.Hospital, hospital_json, None)
             session.pop('user', None)
             if(hospital.loginHospital()):
                 session['user']= hospital_json['emailID']
+                g.logger.info("Logged in")
                 return redirect(url_for('hospitalHome', emailID=session['user']))
             else:   
+                g.logger.error("User did not register")
                 return "Please register"
         elif(hospital_json['submit']=='SignUp'):
             usertype = hospital_json['type']
@@ -55,7 +64,7 @@ def hospitalLogin():
                 return redirect(url_for('registerUser'))
             else:
                 return redirect(url_for('hospitalRegistration'))
-    return render_template('loginPage.html')
+    return render_template('loginpage.html')
 
 
 @app.route('/hospitalHome/<emailID>', methods=['GET','POST'])
@@ -69,9 +78,11 @@ def hospitalHome(emailID=None):
                 return redirect(url_for('donorList'))
             elif(request.form['submit']=='View Receiver List'):
                 return redirect(url_for('receiverList'))
+        requestlist = hprl.HospitalRequestList(hemail)
+        request_list = requestlist.getPendingRequestList()
         donorlist = hdl.HospitalDonorList(hospital_name[0])
         donor_list = donorlist.getDonorList()
         recipientlist = hrl.HospitalRecipientList(hospital_name[0])
         recipient_list = recipientlist.getRecipientList()
-        return render_template('hospitalHome.html',donor=donor_list, receiver=recipient_list)
+        return render_template('hospitalHome.html',request = request_list,donor = donor_list, receiver = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))

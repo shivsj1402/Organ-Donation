@@ -6,36 +6,36 @@ class DonorModel(SqlClient):
 
 
     def donorHospitalShowDonorProfile(self, donorEmail):
-        query = """SELECT * FROM user WHERE emailID=%s AND donationType=%s"""
         try:
-            self.cursor.execute(query,(donorEmail,"d"))
-            userdata = self.cursor.fetchall()
-            if(userdata):
-                return userdata
-            else:
-                return None
+            self.cursor.callproc('donorhospitalshowdonorprofile',[donorEmail])
+            res = self.cursor.stored_results()
+            for result in res:
+                userdata= result.fetchall()
+                if(userdata):
+                    return userdata
+                else:
+                    return None
         except Exception as err:
             return None
 
 
     def recommendedDonorList(self, organ):
         try:
-            query = """SELECT emailID, organ FROM user WHERE organ=%s AND donationType=%s"""
-            self.cursor.execute(query,(organ,"d"))
-            organ_data = self.cursor.fetchall()
-            if(organ_data):
-                return organ_data
-            else:
-                return None
+            self.cursor.callproc('recommendeddonorlist',[organ])
+            res = self.cursor.stored_results()
+            for result in res:
+                organ_data= result.fetchall()
+                if(organ_data):
+                    return organ_data
+                else:
+                    return None
         except Exception as err:
             return None
 
 
-    def getDonorList(self):
-        query = """SELECT  * FROM user where donationType='d'"""
-        self.cursor.execute(query)
-        donorlist= self.cursor.fetchall()
-        if(donorlist):
+    def getDonorList(self, hname):
+        self.cursor.callproc('gethospitaldonorlist',[hname])
+        res = self.cursor.stored_results()
+        for result in res:
+            donorlist= result.fetchall()
             return donorlist
-        else:
-            return None

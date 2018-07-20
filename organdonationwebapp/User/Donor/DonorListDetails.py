@@ -1,11 +1,13 @@
 from organdonationwebapp import duc
 
 class DonorListDetails(object):
-    def __init__(self,donorEmail):
-        self.donorEmail = donorEmail
+    def __init__(self,Email):
+        self.Email = Email
 
-    def getDonorList(self):
-        donor_list = duc.getDonorList()
+
+    def getDonorList(self, hname):
+        self.hname = hname
+        donor_list = duc.getDonorList(self.hname)
         if(donor_list):
             return donor_list
         else:

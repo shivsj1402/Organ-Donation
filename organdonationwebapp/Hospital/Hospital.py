@@ -1,8 +1,8 @@
 from organdonationwebapp import hc
-import bcrypt
+
 
 class Hospital(object):
-    def __init__(self,hospitalJson,certificateFile=None):
+    def initialize(self,hospitalJson,certificateFile=None):
         self.hospitalName = hospitalJson['hospitalName'] if 'hospitalName' in hospitalJson else None
         self.emailID = hospitalJson['emailID'] if 'emailID' in hospitalJson else None
         self.phone = hospitalJson['phone'] if 'phone' in hospitalJson else None
@@ -14,8 +14,8 @@ class Hospital(object):
 
 
     def registerHospital(self):
-        self.encrypted_password = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
-        if(hc.hospitalRegistration(self.hospitalName, self.emailID, self.phone, self.address, self.province, self.city, self.encrypted_password, self.data)):
+        # self.encrypted_password = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
+        if(hc.hospitalRegistration(self.hospitalName, self.emailID, self.phone, self.address, self.province, self.city, self.password, self.data)):
             return True
         else:
             return False
@@ -24,7 +24,17 @@ class Hospital(object):
     def loginHospital(self):
         result = hc.hospitalLoginAuthentication(self.emailID)
         if(result):
-            if(bcrypt.checkpw(self.password.encode('utf-8'), result[0][6].encode('utf-8'))):
-                return result
-            else:
-                return None
+            try:
+                if(self.password == result[0][6]):
+                    return result
+            except Exception as err:
+                print(err)
+                return False
+
+
+#Adding factory for complex operation of initialization of hospital and validating certificate
+def construct_Hospital(cls,hospitalJson,certificate):
+    hosp = cls()
+    hosp.initialize(hospitalJson,certificate)
+    #validate certificate to add here
+    return hosp
