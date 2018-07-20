@@ -6,13 +6,13 @@ class AdminModel(SqlClient):
     
 
     def adminLoginAuthentication(self,emailID,password):
-        query = """SELECT  * FROM admin where emailID=%s  AND password=%s"""
         try:
-            self.cursor.execute(query,(emailID, password))
-            result = self.cursor.fetchone()
-            if(result):
-                return result
+            user1 = self.cursor.callproc('adminlogin',[emailID  ,password,0])
+            if(user1[2]):
+                return user1[2]
             else:
                 return None
         except Exception as err:
+            print(err)
             return None
+
