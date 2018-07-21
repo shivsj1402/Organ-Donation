@@ -14,6 +14,7 @@ class HospitalModel(SqlClient):
             print(err)
             return False
 
+
     def hospitalLoginAuthentication(self,hemail):
         try:
             self.cursor.callproc('hospitallogin',[hemail])
@@ -27,6 +28,7 @@ class HospitalModel(SqlClient):
         except Exception as err:
             print(err)
             return None        
+
 
     def getHospitalName(self,hemail):
         try:
@@ -90,9 +92,20 @@ class HospitalModel(SqlClient):
             requestlist= result.fetchall()
             return requestlist
 
+
     def hospitalexist(self, hemail):
         res = self.cursor.callproc('hospitalexist',[hemail,0])
         if(res[1]):
             return "Exist"
         else:
             return "NotExist"
+
+
+    def getPassword(self):
+        try:
+            query = """SELECT  ruleName, ruleValue FROM validatePassword"""
+            self.cursor.execute(query)
+            passwordRules = self.cursor.fetchall()
+            return passwordRules
+        except Exception as err:
+            return None
