@@ -1,10 +1,12 @@
 from flask import url_for
 from organdonationwebapp import ac
+import base64
 
 class Admin(object):
     def initialize(self,adminJson):
         self.emailID = adminJson['emailID'] if 'emailID' in adminJson else None
-        self.password = adminJson['password'] if 'password' in adminJson else None
+        passwrd = adminJson['password'] if 'password' in adminJson else None
+        self.password = base64.b64encode(passwrd.encode())
 
     def register(self):
         return NotImplementedError

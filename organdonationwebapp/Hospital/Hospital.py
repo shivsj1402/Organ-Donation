@@ -1,6 +1,6 @@
 from flask import url_for
 from organdonationwebapp import hc
-# import bcrypt
+import base64
 
 class Hospital(object):
     def initialize(self,hospitalJson,certificateFile=None):
@@ -10,12 +10,12 @@ class Hospital(object):
         self.address = hospitalJson['address'] if 'address' in hospitalJson else None
         self.province = hospitalJson['province'] if 'province' in hospitalJson else None
         self.city = hospitalJson['city'] if 'city' in hospitalJson else None
-        self.password = hospitalJson['password'] if 'password' in hospitalJson else None
+        passwrd = hospitalJson['password'] if 'password' in hospitalJson else None
+        self.password = base64.b64encode(passwrd.encode())
         self.data = certificateFile
 
-
+    
     def register(self):
-        # self.encrypted_password = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
         try:
             if(hc.hospitalRegistration(self)):
                 url = url_for('Login')
@@ -28,18 +28,12 @@ class Hospital(object):
             
 
     def login(self):
-        result = hc.hospitalLoginAuthentication(self.emailID)
+        result = hc.hospitalLoginAuthentication(self.emailID,self.password)
         if(result):
-            try:
-                if(self.password == result[0][6]):
-                    url = url_for('hospitalHome', emailID=self.emailID)
-                    return result, url
-                else:
-                    return False, "Authentication Failedr"
-            except Exception as err:
-                print(err)
+            url = url_for('hospitalHome', emailID=self.emailID)
+            return result, url
         else:
-            return False, "Authentication Failed"
+            return False, "Authentication Failedr"
                 
 
 #Adding factory for complex operation of initialization of hospital and validating certificate

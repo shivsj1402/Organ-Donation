@@ -6,7 +6,6 @@ class HospitalModel(SqlClient):
     
     def hospitalRegistration(self,hospital):
         try:
-            # print("Cert",(certificate))
             self.cursor.callproc('hospitalregistration',[hospital.hospitalName,hospital.emailID,hospital.phone,hospital.address,hospital.province,hospital.city,hospital.password,hospital.data])
             self.connection.commit()
             return True
@@ -15,9 +14,9 @@ class HospitalModel(SqlClient):
             return False
 
 
-    def hospitalLoginAuthentication(self,hemail):
+    def hospitalLoginAuthentication(self,hemail,hpass):
         try:
-            self.cursor.callproc('hospitallogin',[hemail])
+            self.cursor.callproc('hospitallogin',[hemail,hpass])
             res = self.cursor.stored_results()
             for result in res:
                 hospitalauth= result.fetchall()
