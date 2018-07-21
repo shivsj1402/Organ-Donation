@@ -32,15 +32,21 @@ def hospitalRegistration(usertype = None):
         data = request.files['certificate']
         bcertificate=data.read()
         certificate =binascii.hexlify(bcertificate)
-        registerObject = res.Register(registerJson, certificate, usertype)
-        valid, url = registerObject.registerEntity()
-        if(valid):
-            g.logger.info("Registered Successfully")
-            flash("Registered Successfully")
-            return redirect(url_for('Login'))
+        valPassword = DBval.DBValidatePassword(registerJson['password'])
+        password_value = valPassword.isValid()
+        if(password_value):
+            registerObject = res.Register(registerJson, certificate, usertype)
+            valid, url = registerObject.registerEntity()
+            if(valid):
+                g.logger.info("Registered Successfully")
+                flash("Registered Successfully")
+                return redirect(url_for('Login'))
+            else:
+                g.logger.error("Error Inserting Data") 
+                flash("Registration error") 
         else:
-            g.logger.error("Error Inserting Data") 
-            flash("Registration error") 
+            g.logger.error("Incorrect Password Value")
+            flash("Incorrect Password Value") 
     return render_template('hospitalregistration.html')
 
 
