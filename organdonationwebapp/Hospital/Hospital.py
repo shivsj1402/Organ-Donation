@@ -35,9 +35,11 @@ class Hospital(object):
                     url = url_for('hospitalHome', emailID=self.emailID)
                     return result, url
                 else:
-                    return False, "Authentication Failed. Please register if not a registered User"
+                    return False, "Authentication Failedr"
             except Exception as err:
                 print(err)
+        else:
+            return False, "Authentication Failed"
                 
 
 #Adding factory for complex operation of initialization of hospital and validating certificate

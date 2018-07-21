@@ -69,10 +69,11 @@ def Login():
             if(valid):
                 session['user']= login_json['emailID']
                 g.logger.info("Logged in")
+                flash("Logged in")
                 return redirect(url)
             else:   
                 g.logger.error("User did not register")
-                return url
+                flash("Please register")
         elif(login_json['submit']=='SignUp'):
             usertype = login_json['type']
             if(usertype =="Donor or Receiver"):
