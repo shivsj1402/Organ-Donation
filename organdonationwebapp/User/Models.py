@@ -5,10 +5,10 @@ class UserModel(SqlClient):
         super(UserModel,self).__init__()
 
 
-    def userRegistration(self, first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, organ):
+    def userRegistration(self, user):
         try:
-            for item in organ:
-                self.cursor.callproc('userregistration',[first_name, last_name, phone_number, email, sex, dob, address, province, city, hospital, bloodgroup, usertype, item])
+            for item in user.organ:
+                self.cursor.callproc('userregistration',[user.first_name, user.last_name, user.phone_number, user.email, user.sex, user.dob, user.address, user.province, user.city, user.hospital, user.bloodgroup, user.usertype, user.item])
                 self.connection.commit()
             return True
         except Exception as err:

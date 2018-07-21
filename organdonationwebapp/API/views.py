@@ -17,6 +17,7 @@ import organdonationwebapp.User.Recipient.RecipientListDetails as rlo
 import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
 import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
 import organdonationwebapp.API.Logger as log
+import organdonationwebapp.API.Authenticator as auth
 from io import BytesIO
 import mysql.connector
 import json
@@ -44,9 +45,9 @@ def hospitalRegistration():
         data = request.files['certificate']
         bcertificate=data.read()
         certificate =binascii.hexlify(bcertificate)
-        hospital = ho.construct_Hospital(ho.Hospital, hospital_json, certificate)
-        if(hospital.registerHospital()):
-            g.logger.info(hospital.registerHospital())
+        hospital = ho.build_Hospital(ho.Hospital, hospital_json, certificate)
+        if(hospital.register()):
+            g.logger.info("Registered Successfully")
             return redirect(url_for('hospitalLogin'))
         else:
             g.logger.error("Error Inserting Data")  
@@ -54,22 +55,23 @@ def hospitalRegistration():
 
 
 @app.route('/', methods=['GET','POST'])
-def hospitalLogin():
+def Login():
     if request.method == 'POST':
-        hospital_data= json.dumps(request.form.to_dict())
-        hospital_json = json.loads(hospital_data)
-        if(hospital_json['submit']=='submit'):
-            hospital = ho.construct_Hospital(ho.Hospital, hospital_json, None)
+        login_data= json.dumps(request.form.to_dict())
+        login_json = json.loads(login_data)
+        if(login_json['submit']=='submit'):
+            authenticatorObject = auth.Authenticator(login_json)
             session.pop('user', None)
-            if(hospital.loginHospital()):
-                session['user']= hospital_json['emailID']
+            valid, url = authenticatorObject.validateLogin()
+            if(valid):
+                session['user']= login_json['emailID']
                 g.logger.info("Logged in")
-                return redirect(url_for('hospitalHome', emailID=session['user']))
+                return redirect(url)
             else:   
                 g.logger.error("User did not register")
-                return "Please register"
-        elif(hospital_json['submit']=='SignUp'):
-            usertype = hospital_json['type']
+                return url
+        elif(login_json['submit']=='SignUp'):
+            usertype = login_json['type']
             if(usertype =="Donor/Receiver"):
                 return redirect(url_for('registerUser'))
             else:
@@ -99,22 +101,22 @@ def hospitalHome(emailID=None):
         return render_template('hospitalHome.html',request = request_list,donor = donor_list, receiver = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))
 
-@app.route('/adminlogin', methods=['GET','POST'])
-def adminLoginPage():
-    if request.method == 'POST':
-        user = None
-        admin_data = json.dumps(request.form.to_dict())
-        admin_json = json.loads(admin_data)
-        if(admin_json['submit']=='submit'):
-            admin = ao.Admin(admin_json)
-            session.pop('user', None)
-            if(admin.loginAdmin()):
-                session['user']= admin_json['emailID']
-                user = session['user']
-                return redirect(url_for('adminHomepage', username=user))
-            else:
-                return 'Authentication failed!!'
-    return render_template('adminlogin.html')
+# @app.route('/adminlogin', methods=['GET','POST'])
+# def adminLoginPage():
+#     if request.method == 'POST':
+#         user = None
+#         admin_data = json.dumps(request.form.to_dict())
+#         admin_json = json.loads(admin_data)
+#         if(admin_json['submit']=='submit'):
+#             admin = ao.Admin(admin_json)
+#             session.pop('user', None)
+#             if(admin.loginAdmin()):
+#                 session['user']= admin_json['emailID']
+#                 user = session['user']
+#                 return redirect(url_for('adminHomepage', username=user))
+#             else:
+#                 return 'Authentication failed!!'
+#     return render_template('adminlogin.html')
 
 
 @app.route('/receiverProfile', methods=['GET'])
@@ -246,5 +248,3 @@ def donorProfilePage(donorEmail=None):
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('PageNotFound.html'), 404
-
-#shiv

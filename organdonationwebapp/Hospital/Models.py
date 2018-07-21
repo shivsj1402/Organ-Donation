@@ -4,10 +4,10 @@ class HospitalModel(SqlClient):
     def __init__(self):
         super(HospitalModel,self).__init__()
     
-    def hospitalRegistration(self,hospitalName,emailID,phone,address,province,city,password,certificate):
+    def hospitalRegistration(self,hospital):
         try:
             # print("Cert",(certificate))
-            self.cursor.callproc('hospitalregistration',[hospitalName,emailID,phone,address,province,city,password,certificate])
+            self.cursor.callproc('hospitalregistration',[hospital.hospitalName,hospital.emailID,hospital.phone,hospital.address,hospital.province,hospital.city,hospital.password,hospital.data])
             self.connection.commit()
             return True
         except Exception as err:

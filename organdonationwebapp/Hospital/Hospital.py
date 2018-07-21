@@ -1,3 +1,4 @@
+from flask import url_for
 from organdonationwebapp import hc
 # import bcrypt
 
@@ -13,26 +14,29 @@ class Hospital(object):
         self.data = certificateFile
 
 
-    def registerHospital(self):
+    def register(self):
         # self.encrypted_password = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
-        if(hc.hospitalRegistration(self.hospitalName, self.emailID, self.phone, self.address, self.province, self.city, self.password, self.data)):
+        if(hc.hospitalRegistration(self)):
             return True
         else:
             return False
             
 
-    def loginHospital(self):
+    def login(self):
         result = hc.hospitalLoginAuthentication(self.emailID)
         if(result):
             try:
                 if(self.password == result[0][6]):
-                    return result
+                    url = url_for('hospitalHome', emailID=self.emailID)
+                    return result, url
+                else:
+                    return False, "Authentication Failed. Please register if not a registered User"
             except Exception as err:
                 print(err)
-                return False
+                
 
 #Adding factory for complex operation of initialization of hospital and validating certificate
-def construct_Hospital(cls,hospitalJson,certificate):
+def build_Hospital(cls,hospitalJson,certificate = None):
     hosp = cls()
     hosp.initialize(hospitalJson,certificate)
     #validate certificate to add here
