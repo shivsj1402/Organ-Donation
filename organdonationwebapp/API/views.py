@@ -18,6 +18,7 @@ import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
 import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
 import organdonationwebapp.API.Logger as log
 import organdonationwebapp.API.Authenticator as auth
+import organdonationwebapp.API.Register as res
 from io import BytesIO
 import mysql.connector
 import json
@@ -37,18 +38,20 @@ def donorReceiverRequest():
     return render_template('donorReceiverRequest.html')
 
 
-@app.route('/hospitalregistration', methods=['GET','POST'])
-def hospitalRegistration():
+@app.route('/hospitalregistration/<usertype>', methods=['GET','POST'])
+def hospitalRegistration(usertype = None):
     if request.method == 'POST':
+        
         hospital_data= json.dumps(request.form.to_dict())
-        hospital_json = json.loads(hospital_data)
+        registerJson = json.loads(hospital_data)
         data = request.files['certificate']
         bcertificate=data.read()
         certificate =binascii.hexlify(bcertificate)
-        hospital = ho.build_Hospital(ho.Hospital, hospital_json, certificate)
-        if(hospital.register()):
+        registerObject = res.Register(registerJson, certificate, usertype)
+        valid, url = registerObject.registerEntity()
+        if(valid):
             g.logger.info("Registered Successfully")
-            return redirect(url_for('hospitalLogin'))
+            return redirect(url_for('Login'))
         else:
             g.logger.error("Error Inserting Data")  
     return render_template('hospitalregistration.html')
@@ -72,10 +75,10 @@ def Login():
                 return url
         elif(login_json['submit']=='SignUp'):
             usertype = login_json['type']
-            if(usertype =="Donor/Receiver"):
-                return redirect(url_for('registerUser'))
+            if(usertype =="Donor or Receiver"):
+                return redirect(url_for('registerUser', usertype = usertype))
             else:
-                return redirect(url_for('hospitalRegistration'))
+                return redirect(url_for('hospitalRegistration',usertype = usertype))
     return render_template('loginpage.html')
 
 
@@ -129,8 +132,8 @@ def requestFinal():
     return render_template('requestFinal.html')
 
 
-@app.route('/signup', methods=['GET','POST'])
-def registerUser():
+@app.route('/signup/<usertype>', methods=['GET','POST'])
+def registerUser(usertype = None):
     organ =[]
     hospitalList = hlo.HospitalList()
     hospital_list = hospitalList.getGlobalHospitalList()
@@ -139,10 +142,11 @@ def registerUser():
         organ = request.form.getlist('organ')
         user_dict['organ'] = organ
         user_data= json.dumps(user_dict)
-        user_json = json.loads(user_data)
-        user = us.User(user_json)
-        if user.registerUser():
-            return "<h2> Registered Successfully </h2>"
+        registerJson = json.loads(user_data)
+        registerObject = res.Register(registerJson, None, usertype)
+        valid, url = registerObject.registerEntity()
+        if(valid):
+            return redirect(url_for('Login'))
         else:
             return "<h2> Registration failed </h2>"
     return render_template('signup.html', hlist=hospital_list)

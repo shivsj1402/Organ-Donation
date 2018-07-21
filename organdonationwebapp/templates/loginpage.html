@@ -18,14 +18,14 @@
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-6">
+                <form method="post">
                 <h2 id="Display"><h2 id="label">Login As: Hospital</h2></h2>
-                <select name="logintype" id="type"class="form-control">
+                <select name="logintype" id="typeoption"class="form-control">
                    <option value="Hospital">Hospital</option>
                    <!-- <option value="donor">Donor</option>
                    <option value="receiver">Reciever</option> -->
                    <option value="Admin">Admin</option>
                  </select>
-            <form method="post">
                 <div class="form-group">
                     <label style="padding-top: 10px">Email address</label>
                     <input type="email" name="emailID" class="form-control" id="InputEmail1" placeholder="Enter email">
@@ -55,7 +55,7 @@
              <div class="form-group">
               <label>Select Here:</label>
               <select class="form-control" name="type">
-                <option>Donor/Receiver</option>
+                <option>Donor or Receiver</option>
                 <option>Hospital</option>
               </select>
                  <br>
@@ -69,7 +69,7 @@
 <script>    
         $( "select" ) .change(function () {  
         document.getElementById('label').style.display='none';  
-        document.getElementById("Display").innerHTML="Login As: "+document.getElementById("type").value;  
+        document.getElementById("Display").innerHTML="Login As: "+document.getElementById("typeoption").value;  
         });  
   </script>
 </body>

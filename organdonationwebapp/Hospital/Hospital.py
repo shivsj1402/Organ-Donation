@@ -16,10 +16,15 @@ class Hospital(object):
 
     def register(self):
         # self.encrypted_password = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
-        if(hc.hospitalRegistration(self)):
-            return True
-        else:
-            return False
+        try:
+            if(hc.hospitalRegistration(self)):
+                url = url_for('Login')
+                return True, url
+            else:
+                return False, "Registration Failed."
+        except Exception as err:
+            print(err)
+        
             
 
     def login(self):

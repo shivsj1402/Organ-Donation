@@ -1,3 +1,4 @@
+from flask import url_for
 from organdonationwebapp import uc
 
 class User(object):
@@ -18,10 +19,14 @@ class User(object):
 
 
     def register(self):
-        if(uc.userRegistration(self)):
-            return True
-        else:
-            return False
+        try:
+            if(uc.userRegistration(self)):
+                url = url_for('Login')
+                return True, url
+            else:
+                return False, "Registration Failed."
+        except Exception as err:
+            print(err)
 
 
     def login(self):
