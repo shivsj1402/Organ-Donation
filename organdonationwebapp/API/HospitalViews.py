@@ -98,3 +98,11 @@ def hospitalHome(emailID=None):
         recipient_list = recipientlist.getRecipientList()
         return render_template('hospitalHome.html',request = request_list,donor = donor_list, receiver = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))
+
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('username', None)
+   flash("User logged out Successfully")
+   return redirect(url_for('Login'))

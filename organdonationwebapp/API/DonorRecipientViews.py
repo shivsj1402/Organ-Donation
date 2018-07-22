@@ -24,8 +24,12 @@ def registerUser(usertype = None):
         registerObject = res.Register(registerJson, None, usertype)
         valid, url = registerObject.registerEntity()
         if(valid):
-            flash ("Registered Successfully")
-            return redirect(url_for('Login'))
+            if(g.user):
+                flash ("Registered Successfully")
+                return redirect(url_for('hospitalHome', emailID = g.user))
+            else:
+                flash ("Registered Successfully")
+                return redirect(url_for('Login'))
         else:
             flash("Registration error")
             return "<h2> Registration failed </h2>"
