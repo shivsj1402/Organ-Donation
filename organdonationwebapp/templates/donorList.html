@@ -75,10 +75,10 @@
 
                  <div class="row">
                      <div class="col-xs-6 col-sm-6 col-md-6">
-                         <input type="button" class="btn btn-primary" value="Back" onclick="location.href='#'"/>
+                         <input type="button" class="btn btn-primary" value="Back" onclick="window.history.back()"/>
                      </div>
                      <div class="col-xs-6 col-sm-6 col-md-6">
-                         <input type="button" class="btn btn-primary" value="Create new Receiver" onclick="location.href='#'"/>
+                         <!-- <a class="btn btn-primary"  href="{{ url_for('registerUser', usertype='Donor or Receiver')}}">Create new Receiver</a> -->
                      </div>
                  </div>
             </form>

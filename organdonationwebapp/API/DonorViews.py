@@ -15,7 +15,7 @@ def donorList():
         don_list_details = donorlist.getDonorList()
         if(don_list_details):
             return render_template('donorList.html', dlist=don_list_details)
-    return redirect(url_for('hospitalLogin'))
+    return redirect(url_for('Login'))
 
 
 

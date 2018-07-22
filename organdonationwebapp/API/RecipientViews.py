@@ -14,4 +14,4 @@ def receiverList():
         rec_list_details = recipientlist.getRecipientList()
         if(rec_list_details):
             return render_template('receiverList.html', rlist=rec_list_details)
-    return redirect(url_for('hospitalLogin'))
+    return redirect(url_for('Login'))
