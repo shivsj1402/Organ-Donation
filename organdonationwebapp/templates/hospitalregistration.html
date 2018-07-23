@@ -27,7 +27,7 @@
                      </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="hospitalName" id="first_name" class="form-control" placeholder="Hospital Name">
+                            <input type="text" name="hospitalName" id="first_name" class="form-control" placeholder="Hospital Name" required>
                         </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -37,7 +37,7 @@
                      </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="emailID" id="email" class="form-control" placeholder="Email">
+                            <input type="email" name="emailID" id="email" class="form-control" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -47,7 +47,7 @@
                      </div>
                     <div class="col-xs-7 col-sm-7 col-md-7">
                         <div class="form-group">
-                            <input type="text" name="phone" id="pnone_number" class="form-control input-sm" placeholder="Phone Number">
+                            <input type="tel" name="phone" id="pnone_number" class="form-control input-sm" placeholder="Phone Number" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required>
                         </div>
                      </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -57,7 +57,7 @@
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="text" name="address" id="address" class="form-control" placeholder="Address">
+                            <input type="text" name="address" id="address" class="form-control" placeholder="Address" required>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -105,7 +105,7 @@
                     </div>
                     <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="password" name="password" id="password" class="form-control" placeholder="Enter your Password">
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Enter your Password" required>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -115,7 +115,7 @@
                     </div>
                      <div class="col-xs-9 col-sm-9 col-md-9">
                         <div class="form-group">
-                            <input type="password" name="cpassword" id="rpassword" class="form-control" placeholder="Re-enter your Password">
+                            <input type="password" name="cpassword" id="rpassword" class="form-control" placeholder="Re-enter your Password" required>
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3 col-md-3">
@@ -124,7 +124,7 @@
                         </div>
                     </div>
                     <div class="col-xs-6 col-sm-6 col-md-6">
-                     <input type="file" name="certificate"  class="form-control">
+                     <input type="file" name="certificate"  class="form-control" required>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Submit</button>
