@@ -4,7 +4,10 @@ DELIMITER $$
 
 CREATE PROCEDURE gethospitaldonorlist(IN P_name VARCHAR(50))
 BEGIN
-	SELECT  * FROM user where donationType='d' AND hospital=P_name;
+	select userFirstName, userLastName, emailID, city, province,
+	group_concat(organ) as organ, requestdate
+	from user
+	group by  emailID;
 END $$
 
 DELIMITER ;
