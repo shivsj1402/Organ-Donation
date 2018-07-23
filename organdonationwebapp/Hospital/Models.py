@@ -7,7 +7,6 @@ class HospitalModel(SqlClient):
     
     def hospitalRegistration(self,hospitalName,emailID,phone,address,province,city,password,certificate):
         try:
-            # print("Cert",(certificate))
             self.cursor.callproc('hospitalregistration',[hospitalName,emailID,phone,address,province,city,password,certificate])
             self.connection.commit()
             return True
@@ -16,9 +15,9 @@ class HospitalModel(SqlClient):
             return False
 
 
-    def hospitalLoginAuthentication(self,hemail):
+    def hospitalLoginAuthentication(self,hemail,hpass):
         try:
-            self.cursor.callproc('hospitallogin',[hemail])
+            self.cursor.callproc('hospitallogin',[hemail,hpass])
             res = self.cursor.stored_results()
             for result in res:
                 hospitalauth= result.fetchall()
@@ -44,6 +43,7 @@ class HospitalModel(SqlClient):
         except Exception as err:
             return None
 
+
     def validateHospital(self, hospitalEmail):
         try:
             self.cursor.callproc('validatehospital',[hospitalEmail])
@@ -67,6 +67,19 @@ class HospitalModel(SqlClient):
                     return hospitallist
                 else:
                     return None
+        except Exception as err:
+            return None
+
+#################################
+    def getHospitalID(self,donorHospitalName):
+        try:
+            query = """SELECT emailID FROM hospital WHERE hospitalName=%s"""
+            self.cursor.execute(query,(donorHospitalName,))
+            hospital_email = self.cursor.fetchone()
+            if(hospital_email):
+                return hospital_email
+            else:
+                return None
         except Exception as err:
             return None
 

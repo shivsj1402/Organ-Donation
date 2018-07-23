@@ -1,11 +1,15 @@
 from flask import Flask, render_template, request, redirect, session, url_for, g, send_file,flash, jsonify
-from organdonationwebapp import app
+from organdonationwebapp import app, sc
 import organdonationwebapp.User.User as us
+import organdonationwebapp.User.OpenRequestDetails as rdo
 import organdonationwebapp.Hospital.HospitalList as hlo
+import organdonationwebapp.Hospital.DonorHospitalID as dho
 import organdonationwebapp.User.Donor.Donor as do
 import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
 import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
+import organdonationwebapp.User.Recipient.RequestsStatus as rso
+import organdonationwebapp.User.Recipient.NewDonationRequest as dro
 import json
 
 
@@ -28,10 +32,15 @@ def registerUser():
     return render_template('signup.html', hlist=hospital_list)
 
 
-@app.route('/donorhospitalrequest/<donorEmail>/<recipientEmail>/<organ>', methods=['GET'])
-def donorHospitalRequestPage(donorEmail=None, recipientEmail=None, organ=None):
+@app.route('/donorhospitalrequest/<requestID>', methods=['GET'])
+def donorHospitalRequestPage(requestID=None):
     donor_userdata = None
     recipient_userdata = None
+    requestdata =rdo.OpenRequestDetails(requestID)
+    request_userdata = requestdata.getOpenRequestData()
+    donorEmail=request_userdata[0][0]
+    recipientEmail=request_userdata[0][1]
+    organ=request_userdata[0][2]
     if(donorEmail):
         donor = do.Donor(donorEmail)
         donor_userdata = donor.donorHospitalRequestPage()
@@ -40,20 +49,44 @@ def donorHospitalRequestPage(donorEmail=None, recipientEmail=None, organ=None):
         recipient_userdata = recipient.donorHospitalPageRecipientList()
     if(recipient_userdata and donor_userdata):
         return render_template('donorreceiverrequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ)
-
+    else:
+        return "No donor/reciever available for this Request. Please go back to previous page!"
 
 
 @app.route('/receiverhospitalrequest/<recipientEmail>', methods=['GET','POST'])
 def receiverHospitalRequestPage(recipientEmail=None):
-    print("RecEmail:",(recipientEmail))
-    if(recipientEmail != " "):
-        recipient_data = rpo.ShowRecipientProfile(recipientEmail)
-        recipient_profile = recipient_data.getRecipientProfile()
-        recipient_organ_data = recipient_data.getRecipientOrgans()
-        donor_organ_data = []
-        for organ in recipient_organ_data:
-            donor_data = dpo.ShowRecommendedDonors(organ[0])
-            donor_organ_data.extend(donor_data.getrecommendedDonorList())
-        print (donor_organ_data)
-        if(recipient_profile and recipient_organ_data):
-            return render_template('receiverprofile.html', recipientdata=recipient_profile, organdata=recipient_organ_data, donororgandata=donor_organ_data)
+    recipient_data = rpo.ShowRecipientProfile(recipientEmail)
+    recipient_profile = recipient_data.getRecipientProfile()
+    recipientEmail = recipient_profile[0][2] #Extracting recipient email from Recipient profile JSON
+    recipient_organ_data = recipient_data.getRecipientOrgans()
+    donor_organ_list = []
+    for organ in recipient_organ_data:
+        donor_list = dpo.ShowRecommendedDonors(organ[0])
+        donor_organ_list.extend(donor_list.getrecommendedDonorList())
+
+    requestStatus = rso.RequestsStatus(recipientEmail)
+    request_status_data = requestStatus.getRequestsStatus()
+    approved_requests = request_status_data["approved"]
+    rejected_requests = request_status_data["rejected"]
+    pending_requests = request_status_data["pending"]
+    print("approved_requests",(approved_requests))
+    print("pending_requests",(pending_requests))
+    if(recipient_profile and recipient_organ_data):
+        if request.method == 'POST':
+            donor_data= json.dumps(request.form.to_dict())
+            donor_json = json.loads(donor_data)
+            donor_json_values = donor_json["send request"]
+            donor_values_split = donor_json_values.split('_')
+            donorEmail = donor_values_split[0]
+            donatingOrgan = donor_values_split[1]
+            donorHospitalName = donor_values_split[2]
+            hospitalID = dho.DonorHospitalID(donorHospitalName)
+            donorHospital = hospitalID.getDonorHospitalID()
+            if('send request' in donor_json):
+                newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0])
+                if (newRequest.createDonationRequest()):
+                    print("Inserted successfully")
+                else:
+                    print("Error creating request")
+        return render_template('receiverprofile.html', recipient_data=recipient_profile, organ_data=recipient_organ_data, donor_organ_data=donor_organ_list, pending_requests=pending_requests, approved_requests=approved_requests, rejected_requests=rejected_requests)
+    

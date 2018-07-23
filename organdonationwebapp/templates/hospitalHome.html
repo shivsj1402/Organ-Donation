@@ -42,10 +42,10 @@
                                     {% if request|length > 0 %}
                                     {% for item in request %}
                                     <li>Request ID :{{ item[0] }} 
-                                    <input type="button" class="btn btn-primary" value="View Request" /></li>
+                                    <button type="submit" class="btn btn-primary" name="requestID" value="{{ item[0] }}" />View Request</button></li>
                                     {% endfor %}
                                     {% else %}
-                                    <p>No Requests Available</p>
+                                    <p>No Pending Requests</p>
                                     {% endif %}
                                 </ul>
                              </div>
@@ -68,10 +68,10 @@
                             <div class="col-md-4">
                             </div>
                             <div class="col-md-4">
-                                    <input type="submit" name="submit" class="btn btn-primary" value="View Donor List" />
+                                    <button type="submit" name="submit" class="btn btn-primary" value="View Donor List"> View Donor List </button>
                             </div>
                             <div class="col-md-4">
-                                    <input type="submit" name="submit" class="btn btn-primary" value="View Receiver List" />
+                                    <button type="submit" name="submit" class="btn btn-primary" value="View Receiver List"> View Receiver List </button>
                             </div>
                         </div>
                 </div>

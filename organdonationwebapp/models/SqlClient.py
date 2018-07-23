@@ -18,15 +18,15 @@ class SqlClient(object):
             exit(1)
 
 
-    def organRequest(self, requestID):
-        self.cursor.callproc('organrequest',[requestID])
-        res = self.cursor.stored_results()
-        for result in res:
-            requestdata= result.fetchall()
-            if(requestdata):
-                return requestdata
-            else:
-                return None
+    # def organRequest(self, requestID):
+    #     self.cursor.callproc('organrequest',[requestID])
+    #     res = self.cursor.stored_results()
+    #     for result in res:
+    #         requestdata= result.fetchall()
+    #         if(requestdata):
+    #             return requestdata
+    #         else:
+    #             return None
 
     
     def closeDBConnection(self):

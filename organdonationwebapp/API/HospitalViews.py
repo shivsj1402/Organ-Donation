@@ -73,16 +73,22 @@ def hospitalHome(emailID=None):
         hemail=g.user
         hospitalhome = hho.HospitalHome(emailID)
         hospital_name = hospitalhome.getHospitalName()
-        if request.method == 'POST':
-            if(request.form['submit']=='View Donor List'):
-                return redirect(url_for('donorList'))
-            elif(request.form['submit']=='View Receiver List'):
-                return redirect(url_for('receiverList'))
         requestlist = hprl.HospitalRequestList(hemail)
         request_list = requestlist.getPendingRequestList()
         donorlist = hdl.HospitalDonorList(hospital_name[0])
         donor_list = donorlist.getDonorList()
         recipientlist = hrl.HospitalRecipientList(hospital_name[0])
         recipient_list = recipientlist.getRecipientList()
+        if request.method == 'POST':
+            data= json.dumps(request.form.to_dict())
+            datajson = json.loads(data)
+            if('requestID' in datajson):
+                requestID = request.form['requestID']
+                return redirect(url_for('donorHospitalRequestPage', requestID=requestID))
+            if('submit' in datajson):
+                if(request.form['submit']=='View Donor List'):
+                    return redirect(url_for('donorList'))
+                elif(request.form['submit']=='View Receiver List'):
+                    return redirect(url_for('receiverList'))
         return render_template('hospitalHome.html',request = request_list,donor = donor_list, receiver = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))

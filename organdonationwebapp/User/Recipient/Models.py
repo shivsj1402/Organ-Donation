@@ -20,11 +20,14 @@ class RecipientModel(SqlClient):
 
 
     def getReceiverList(self, hname):
-        self.cursor.callproc('gethospitalreceiverlist',[hname])
-        res = self.cursor.stored_results()
-        for result in res:
-            recipientlist= result.fetchall()
-            return recipientlist
+        try:
+            self.cursor.callproc('gethospitalreceiverlist',[hname])
+            res = self.cursor.stored_results()
+            for result in res:
+                recipientlist= result.fetchall()
+                return recipientlist
+        except Exception as err:
+            return None
 
 
     def receiverHospitalShowProfile(self, recipientEmail):
@@ -53,5 +56,29 @@ class RecipientModel(SqlClient):
                     return userdata_organ
                 else:
                     return None
+        except Exception as err:
+            return None
+
+##################################
+    def createRequest(self, donorEmail, recipientEmail, donatingOrgan, donorHospital):
+        try:
+            query = """INSERT INTO requestdata(donorID,recipientID,organRequested,hospitalID, requestState) VALUES (%s,%s,%s,%s,%s)"""
+            self.cursor.execute(query,(donorEmail,recipientEmail,donatingOrgan,donorHospital,0))
+            self.connection.commit()
+            return True
+        except Exception as err:
+            print(err)
+            return False
+
+##################################
+    def getOpenRequestsStatus(self, recipientEmail):
+        try:
+            query = """SELECT * FROM requestdata WHERE recipientID=%s"""
+            self.cursor.execute(query,(recipientEmail,))
+            requeststatusdata = self.cursor.fetchall()
+            if(requeststatusdata):
+                return requeststatusdata
+            else:
+                return None
         except Exception as err:
             return None

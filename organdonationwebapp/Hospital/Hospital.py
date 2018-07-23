@@ -22,14 +22,15 @@ class Hospital(object):
             
 
     def loginHospital(self):
-        result = hc.hospitalLoginAuthentication(self.emailID)
-        if(result):
-            try:
-                if(self.password == result[0][6]):
-                    return result
-            except Exception as err:
-                print(err)
-                return False
+        try:
+            result = hc.hospitalLoginAuthentication(self.emailID,self.password)
+            if(result):
+                return result
+            else:
+                return None
+        except Exception as err:
+            print(err)
+            return None
 
 
 #Adding factory for complex operation of initialization of hospital and validating certificate
