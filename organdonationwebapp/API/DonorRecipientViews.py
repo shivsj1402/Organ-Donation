@@ -89,4 +89,3 @@ def receiverHospitalRequestPage(recipientEmail=None):
                 else:
                     print("Error creating request")
         return render_template('receiverprofile.html', recipient_data=recipient_profile, organ_data=recipient_organ_data, donor_organ_data=donor_organ_list, pending_requests=pending_requests, approved_requests=approved_requests, rejected_requests=rejected_requests)
-    
