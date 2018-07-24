@@ -42,6 +42,7 @@ class HospitalModel(SqlClient):
         except Exception as err:
             return None
 
+
     def validateHospital(self, hospitalEmail):
         try:
             self.cursor.callproc('validatehospital',[hospitalEmail])
@@ -69,6 +70,20 @@ class HospitalModel(SqlClient):
             return None
 
 
+    def getHospitalID(self,donorHospitalName):
+        try:
+            self.cursor.callproc('getHospitalID',[donorHospitalName])
+            res = self.cursor.stored_results()
+            for result in res:
+                hospital_email= result.fetchone()
+                if(hospital_email):
+                    return hospital_email
+                else:
+                    return None
+        except Exception as err:
+            return None
+
+
     def getHospitalDonorList(self,hname):
         self.cursor.callproc('gethospitaldonorlist',[hname])
         res = self.cursor.stored_results()
@@ -83,6 +98,7 @@ class HospitalModel(SqlClient):
         for result in res:
             receiverlist= result.fetchall()
             return receiverlist
+
 
     def getHospitalRequestList(self,emailID):
         self.cursor.callproc('requestlist', [emailID])
@@ -102,9 +118,11 @@ class HospitalModel(SqlClient):
 
     def getPassword(self):
         try:
-            query = """SELECT  ruleName, ruleValue FROM validatePassword"""
-            self.cursor.execute(query)
-            passwordRules = self.cursor.fetchall()
-            return passwordRules
+            self.cursor.callproc('validatePassword')
+            res = self.cursor.stored_results()
+            for result in res:
+                passwordRules= result.fetchall()
+                print(passwordRules)
+                return passwordRules
         except Exception as err:
             return None

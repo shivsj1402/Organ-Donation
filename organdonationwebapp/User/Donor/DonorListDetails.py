@@ -1,8 +1,9 @@
-from organdonationwebapp import duc, sc
+from organdonationwebapp import duc
 
 class DonorListDetails(object):
     def __init__(self,Email):
         self.Email = Email
+
 
     def getDonorsList(self, hname):
         self.hname = hname

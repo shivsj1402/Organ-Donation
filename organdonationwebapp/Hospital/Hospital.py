@@ -2,6 +2,7 @@ from flask import url_for
 from organdonationwebapp import hc
 import base64
 
+
 class Hospital(object):
     def initialize(self,hospitalJson,certificateFile=None):
         self.hospitalName = hospitalJson['hospitalName'] if 'hospitalName' in hospitalJson else None
@@ -26,7 +27,6 @@ class Hospital(object):
             print(err)
         
             
-
     def login(self):
         result = hc.hospitalLoginAuthentication(self.emailID,self.password)
         if(result):
@@ -34,7 +34,7 @@ class Hospital(object):
             return result, url
         else:
             return False, "Authentication Failedr"
-                
+
 
 #Adding factory for complex operation of initialization of hospital and validating certificate
 def build_Hospital(cls,hospitalJson,certificate = None):

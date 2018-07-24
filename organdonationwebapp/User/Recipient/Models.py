@@ -20,11 +20,14 @@ class RecipientModel(SqlClient):
 
 
     def getRecepientList(self, hname):
-        self.cursor.callproc('gethospitalreceiverlist',[hname])
-        res = self.cursor.stored_results()
-        for result in res:
-            recipientlist= result.fetchall()
-            return recipientlist
+        try:
+            self.cursor.callproc('gethospitalreceiverlist',[hname])
+            res = self.cursor.stored_results()
+            for result in res:
+                recipientlist= result.fetchall()
+                return recipientlist
+        except Exception as err:
+            return None
 
 
     def receiverHospitalShowProfile(self, recipientEmail):
@@ -51,6 +54,30 @@ class RecipientModel(SqlClient):
                     organ = row[0]
                 if(userdata_organ):
                     return userdata_organ
+                else:
+                    return None
+        except Exception as err:
+            return None
+
+
+    def createRequest(self, donorEmail, recipientEmail, donatingOrgan, donorHospital):
+        try:
+            self.cursor.callproc('createrequest',[donorEmail,recipientEmail,donatingOrgan,donorHospital,0])
+            self.connection.commit()
+            return True
+        except Exception as err:
+            print(err)
+            return False
+
+
+    def getOpenRequestsStatus(self, recipientEmail):
+        try:
+            self.cursor.callproc('openrequeststatus',[recipientEmail])
+            res = self.cursor.stored_results()
+            for result in res:
+                requeststatusdata= result.fetchall()
+                if(requeststatusdata):
+                    return requeststatusdata
                 else:
                     return None
         except Exception as err:

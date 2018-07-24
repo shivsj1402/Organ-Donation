@@ -24,6 +24,8 @@ class DBValidatePassword(ValidatePassword):
 
     def validateCapitalLetters(self):
         count=0
+        if "capital_letters" not in self.ruleDict:
+            return True
         for i in self.password:
             if(i.isupper()):
                 count = count+1

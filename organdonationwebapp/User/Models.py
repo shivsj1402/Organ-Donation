@@ -16,3 +16,18 @@ class UserModel(SqlClient):
         except Exception as err:
             print(err)
             return False
+
+
+    def organRequest(self, requestID):
+        try:
+            self.cursor.callproc('organrequest',[requestID])
+            res = self.cursor.stored_results()
+            for result in res:
+                requestdata= result.fetchall()
+                if(requestdata):
+                    return requestdata
+                else:
+                    return None
+        except Exception as err:
+            print(err)
+            return None

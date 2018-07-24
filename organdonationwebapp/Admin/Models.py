@@ -15,4 +15,3 @@ class AdminModel(SqlClient):
         except Exception as err:
             print(err)
             return None
-

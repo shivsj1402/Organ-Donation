@@ -25,15 +25,15 @@ def hospitalDonorPage():
     return render_template('DonorReceiverRequest.html')
 
 
-@app.route('/dummyrequest', methods=['GET', 'POST'])
-def dummyRequest():
-    if request.method == 'POST':
-        requestdata = request.form
-        requestID = requestdata['requestID']
-        requestdata = sc.organRequest(requestID)
-        if(requestdata):
-            return redirect(url_for('donorHospitalRequestPage', donorEmail=requestdata[0][0],recipientEmail=requestdata[0][1],organ=requestdata[0][2]))
-    return render_template('dummyrequests.html')
+# @app.route('/dummyrequest', methods=['GET', 'POST'])
+# def dummyRequest():
+#     if request.method == 'POST':
+#         requestdata = request.form
+#         requestID = requestdata['requestID']
+#         requestdata = sc.organRequest(requestID)
+#         if(requestdata):
+#             return redirect(url_for('receiverHospitalRequestPage', donorEmail=requestdata[0][0],recipientEmail=requestdata[0][1],organ=requestdata[0][2]))
+#     return render_template('dummyrequests.html')
 
 
 @app.errorhandler(404)

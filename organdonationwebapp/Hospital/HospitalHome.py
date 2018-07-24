@@ -6,8 +6,12 @@ class HospitalHome(object):
             
 
     def getHospitalName(self):
-        hospital_name = hc.getHospitalName(self.hospitalEmail)
-        if(hospital_name):
-            return hospital_name
-        else:
+        try:
+            hospital_name = hc.getHospitalName(self.hospitalEmail)
+            if(hospital_name):
+                return hospital_name
+            else:
+                return None
+        except Exception as err:
+            print(err)
             return None

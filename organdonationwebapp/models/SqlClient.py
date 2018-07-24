@@ -1,9 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import mysql.connector
 
-import logging
-logging.basicConfig(filename='file.log',level=logging.DEBUG)
-
 class SqlClient(object):
     def __init__(self):
         self.host = "db-5308.cs.dal.ca"
@@ -15,23 +12,22 @@ class SqlClient(object):
         try:
             self.connection = mysql.connector.connect(user=self.user,password=self.password,host=self.host,database=self.dbname)
             self.cursor = self.connection.cursor()
-            logging.info("Successfully connected to Database")
+            print("Successfully connected to Database")
         except Exception as err:
-            logging.info("Error connecting to Database")
+            print("Error connecting to Database")
             exit(1)
 
 
-    def organRequest(self, requestID):
-        # print(requestID)
-        self.cursor.callproc('organrequest',[requestID])
-        res = self.cursor.stored_results()
-        for result in res:
-            requestdata= result.fetchall()
-            # print("Hello",(requestdata))
-            if(requestdata):
-                return requestdata
-            else:
-                return None
+    # def organRequest(self, requestID):
+    #     self.cursor.callproc('organrequest',[requestID])
+    #     res = self.cursor.stored_results()
+    #     for result in res:
+    #         requestdata= result.fetchall()
+    #         if(requestdata):
+    #             return requestdata
+    #         else:
+    #             return None
+
     
     def closeDBConnection(self):
         self.cursor.close()

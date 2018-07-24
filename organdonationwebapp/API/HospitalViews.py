@@ -26,7 +26,6 @@ def before_request():
     g.logger.debug("Acquired Singleton Logger")
 
 
-
 @app.route('/hospitalregistration/<usertype>', methods=['GET','POST'])
 def hospitalRegistration(usertype = None):
     if request.method == 'POST':
@@ -51,7 +50,6 @@ def hospitalRegistration(usertype = None):
             g.logger.error("Incorrect Password Value")
             flash("Incorrect Password Value") 
     return render_template('hospitalregistration.html')
-
 
 
 @app.route('/', methods=['GET','POST'])
@@ -87,20 +85,25 @@ def hospitalHome(emailID=None):
         # print(hemail)
         hospitalhome = hho.HospitalHome(emailID)
         hospital_name = hospitalhome.getHospitalName()
-        # print("1234",hospital_name)
-        if request.method == 'POST':
-            if(request.form['submit']=='View Donor List'):
-                return redirect(url_for('donorList'))
-            elif(request.form['submit']=='View Receiver List'):
-                return redirect(url_for('receiverList'))
-            elif(request.form['submit']=='View Donor Receiver Mapping'):
-                    return redirect(url_for('donorReceiverMapping'))
         requestlist = hprl.HospitalRequestList(hemail)
         request_list = requestlist.getPendingRequestList()
         donorlist = hdl.HospitalDonorList(hospital_name[0])
         donor_list = donorlist.getDonorList()
         recipientlist = hrl.HospitalRecipientList(hospital_name[0])
         recipient_list = recipientlist.getRecipientList()
+        if request.method == 'POST':
+            data= json.dumps(request.form.to_dict())
+            datajson = json.loads(data)
+            if('requestID' in datajson):
+                requestID = request.form['requestID']
+                return redirect(url_for('donorHospitalRequestPage', requestID=requestID))
+            if('submit' in datajson):
+                if(request.form['submit']=='View Donor List'):
+                    return redirect(url_for('donorList'))
+                elif(request.form['submit']=='View Receiver List'):
+                    return redirect(url_for('receiverList'))
+                elif(request.form['submit']=='View Donor Receiver Mapping'):
+                    return redirect(url_for('donorReceiverMapping'))
         return render_template('hospitalHome.html',request = request_list,donor = donor_list, receiver = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))
 

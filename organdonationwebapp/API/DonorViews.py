@@ -18,7 +18,6 @@ def donorList():
     return redirect(url_for('Login'))
 
 
-
 @app.route('/donorprofile/<donorEmail>', methods=['GET'])
 def donorProfilePage(donorEmail=None):
     donor_userdata = None

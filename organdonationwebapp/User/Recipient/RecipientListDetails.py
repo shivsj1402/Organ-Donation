@@ -1,8 +1,10 @@
-from organdonationwebapp import ruc,sc
+from organdonationwebapp import ruc
+
 
 class RecipientListDetails(object):
     def __init__(self,recipientEmail):
         self.recipientEmail = recipientEmail
+
 
     def getRecipientsList(self, hname):
         self.hname = hname
