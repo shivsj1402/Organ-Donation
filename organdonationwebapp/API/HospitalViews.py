@@ -11,6 +11,8 @@ import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
 import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
 import organdonationwebapp.API.Logger as log
+import organdonationwebapp.API.Authenticator as auth
+import organdonationwebapp.API.Register as res
 import json
 import binascii
 
@@ -24,49 +26,57 @@ def before_request():
     g.logger.debug("Acquired Singleton Logger")
 
 
-@app.route('/hospitalregistration', methods=['GET','POST'])
-def hospitalRegistration():
+
+@app.route('/hospitalregistration/<usertype>', methods=['GET','POST'])
+def hospitalRegistration(usertype = None):
     if request.method == 'POST':
         hospital_data= json.dumps(request.form.to_dict())
-        hospital_json = json.loads(hospital_data)
+        registerJson = json.loads(hospital_data)
         data = request.files['certificate']
         bcertificate=data.read()
         certificate =binascii.hexlify(bcertificate)
-        valPassword = DBval.DBValidatePassword(hospital_json['password'])
+        valPassword = DBval.DBValidatePassword(registerJson['password'])
         password_value = valPassword.isValid()
         if(password_value):
-            hospital = ho.construct_Hospital(ho.Hospital, hospital_json, certificate)
-            if(hospital.registerHospital()):
-                g.logger.info("Logged in successfully")
-                return redirect(url_for('hospitalLogin'))
+            registerObject = res.Register(registerJson, certificate, usertype)
+            valid, url = registerObject.registerEntity()
+            if(valid):
+                g.logger.info("Registered Successfully")
+                flash("Registered Successfully")
+                return redirect(url_for('Login'))
             else:
-                g.logger.error("Error Inserting Data")
+                g.logger.error("Error Inserting Data") 
+                flash("Registration error") 
         else:
-            return "Incorrect Password Value"
+            g.logger.error("Incorrect Password Value")
+            flash("Incorrect Password Value") 
     return render_template('hospitalregistration.html')
 
 
+
 @app.route('/', methods=['GET','POST'])
-def hospitalLogin():
+def Login():
     if request.method == 'POST':
-        hospital_data= json.dumps(request.form.to_dict())
-        hospital_json = json.loads(hospital_data)
-        if(hospital_json['submit']=='submit'):
-            hospital = ho.construct_Hospital(ho.Hospital, hospital_json, None)
+        login_data= json.dumps(request.form.to_dict())
+        login_json = json.loads(login_data)
+        if(login_json['submit']=='submit'):
+            authenticatorObject = auth.Authenticator(login_json)
             session.pop('user', None)
-            if(hospital.loginHospital()):
-                session['user']= hospital_json['emailID']
+            valid, url = authenticatorObject.validateLogin()
+            if(valid):
+                session['user']= login_json['emailID']
                 g.logger.info("Logged in")
-                return redirect(url_for('hospitalHome', emailID=session['user']))
+                flash("Logged in")
+                return redirect(url)
             else:   
                 g.logger.error("User did not register")
-                return "Please register"
-        elif(hospital_json['submit']=='SignUp'):
-            usertype = hospital_json['type']
-            if(usertype =="Donor/Receiver"):
-                return redirect(url_for('registerUser'))
+                flash("Please register")
+        elif(login_json['submit']=='SignUp'):
+            usertype = login_json['type']
+            if(usertype =="Donor or Receiver"):
+                return redirect(url_for('registerUser', usertype = usertype))
             else:
-                return redirect(url_for('hospitalRegistration'))
+                return redirect(url_for('hospitalRegistration',usertype = usertype))
     return render_template('loginpage.html')
 
 
@@ -74,27 +84,23 @@ def hospitalLogin():
 def hospitalHome(emailID=None):
     if g.user:
         hemail=g.user
+        # print(hemail)
         hospitalhome = hho.HospitalHome(emailID)
         hospital_name = hospitalhome.getHospitalName()
+        # print("1234",hospital_name)
+        if request.method == 'POST':
+            if(request.form['submit']=='View Donor List'):
+                return redirect(url_for('donorList'))
+            elif(request.form['submit']=='View Receiver List'):
+                return redirect(url_for('receiverList'))
+            elif(request.form['submit']=='View Donor Receiver Mapping'):
+                    return redirect(url_for('donorReceiverMapping'))
         requestlist = hprl.HospitalRequestList(hemail)
         request_list = requestlist.getPendingRequestList()
         donorlist = hdl.HospitalDonorList(hospital_name[0])
         donor_list = donorlist.getDonorList()
         recipientlist = hrl.HospitalRecipientList(hospital_name[0])
         recipient_list = recipientlist.getRecipientList()
-        if request.method == 'POST':
-            data= json.dumps(request.form.to_dict())
-            datajson = json.loads(data)
-            if('requestID' in datajson):
-                requestID = request.form['requestID']
-                return redirect(url_for('donorHospitalRequestPage', requestID=requestID))
-            if('submit' in datajson):
-                if(request.form['submit']=='View Donor List'):
-                    return redirect(url_for('donorList'))
-                elif(request.form['submit']=='View Receiver List'):
-                    return redirect(url_for('receiverList'))
-                elif(request.form['submit']=='View Donor Receiver Mapping'):
-                    return redirect(url_for('donorReceiverMapping'))
         return render_template('hospitalHome.html',request = request_list,donor = donor_list, receiver = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))
 
