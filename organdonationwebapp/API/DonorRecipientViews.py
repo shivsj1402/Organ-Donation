@@ -6,11 +6,12 @@ import organdonationwebapp.User.Donor.Donor as do
 import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
 import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
+import organdonationwebapp.API.Register as res
 import json
 
 
-@app.route('/signup', methods=['GET','POST'])
-def registerUser():
+@app.route('/signup/<usertype>', methods=['GET','POST'])
+def registerUser(usertype = None):
     organ =[]
     hospitalList = hlo.HospitalList()
     hospital_list = hospitalList.getGlobalHospitalList()
@@ -19,14 +20,20 @@ def registerUser():
         organ = request.form.getlist('organ')
         user_dict['organ'] = organ
         user_data= json.dumps(user_dict)
-        user_json = json.loads(user_data)
-        user = us.User(user_json)
-        if user.registerUser():
-            return "<h2> Registered Successfully </h2>"
+        registerJson = json.loads(user_data)
+        registerObject = res.Register(registerJson, None, usertype)
+        valid, url = registerObject.registerEntity()
+        if(valid):
+            if(g.user):
+                flash ("Registered Successfully")
+                return redirect(url_for('hospitalHome', emailID = g.user))
+            else:
+                flash ("Registered Successfully")
+                return redirect(url_for('Login'))
         else:
+            flash("Registration error")
             return "<h2> Registration failed </h2>"
     return render_template('signup.html', hlist=hospital_list)
-
 
 @app.route('/donorhospitalrequest/<donorEmail>/<recipientEmail>/<organ>', methods=['GET'])
 def donorHospitalRequestPage(donorEmail=None, recipientEmail=None, organ=None):

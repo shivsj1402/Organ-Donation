@@ -1,7 +1,8 @@
+from flask import url_for
 from organdonationwebapp import uc
 
 class User(object):
-    def __init__(self,userJson):
+    def initialize(self,userJson):
         self.first_name = userJson['first_name'] if 'first_name' in userJson else None
         self.last_name = userJson['last_name'] if 'last_name' in userJson else None
         self.phone_number = userJson['phone_number'] if 'phone_number' in userJson else None
@@ -17,8 +18,22 @@ class User(object):
         self.organ = userJson['organ'] if 'organ' in userJson else None
 
 
-    def registerUser(self):
-        if(uc.userRegistration(self.first_name, self.last_name, self.phone_number, self.email, self.sex, self.dob, self.address, self.province, self.city, self.hospital, self.bloodgroup, self.usertype, self.organ)):
-            return True
-        else:
-            return False
+    def register(self):
+        try:
+            if(uc.userRegistration(self)):
+                url = url_for('Login')
+                return True, url
+            else:
+                return False, "Registration Failed."
+        except Exception as err:
+            print(err)
+
+
+    def login(self):
+       return NotImplementedError
+
+def build_User(cls,userJson):
+    user = cls()
+    user.initialize(userJson)
+    #validate certificate to add here
+    return user
