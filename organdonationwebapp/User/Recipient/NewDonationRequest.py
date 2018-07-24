@@ -11,7 +11,6 @@ class NewDonationRequest(object):
 
     def createDonationRequest(self):
         try:
-            #hospitalRegistration
             if(ruc.createRequest(self.donorEmail, self.recipientEmail, self.donatingOrgan, self.donorHospital)):
                 return True
             else:

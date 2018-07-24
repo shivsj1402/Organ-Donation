@@ -6,24 +6,6 @@ import organdonationwebapp.Hospital.HospitalList as hlo
 import json
 
 
-@app.route('/adminlogin', methods=['GET','POST'])
-def adminLoginPage():
-    if request.method == 'POST':
-        user = None
-        admin_data = json.dumps(request.form.to_dict())
-        admin_json = json.loads(admin_data)
-        if(admin_json['submit']=='submit'):
-            admin = ao.Admin(admin_json)
-            session.pop('user', None)
-            if(admin.loginAdmin()):
-                session['user']= admin_json['emailID']
-                user = session['user']
-                return redirect(url_for('adminHomepage', username=user))
-            else:
-                return 'Authentication failed!!'
-    return render_template('adminlogin.html')
-
-
 @app.route('/adminhome/<username>', methods=['GET','POST'])
 def adminHomepage(username=None, hospitalEmail=None):
     if request.method == 'POST':

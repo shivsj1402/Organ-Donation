@@ -18,9 +18,14 @@
         <div class="col-md-12">
              <form>
                 <div class="row">
-                    <div class="col-xs-3 col-sm-3 col-md-3">
+                    <div class="col-xs-2 col-sm-2 col-md-2">
                         <div class="form-group">
                             <label>Name</label>
+                        </div>
+                     </div>
+                     <div class="col-xs-2 col-sm-2 col-md-2">
+                        <div class="form-group">
+                            <label>email</label>
                         </div>
                      </div>
                     <div class="col-xs-2 col-sm-2 col-md-2">
@@ -33,7 +38,7 @@
                             <label>Organ</label>
                         </div>
                      </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3">
+                    <div class="col-xs-2 col-sm-2 col-md-2">
                         <div class="form-group">
                             <label>Request Date</label>
                         </div>
@@ -45,24 +50,29 @@
                 </div>
                 {% for item in dlist %}
                   <div class="row">
-                    <div class="col-xs-3 col-sm-3 col-md-3">
+                    <div class="col-xs-2 col-sm-2 col-md-2">
                         <div class="form-group">
-                            {{item[1]}} {{item[2]}}
+                            {{item[0]}} {{item[1]}}
+                        </div>
+                     </div>
+                     <div class="col-xs-2 col-sm-2 col-md-2">
+                        <div class="form-group">
+                                {{item[2]}} 
                         </div>
                      </div>
                     <div class="col-xs-2 col-sm-2 col-md-2">
                         <div class="form-group">
-                                {{item[9]}} {{item[8]}}
+                                {{item[3]}} {{item[4]}}
                         </div>
                      </div>
                     <div class="col-xs-2 col-sm-2 col-md-2">
                         <div class="form-group">
-                                {{item[14]}}
+                                {{item[5]}}
                         </div>
                      </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3">
+                    <div class="col-xs-2 col-sm-2 col-md-2">
                         <div class="form-group">
-                            <label>Dummy Request Date</label>
+                            {{item[6]}}
                         </div>
                      </div>
                     <div class="col-xs-2 col-sm-2 col-md-2">
@@ -75,10 +85,10 @@
 
                  <div class="row">
                      <div class="col-xs-6 col-sm-6 col-md-6">
-                         <input type="button" class="btn btn-primary" value="Back" onclick="location.href='#'"/>
+                         <input type="button" class="btn btn-primary" value="Back" onclick="window.history.back()"/>
                      </div>
                      <div class="col-xs-6 col-sm-6 col-md-6">
-                         <input type="button" class="btn btn-primary" value="Create new Receiver" onclick="location.href='#'"/>
+                         <a class="btn btn-primary"  href="{{ url_for('registerUser', usertype='Donor or Receiver')}}">Create new Donor</a>
                      </div>
                  </div>
             </form>

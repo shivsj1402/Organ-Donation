@@ -5,7 +5,7 @@ class DonorListDetails(object):
         self.Email = Email
 
 
-    def getDonorList(self, hname):
+    def getDonorsList(self, hname):
         self.hname = hname
         donor_list = duc.getDonorList(self.hname)
         if(donor_list):

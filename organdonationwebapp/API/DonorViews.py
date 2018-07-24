@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, url_for, g, send_file,flash, jsonify
 from organdonationwebapp import app
+import organdonationwebapp.User.Donor.DonorListDetails as dlo
 import organdonationwebapp.User.Donor.DonorProfile as dop
 import organdonationwebapp.Hospital.HospitalHome as hho
 import organdonationwebapp.Hospital.HospitalDonorList as hdl
@@ -10,11 +11,11 @@ def donorList():
     if g.user:
         hospitalhome = hho.HospitalHome(g.user)
         hospital_name = hospitalhome.getHospitalName()
-        donorlist = hdl.HospitalDonorList(hospital_name[0])
-        don_list_details = donorlist.getDonorList()
+        donorlist = dlo.DonorListDetails(hospital_name[0])
+        don_list_details = donorlist.getDonorsList(hospital_name[0])
         if(don_list_details):
             return render_template('donorList.html', dlist=don_list_details)
-    return redirect(url_for('hospitalLogin'))
+    return redirect(url_for('Login'))
 
 
 @app.route('/donorprofile/<donorEmail>', methods=['GET'])

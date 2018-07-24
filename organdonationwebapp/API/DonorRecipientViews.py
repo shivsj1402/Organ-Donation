@@ -10,11 +10,12 @@ import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
 import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
 import organdonationwebapp.User.Recipient.RequestsStatus as rso
 import organdonationwebapp.User.Recipient.NewDonationRequest as dro
+import organdonationwebapp.API.Register as res
 import json
 
 
-@app.route('/signup', methods=['GET','POST'])
-def registerUser():
+@app.route('/signup/<usertype>', methods=['GET','POST'])
+def registerUser(usertype = None):
     organ =[]
     hospitalList = hlo.HospitalList()
     hospital_list = hospitalList.getGlobalHospitalList()
@@ -23,11 +24,18 @@ def registerUser():
         organ = request.form.getlist('organ')
         user_dict['organ'] = organ
         user_data= json.dumps(user_dict)
-        user_json = json.loads(user_data)
-        user = us.User(user_json)
-        if user.registerUser():
-            return "<h2> Registered Successfully </h2>"
+        registerJson = json.loads(user_data)
+        registerObject = res.Register(registerJson, None, usertype)
+        valid, url = registerObject.registerEntity()
+        if(valid):
+            if(g.user):
+                flash ("Registered Successfully")
+                return redirect(url_for('hospitalHome', emailID = g.user))
+            else:
+                flash ("Registered Successfully")
+                return redirect(url_for('Login'))
         else:
+            flash("Registration error")
             return "<h2> Registration failed </h2>"
     return render_template('signup.html', hlist=hospital_list)
 
@@ -63,14 +71,12 @@ def receiverHospitalRequestPage(recipientEmail=None):
     for organ in recipient_organ_data:
         donor_list = dpo.ShowRecommendedDonors(organ[0])
         donor_organ_list.extend(donor_list.getrecommendedDonorList())
-
     requestStatus = rso.RequestsStatus(recipientEmail)
     request_status_data = requestStatus.getRequestsStatus()
     approved_requests = request_status_data["approved"]
     rejected_requests = request_status_data["rejected"]
     pending_requests = request_status_data["pending"]
-    print("approved_requests",(approved_requests))
-    print("pending_requests",(pending_requests))
+    #print("approved_requests",(approved_requests))
     if(recipient_profile and recipient_organ_data):
         if request.method == 'POST':
             donor_data= json.dumps(request.form.to_dict())

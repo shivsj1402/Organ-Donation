@@ -1,4 +1,6 @@
+from flask import url_for
 from organdonationwebapp import hc
+import base64
 
 
 class Hospital(object):
@@ -9,32 +11,33 @@ class Hospital(object):
         self.address = hospitalJson['address'] if 'address' in hospitalJson else None
         self.province = hospitalJson['province'] if 'province' in hospitalJson else None
         self.city = hospitalJson['city'] if 'city' in hospitalJson else None
-        self.password = hospitalJson['password'] if 'password' in hospitalJson else None
+        passwrd = hospitalJson['password'] if 'password' in hospitalJson else None
+        self.password = base64.b64encode(passwrd.encode())
         self.data = certificateFile
 
-
-    def registerHospital(self):
-        # self.encrypted_password = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt())
-        if(hc.hospitalRegistration(self.hospitalName, self.emailID, self.phone, self.address, self.province, self.city, self.password, self.data)):
-            return True
-        else:
-            return False
-            
-
-    def loginHospital(self):
+    
+    def register(self):
         try:
-            result = hc.hospitalLoginAuthentication(self.emailID,self.password)
-            if(result):
-                return result
+            if(hc.hospitalRegistration(self)):
+                url = url_for('Login')
+                return True, url
             else:
-                return None
+                return False, "Registration Failed."
         except Exception as err:
             print(err)
-            return None
+        
+            
+    def login(self):
+        result = hc.hospitalLoginAuthentication(self.emailID,self.password)
+        if(result):
+            url = url_for('hospitalHome', emailID=self.emailID)
+            return result, url
+        else:
+            return False, "Authentication Failedr"
 
 
 #Adding factory for complex operation of initialization of hospital and validating certificate
-def construct_Hospital(cls,hospitalJson,certificate):
+def build_Hospital(cls,hospitalJson,certificate = None):
     hosp = cls()
     hosp.initialize(hospitalJson,certificate)
     #validate certificate to add here

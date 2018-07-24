@@ -6,7 +6,7 @@ class RecipientListDetails(object):
         self.recipientEmail = recipientEmail
 
 
-    def getReceiverList(self, hname):
+    def getRecipientsList(self, hname):
         self.hname = hname
         recipient_list = ruc.getRecepientList(self.hname)
         if(recipient_list):

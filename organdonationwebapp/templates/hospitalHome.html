@@ -52,14 +52,14 @@
                     <div class="col-xs-4 col-sm-4 col-md-4">
                         <ol>
                             {% for item in donor %}
-                            <li> {{ item[4] }} </li>
+                            <li> {{ item[2] }} </li>
                             {% endfor %}
                         </ol>
                     </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
                             <ol>
                                 {% for item in receiver %}
-                                <li> {{ item[4] }} </li>
+                                <li> {{ item[2] }} </li>
                                 {% endfor %}
                             </ol>
                        </div>
@@ -75,6 +75,17 @@
                             </div>
                         </div>
                 </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <script>
+                        var messages = {{ messages | safe }};
+                        for (var i=0; i<messages.length; i++) 
+                        {
+                            alert(messages[i]);
+                        }
+                    </script>
+                {% endif %}
+             {% endwith %}
             </form>
         </div>
     </div>
