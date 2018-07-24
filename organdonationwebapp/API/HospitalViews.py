@@ -102,11 +102,8 @@ def hospitalHome(emailID=None):
                     return redirect(url_for('donorList'))
                 elif(request.form['submit']=='View Receiver List'):
                     return redirect(url_for('receiverList'))
-<<<<<<< HEAD
                 elif(request.form['submit']=='View Donor Receiver Mapping'):
                     return redirect(url_for('donorReceiverMapping'))
-=======
->>>>>>> 0cfa5c0e3e04755c17153c4819c420be4d3217c0
         return render_template('hospitalHome.html',request = request_list,donor = donor_list, receiver = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))
 
