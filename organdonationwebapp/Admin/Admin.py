@@ -14,12 +14,18 @@ class Admin(object):
     def login(self):
         if(ac.adminLoginAuthentication(self.emailID, self.password)):
             url = url_for('adminHomepage', username=self.emailID)
+            self.logger.debug("Admin " + self.emailID + " logged in Successfully." )
             return True, url
         else:
+            self.logger.error("Authentication Failed. Please register if not a registered User")
             return False, "Authentication Failed. Please register if not a registered User"
+    
+    def setLogger(self,logger):
+        self.logger = logger
 
-def build_Admin(cls,adminJson):
+def build_Admin(cls,adminJson, logger):
     admin = cls()
     admin.initialize(adminJson)
+    admin.setLogger(logger)
     #validate certificate to add here
     return admin

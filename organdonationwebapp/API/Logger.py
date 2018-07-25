@@ -2,18 +2,9 @@ import logging
 import os
 import datetime
 import time
+import organdonationwebapp.API.Singleton as Single
 
-
-class SingletonType(type):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(SingletonType, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-class MyLogger(object, metaclass=SingletonType):
+class MyLogger(object, metaclass=Single.SingletonType):
     # __metaclass__ = SingletonType   # python 2 Style
     _logger = None
 
@@ -37,6 +28,7 @@ class MyLogger(object, metaclass=SingletonType):
         self._logger.addHandler(fileHandler)
         self._logger.addHandler(streamHandler)
 
+        self._logger.debug("Logger generated successfully.")
         print("Generate new instance")
 
     def get_logger(self):

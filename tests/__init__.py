@@ -4,7 +4,6 @@ from flask import Flask
 app = Flask(__name__)
 app.debug=True
 
-
 from organdonationwebapp.models.SqlClient import SqlClient
 sc = None
 if not sc:

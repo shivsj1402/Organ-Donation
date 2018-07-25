@@ -7,9 +7,6 @@ import organdonationwebapp.Hospital.HospitalRecipientList as hrl
 import organdonationwebapp.Hospital.HospitalRequestList as hprl
 import organdonationwebapp.Hospital.ValidatePassword as val
 import organdonationwebapp.Hospital.DBValidatePassword as DBval
-import organdonationwebapp.User.Recipient.Recipient as ro
-import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
-import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
 import organdonationwebapp.API.Logger as log
 import organdonationwebapp.API.Authenticator as auth
 import organdonationwebapp.API.Register as res
@@ -23,7 +20,7 @@ def before_request():
     if 'user' in session:
         g.user = session['user']
     g.logger = log.MyLogger.__call__().get_logger()
-    g.logger.debug("Acquired Singleton Logger")
+    #g.logger.debug("Acquired Singleton Logger")
 
 
 @app.route('/hospitalregistration/<usertype>', methods=['GET','POST'])
@@ -58,7 +55,7 @@ def Login():
         login_data= json.dumps(request.form.to_dict())
         login_json = json.loads(login_data)
         if(login_json['submit']=='submit'):
-            authenticatorObject = auth.Authenticator(login_json)
+            authenticatorObject = auth.Authenticator(login_json, g.logger)
             session.pop('user', None)
             valid, url = authenticatorObject.validateLogin()
             if(valid):
@@ -132,3 +129,11 @@ def donorReceiverMapping():
                 print("recommended_donor_list",(recommended_donor_list))
             return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recommended_donor_list=recommended_donor_list, recipientEmail=recipientEmail)
     return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details)
+
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('username', None)
+   flash("User logged out Successfully")
+   return redirect(url_for('Login'))
