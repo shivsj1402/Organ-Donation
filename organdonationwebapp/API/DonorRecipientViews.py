@@ -11,7 +11,9 @@ import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
 import organdonationwebapp.User.Recipient.RequestsStatus as rso
 import organdonationwebapp.User.Recipient.NewDonationRequest as dro
 import organdonationwebapp.API.Register as res
+import organdonationwebapp.User.UpdateMedicalReports as rro
 import json
+import binascii
 
 
 @app.route('/signup/<usertype>', methods=['GET','POST'])
@@ -81,17 +83,34 @@ def receiverHospitalRequestPage(recipientEmail=None):
         if request.method == 'POST':
             donor_data= json.dumps(request.form.to_dict())
             donor_json = json.loads(donor_data)
-            donor_json_values = donor_json["send request"]
-            donor_values_split = donor_json_values.split('_')
-            donorEmail = donor_values_split[0]
-            donatingOrgan = donor_values_split[1]
-            donorHospitalName = donor_values_split[2]
-            hospitalID = dho.DonorHospitalID(donorHospitalName)
-            donorHospital = hospitalID.getDonorHospitalID()
-            if('send request' in donor_json):
-                newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0])
-                if (newRequest.createDonationRequest()):
-                    print("Inserted successfully")
+            if(request.form['submit']=='submit'):
+                if(donor_json['reports']==""):
+                    flash("please enter a valid certificate")
                 else:
-                    print("Error creating request")
+                    data = request.files['reports']
+                    breport=data.read()
+                    report =binascii.hexlify(breport)
+                    userType= "r"
+                    recipientReport= rro.UpdateMedicalReports(recipientEmail, report, userType)
+                    recipient_report_status = recipientReport.updateReports()
+                    if(recipient_report_status):
+                        flash("Upadated Successfully")
+                    else:
+                        flash("Insertion Error!") 
+            else:
+                donor_json_values = donor_json["submit"]
+                donor_values_split = donor_json_values.split('_')
+                donorEmail = donor_values_split[0]
+                donatingOrgan = donor_values_split[1]
+                donorHospitalName = donor_values_split[2]
+                hospitalID = dho.DonorHospitalID(donorHospitalName)
+                donorHospital = hospitalID.getDonorHospitalID()
+                if('send request' in donor_json):
+                    newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0])
+                    if (newRequest.createDonationRequest()):
+                        print("Inserted successfully")
+                        flash ("Request Sent")
+                    else:
+                        print("Error creating request")
+                        flash ("Request Sending Error!")
         return render_template('receiverProfile.html', recipient_data=recipient_profile, organ_data=recipient_organ_data, donor_organ_data=donor_organ_list, pending_requests=pending_requests, approved_requests=approved_requests, rejected_requests=rejected_requests)

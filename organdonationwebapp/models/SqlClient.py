@@ -14,6 +14,7 @@ class SqlClient(object):
             self.cursor = self.connection.cursor()
             print("Successfully connected to Database")
         except Exception as err:
+            print(err)
             print("Error connecting to Database")
             exit(1)
 

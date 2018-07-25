@@ -7,6 +7,9 @@ import organdonationwebapp.Hospital.HospitalRecipientList as hrl
 import organdonationwebapp.Hospital.HospitalRequestList as hprl
 import organdonationwebapp.Hospital.ValidatePassword as val
 import organdonationwebapp.Hospital.DBValidatePassword as DBval
+import organdonationwebapp.User.Recipient.Recipient as ro
+import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
+import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
 import organdonationwebapp.API.Logger as log
 import organdonationwebapp.API.Authenticator as auth
 import organdonationwebapp.API.Register as res
@@ -114,19 +117,16 @@ def donorReceiverMapping():
     if request.method == 'POST':
         buttondata= json.dumps(request.form.to_dict())
         buttonjson = json.loads(buttondata)
-        print("buttonjson",(buttonjson))
         if('showorgan' in buttonjson):
             recipientEmail = request.form['showorgan']
             recipient = ro.Recipient(recipientEmail)
             recipient_userdata = recipient.donorHospitalPageRecipientList()
-            print("recipient_userdata",(recipient_userdata))
             organData = rpo.ShowRecipientProfile(recipientEmail)
             recipient_organ_data = organData.getRecipientOrgans()
             recommended_donor_list = []
             for item in recipient_organ_data:
                 donor_list = dpo.ShowRecommendedDonors(item[0])
                 recommended_donor_list.extend(donor_list.getrecommendedDonorList())
-                print("recommended_donor_list",(recommended_donor_list))
             return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recommended_donor_list=recommended_donor_list, recipientEmail=recipientEmail)
     return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details)
 
