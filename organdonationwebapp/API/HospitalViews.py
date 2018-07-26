@@ -37,7 +37,7 @@ def hospitalRegistration(usertype = None):
         valPassword = DBval.DBValidatePassword(registerJson['password'])
         password_value = valPassword.isValid()
         if(password_value):
-            registerObject = res.Register(registerJson, certificate, usertype)
+            registerObject = res.Register(registerJson, g.logger,certificate, usertype)
             valid, url = registerObject.registerEntity()
             if(valid):
                 g.logger.info("Registered Successfully")
