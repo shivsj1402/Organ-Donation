@@ -105,7 +105,7 @@ def receiverHospitalRequestPage(recipientEmail=None):
                 donorHospitalName = donor_values_split[2]
                 hospitalID = dho.DonorHospitalID(donorHospitalName)
                 donorHospital = hospitalID.getDonorHospitalID()
-                if('send request' in donor_json):
+                if('submit' in donor_json):
                     newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0])
                     if (newRequest.createDonationRequest()):
                         print("Inserted successfully")
