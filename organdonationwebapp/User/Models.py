@@ -31,3 +31,12 @@ class UserModel(SqlClient):
         except Exception as err:
             print(err)
             return None
+
+    def updateReport(self,emailID, report,userType):
+        try:
+            self.cursor.callproc('updatereports',[emailID, userType, report])
+            self.connection.commit()
+            return True
+        except Exception as err:
+            print(err)
+            return False

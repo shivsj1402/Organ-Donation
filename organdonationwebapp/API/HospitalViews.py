@@ -23,7 +23,7 @@ def before_request():
     if 'user' in session:
         g.user = session['user']
     g.logger = log.MyLogger.__call__().get_logger()
-    g.logger.debug("Acquired Singleton Logger")
+    #g.logger.debug("Acquired Singleton Logger")
 
 
 @app.route('/hospitalregistration/<usertype>', methods=['GET','POST'])
@@ -37,7 +37,7 @@ def hospitalRegistration(usertype = None):
         valPassword = DBval.DBValidatePassword(registerJson['password'])
         password_value = valPassword.isValid()
         if(password_value):
-            registerObject = res.Register(registerJson, certificate, usertype)
+            registerObject = res.Register(registerJson, g.logger,certificate, usertype)
             valid, url = registerObject.registerEntity()
             if(valid):
                 g.logger.info("Registered Successfully")
@@ -48,7 +48,7 @@ def hospitalRegistration(usertype = None):
                 flash("Registration error") 
         else:
             g.logger.error("Incorrect Password Value")
-            flash("Incorrect Password Value") 
+            flash("Incorrect Password Value! \n Password should have 1 Upper case letter, 1 number, 1 special character and minimum 3 lower case letters") 
     return render_template('hospitalregistration.html')
 
 
@@ -58,7 +58,7 @@ def Login():
         login_data= json.dumps(request.form.to_dict())
         login_json = json.loads(login_data)
         if(login_json['submit']=='submit'):
-            authenticatorObject = auth.Authenticator(login_json)
+            authenticatorObject = auth.Authenticator(login_json, g.logger)
             session.pop('user', None)
             valid, url = authenticatorObject.validateLogin()
             if(valid):
@@ -117,18 +117,23 @@ def donorReceiverMapping():
     if request.method == 'POST':
         buttondata= json.dumps(request.form.to_dict())
         buttonjson = json.loads(buttondata)
-        print("buttonjson",(buttonjson))
         if('showorgan' in buttonjson):
             recipientEmail = request.form['showorgan']
             recipient = ro.Recipient(recipientEmail)
             recipient_userdata = recipient.donorHospitalPageRecipientList()
-            print("recipient_userdata",(recipient_userdata))
             organData = rpo.ShowRecipientProfile(recipientEmail)
             recipient_organ_data = organData.getRecipientOrgans()
             recommended_donor_list = []
             for item in recipient_organ_data:
                 donor_list = dpo.ShowRecommendedDonors(item[0])
                 recommended_donor_list.extend(donor_list.getrecommendedDonorList())
-                print("recommended_donor_list",(recommended_donor_list))
             return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recommended_donor_list=recommended_donor_list, recipientEmail=recipientEmail)
     return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details)
+
+
+@app.route('/logout')
+def logout():
+   # remove the username from the session if it is there
+   session.pop('username', None)
+   flash("User logged out Successfully")
+   return redirect(url_for('Login'))

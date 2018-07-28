@@ -113,5 +113,4 @@ __pycache__/
 .idea/
 .pytest_cache/
 
-.DS_Store
-organdonationwebapp/.DS_Store
+.vscode/

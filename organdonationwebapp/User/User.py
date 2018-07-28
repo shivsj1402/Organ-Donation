@@ -22,18 +22,24 @@ class User(object):
         try:
             if(uc.userRegistration(self)):
                 url = url_for('Login')
+                self.logger.debug("User " + self.first_name + " registered Successfully." )
                 return True, url
             else:
+                self.logger.error("Registration failed." )
                 return False, "Registration Failed."
         except Exception as err:
             print(err)
 
 
+    def setLogger(self,logger):
+        self.logger = logger
+
     def login(self):
        return NotImplementedError
 
-def build_User(cls,userJson):
+def build_User(cls,userJson, logger):
     user = cls()
     user.initialize(userJson)
+    user.setLogger(logger)
     #validate certificate to add here
     return user
