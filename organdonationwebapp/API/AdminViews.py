@@ -16,7 +16,6 @@ def adminHomepage(username=None, hospitalEmail=None):
         if request.method == 'POST':
             validate_hospital = json.dumps(request.form.to_dict())
             hospital_json = json.loads(validate_hospital)
-            print("hospital_json",hospital_json)
             if('viewcertificate' in hospital_json):
                 validate = vho.ValidateHospital(hospital_json)
                 hospitalEmail = validate.updateValidateHospitalFlag()
@@ -25,23 +24,7 @@ def adminHomepage(username=None, hospitalEmail=None):
                 deleteHospital = dho.DeleteHospital(hospitalID)
                 delete_hospital_status = deleteHospital.deleteHospital()
                 if(delete_hospital_status):
+                    flash((hospitalID),"deleted successfully")
                     return render_template('adminhome.html', list=hospital_list,username=username)
         return render_template('adminhome.html', list=hospital_list,username=username)
     return render_template('adminhome.html', username=username)
-
-
-# @app.route('/adminhome/<username>', methods=['GET','POST'])
-# def adminHomepage(username=None, hospitalEmail=None):
-#     if request.method == 'POST':
-#         validate_hospital = json.dumps(request.form.to_dict())
-#         hospital_json = json.loads(validate_hospital)
-#         if(hospital_json != " "):
-#             validate = vho.ValidateHospital(hospital_json)
-#             hospitalEmail = validate.updateValidateHospitalFlag()
-#     hospitalList = hlo.HospitalList()
-#     hospital_list = hospitalList.getGlobalHospitalList()
-#     # print(hospital_list)
-#     # return send_file(BytesIO(hospital_list[5][7]), attachment_filename='certificate.pdf', as_attachment=True)
-#     if(hospital_list):
-#         return render_template('adminhome.html', list=hospital_list,username=username)
-#     return render_template('adminhome.html', username=username)

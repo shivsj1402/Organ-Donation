@@ -8,7 +8,6 @@ class DeleteHospital(object):
     def deleteHospital(self):
         try:
             if(ac.deleteHospital(self.hospitalEmail)):
-                print("Hospital",(self.hospitalEmail),"deleted successfully")
                 return True
             else:
                 print("Error deleting hospital",(self.hospitalEmail))
