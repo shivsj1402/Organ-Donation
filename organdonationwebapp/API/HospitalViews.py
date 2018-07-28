@@ -127,8 +127,9 @@ def donorReceiverMapping():
             for item in recipient_organ_data:
                 donor_list = dpo.ShowRecommendedDonors(item[0])
                 recommended_donor_list.extend(donor_list.getrecommendedDonorList())
-            return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recommended_donor_list=recommended_donor_list, recipientEmail=recipientEmail)
+            return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recipient_organ_data=recipient_organ_data, recommended_donor_list=recommended_donor_list, recipientEmail=recipientEmail)
     return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details)
+
 
 
 @app.route('/logout')
@@ -137,3 +138,29 @@ def logout():
    session.pop('username', None)
    flash("User logged out Successfully")
    return redirect(url_for('Login'))
+
+
+
+#    @app.route('/donorreceivermapping', methods=['GET','POST'])
+# def donorReceiverMapping():
+#     hospitalhome = hho.HospitalHome(g.user)
+#     hospital_name = hospitalhome.getHospitalName()
+#     recipientlist = hrl.HospitalRecipientList(hospital_name[0])
+#     rec_list_details = recipientlist.getRecipientList()
+#     if request.method == 'POST':
+#         buttondata= json.dumps(request.form.to_dict())
+#         buttonjson = json.loads(buttondata)
+#         if('showorgan' in buttonjson):
+#             recipientEmail = request.form['showorgan']
+#             recipient = ro.Recipient(recipientEmail)
+#             recipient_userdata = recipient.donorHospitalPageRecipientList()
+#             organData = rpo.ShowRecipientProfile(recipientEmail)
+#             recipient_organ_data = organData.getRecipientOrgans()
+#             return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recipient_organ_data=recipient_organ_data, recipientEmail=recipientEmail)
+#             if('showdonor' in buttonjson):
+#                 recommended_donor_list = []
+#                 for item in recipient_organ_data:
+#                     donor_list = dpo.ShowRecommendedDonors(item[0])
+#                     recommended_donor_list.extend(donor_list.getrecommendedDonorList())
+#                 return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recipient_organ_data=recipient_organ_data, recommended_donor_list=recommended_donor_list, recipientEmail=recipientEmail)
+#     return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details)

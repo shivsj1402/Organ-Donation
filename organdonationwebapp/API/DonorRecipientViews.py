@@ -8,7 +8,8 @@ import organdonationwebapp.User.Donor.Donor as do
 import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
 import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
-import organdonationwebapp.User.Recipient.RequestsStatus as rso
+import organdonationwebapp.User.Recipient.ShowRequestsStatus as sro
+import organdonationwebapp.User.Donor.UpdateRequestStatus as uro
 import organdonationwebapp.User.Recipient.NewDonationRequest as dro
 import organdonationwebapp.API.Register as res
 import organdonationwebapp.User.UpdateMedicalReports as rro
@@ -42,7 +43,7 @@ def registerUser(usertype = None):
     return render_template('signup.html', hlist=hospital_list)
 
 
-@app.route('/donorhospitalrequest/<requestID>', methods=['GET'])
+@app.route('/donorhospitalrequest/<requestID>', methods=['GET','POST'])
 def donorHospitalRequestPage(requestID=None):
     donor_userdata = None
     recipient_userdata = None
@@ -58,9 +59,21 @@ def donorHospitalRequestPage(requestID=None):
         recipient = ro.Recipient(recipientEmail)
         recipient_userdata = recipient.donorHospitalPageRecipientList()
     if(recipient_userdata and donor_userdata):
+        if request.method == 'POST':
+            request1= json.dumps(request.form.to_dict())
+            request_json = json.loads(request1)
+            if('submit' in request_json):
+                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID)
+                request_status = updateRequestStatus.setRequestsStatus()
+                if(request_status):
+                    flash("Request Status updated successfully")
+                else:
+                    flash("Error updating request status. Please try again later!")
         return render_template('donorreceiverrequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ)
     else:
         return "No donor/reciever available for this Request. Please go back to previous page!"
+
+
 
 
 @app.route('/receiverhospitalrequest/<recipientEmail>', methods=['GET','POST'])
@@ -73,12 +86,11 @@ def receiverHospitalRequestPage(recipientEmail=None):
     for organ in recipient_organ_data:
         donor_list = dpo.ShowRecommendedDonors(organ[0])
         donor_organ_list.extend(donor_list.getrecommendedDonorList())
-    requestStatus = rso.RequestsStatus(recipientEmail)
+    requestStatus = sro.ShowRequestsStatus(recipientEmail)
     request_status_data = requestStatus.getRequestsStatus()
     approved_requests = request_status_data["approved"]
     rejected_requests = request_status_data["rejected"]
     pending_requests = request_status_data["pending"]
-    #print("approved_requests",(approved_requests))
     if(recipient_profile and recipient_organ_data):
         if request.method == 'POST':
             donor_data= json.dumps(request.form.to_dict())
@@ -94,7 +106,7 @@ def receiverHospitalRequestPage(recipientEmail=None):
                     recipientReport= rro.UpdateMedicalReports(recipientEmail, report, userType)
                     recipient_report_status = recipientReport.updateReports()
                     if(recipient_report_status):
-                        flash("Upadated Successfully")
+                        flash("Updated Successfully")
                     else:
                         flash("Insertion Error!") 
             else:
@@ -105,7 +117,7 @@ def receiverHospitalRequestPage(recipientEmail=None):
                 donorHospitalName = donor_values_split[2]
                 hospitalID = dho.DonorHospitalID(donorHospitalName)
                 donorHospital = hospitalID.getDonorHospitalID()
-                if('send request' in donor_json):
+                if('submit' in donor_json):
                     newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0])
                     if (newRequest.createDonationRequest()):
                         print("Inserted successfully")

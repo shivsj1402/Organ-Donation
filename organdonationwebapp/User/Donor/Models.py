@@ -39,3 +39,15 @@ class DonorModel(SqlClient):
         for result in res:
             donorlist= result.fetchall()
             return donorlist
+
+
+    def setRequestsStatus(self, requestID, requeststate):
+        try:
+            print("requestID",(requestID))
+            print("requeststate",(requeststate))
+            self.cursor.callproc('updaterequeststate',[requestID,requeststate])
+            self.connection.commit()
+            return True
+        except Exception as err:
+            print(err)
+            return False
