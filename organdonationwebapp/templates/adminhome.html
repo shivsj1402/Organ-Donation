@@ -43,7 +43,7 @@
                             {% for item in list %}
                                 <tr>
                                     <td>{{ item[0] }}</td>
-                                    <td><input type="submit" class="btn btn-primary btn-sm" name = "viewcertificate" value="View Ceritficate" onclick=""/></td>
+                                    <td><button type="submit" class="btn btn-primary btn-sm" name = "certificate" value="{{ item[1] }}"> View Reports</button>
                                     <td>{% if item[8] != 1 %}
                                         <button type="submit" class="btn btn-primary btn-sm" name = "validate" id="validate" value="{{ item[1] }} "> Validate</button>
                                     {% endif %}</td>
