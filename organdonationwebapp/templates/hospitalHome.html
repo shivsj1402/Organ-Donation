@@ -39,14 +39,14 @@
                   <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6">
                                 <ul>
-                                    {% if request|length > 0 %}
+                                    {% if request_list|length > 0 %}
                                     <table class="table table-sm table-borderless">
                                             <tr>
                                                 <th>Donor Name</th> 
                                             </tr>
-                                            {% for item in request %}
+                                            {% for item in request_list %}
                                             <tr>
-                                                <td> {{ item[1] }} {{ item[2] }} </td>
+                                                <td> {{ item[1] }}</td>
                                                 <td>  <button type="submit" class="btn btn-primary btn-sm" name="requestID" value="{{ item[0] }}" />View Request</button></td>
                                             </tr>
                                                 {% endfor %}

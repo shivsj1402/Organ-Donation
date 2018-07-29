@@ -14,7 +14,6 @@ import organdonationwebapp.User.Donor.ShowRecommendedDonors as dpo
 import organdonationwebapp.API.Logger as log
 import organdonationwebapp.API.Authenticator as auth
 import organdonationwebapp.API.Register as res
-import organdonationwebapp.Hospital.RequestName as rn
 import json
 import binascii
 
@@ -93,11 +92,6 @@ def hospitalHome(emailID=None):
         donor_list = donorlist.getDonorList()
         recipientlist = hrl.HospitalRecipientList(hospital_name[0])
         recipient_list = recipientlist.getRecipientList()
-        reqlist = []
-        if(request_list):
-            for item in request_list:
-                donorNamesList= rn.RequestName(item[1], hospital_name[0])
-                reqlist.extend(donorNamesList.getRequestListName())
         if request.method == 'POST':
             data= json.dumps(request.form.to_dict())
             datajson = json.loads(data)
@@ -111,7 +105,7 @@ def hospitalHome(emailID=None):
                     return redirect(url_for('receiverList'))
                 elif(request.form['submit']=='View Donor Receiver Mapping'):
                     return redirect(url_for('donorReceiverMapping'))
-        return render_template('hospitalHome.html',request = reqlist,donor_list = donor_list, receiver_list = recipient_list)
+        return render_template('hospitalHome.html',request_list=request_list,donor_list = donor_list, receiver_list = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))
 
 

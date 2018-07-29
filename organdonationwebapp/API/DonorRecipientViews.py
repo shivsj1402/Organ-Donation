@@ -49,6 +49,8 @@ def donorHospitalRequestPage(requestID=None):
     recipient_userdata = None
     requestdata =rdo.OpenRequestDetails(requestID)
     request_userdata = requestdata.getOpenRequestData()
+    print(requestID)
+    print(request_userdata)
     donorEmail=request_userdata[0][0]
     recipientEmail=request_userdata[0][1]
     organ=request_userdata[0][2]
