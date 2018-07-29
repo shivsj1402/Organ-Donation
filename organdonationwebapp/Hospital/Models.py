@@ -126,3 +126,10 @@ class HospitalModel(SqlClient):
                 return passwordRules
         except Exception as err:
             return None
+
+    def getRequestName(self, emailID, HospitalName):
+        self.cursor.callproc('requestlistprofile', [emailID,HospitalName])
+        res = self.cursor.stored_results()
+        for result in res:
+            rlist= result.fetchall()
+            return rlist

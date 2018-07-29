@@ -34,12 +34,12 @@ class Hospital(object):
     def login(self):
         result = hc.hospitalLoginAuthentication(self.emailID,self.password)
         if(result):
-            url = url_for('hospitalHome', emailID=self.emailID)
+            url = ('/hospitalHome/' + self.emailID)
             self.logger.debug("Hospital " + self.emailID + " logged in Successfully." )
             return result, url
         else:
             self.logger.error("Hospital " + self.emailID + " log in failed." )
-            return False, "Authentication Failedr"
+            return False, "Authentication Failed"
 
 
 #Adding factory for complex operation of initialization of hospital and validating certificate

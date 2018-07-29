@@ -20,58 +20,75 @@
         <div class="col-md-12">
              <form method="post">
                 <div class="row">
-                    <div class="col-xs-4 col-sm-4 col-md-4">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="form-group">
                             <label>Pending Request</label>
                         </div>
                      </div>
-                    <div class="col-xs-4 col-sm-4 col-md-4">
+                    <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
                             <label>Donor List</label>
                         </div>
                      </div>
-                    <div class="col-xs-4 col-sm-4 col-md-4">
+                    <div class="col-xs-3 col-sm-3 col-md-3">
                         <div class="form-group">
                             <label>Receiver List</label>
                         </div>
                      </div>
                 </div>
                   <div class="row">
-                        <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
                                 <ul>
                                     {% if request|length > 0 %}
-                                    {% for item in request %}
-                                    <li>Request ID :{{ item[0] }} 
-                                    <button type="submit" class="btn btn-primary" name="requestID" value="{{ item[0] }}" />View Request</button></li>
-                                    {% endfor %}
-                                    {% else %}
-                                    <p>No Pending Requests</p>
+                                    <table class="table table-sm table-borderless">
+                                            <tr>
+                                                <th>Donor Name</th> 
+                                            </tr>
+                                            {% for item in request %}
+                                            <tr>
+                                                <td> {{ item[1] }} {{ item[2] }} </td>
+                                                <td>  <button type="submit" class="btn btn-primary btn-sm" name="requestID" value="{{ item[0] }}" />View Request</button></td>
+                                            </tr>
+                                                {% endfor %}
+                                            </table>
+
+                                            {% else %}
+                                            <p>No Requests Available</p>
                                     {% endif %}
-                                </ul>
                              </div>
-                    <div class="col-xs-4 col-sm-4 col-md-4">
+                    <div class="col-xs-3 col-sm-3 col-md-3">
                         <ol>
-                            {% for item in donor %}
-                            <li> {{ item[2] }} </li>
+                            {% if donor_list|length > 0 %}
+                            {% for item in donor_list %}
+                            <li> {{ item[0]}} {{item[1]}} </li>
                             {% endfor %}
+                            {% else %}
+                            <p>No Donors Available</p>
+                            {% endif %}
+
                         </ol>
                     </div>
-                       <div class="col-xs-4 col-sm-4 col-md-4">
+                       <div class="col-xs-3 col-sm-3 col-md-3">
                             <ol>
-                                {% for item in receiver %}
-                                <li> {{ item[2] }} </li>
+
+                                    {% if receiver_list|length > 0 %}
+                                    {% for item in receiver_list %}
+                                <li> {{ item[0]}} {{item[1]}} </li>
                                 {% endfor %}
+                                {% else %}
+                                <p>No Receivers Available</p>
+                                    {% endif %}
                             </ol>
                        </div>
                      </div>
                      <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                     <input type="submit" name="submit" class="btn btn-primary" value="View Donor Receiver Mapping" />
                                 </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                     <button type="submit" name="submit" class="btn btn-primary" value="View Donor List"> View Donor List </button>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                     <button type="submit" name="submit" class="btn btn-primary" value="View Receiver List"> View Receiver List </button>
                             </div>
                         </div>

@@ -13,7 +13,8 @@ class Admin(object):
 
     def login(self):
         if(ac.adminLoginAuthentication(self.emailID, self.password)):
-            url = url_for('adminHomepage', username=self.emailID)
+            url = ('/adminhome/'+ self.emailID)
+            #url_for('adminHomepage', username=self.emailID)
             self.logger.debug("Admin " + self.emailID + " logged in Successfully." )
             return True, url
         else:
