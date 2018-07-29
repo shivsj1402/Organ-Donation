@@ -83,7 +83,6 @@ def Login():
 def hospitalHome(emailID=None):
     if g.user:
         hemail=g.user
-        # print(hemail)
         hospitalhome = hho.HospitalHome(emailID)
         hospital_name = hospitalhome.getHospitalName()
         requestlist = hprl.HospitalRequestList(hemail)

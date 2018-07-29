@@ -12,7 +12,7 @@ import organdonationwebapp.User.Recipient.ShowRequestsStatus as sro
 import organdonationwebapp.User.Donor.UpdateRequestStatus as uro
 import organdonationwebapp.User.Recipient.NewDonationRequest as dro
 import organdonationwebapp.API.Register as res
-import organdonationwebapp.User.UpdateMedicalReports as rro
+import organdonationwebapp.User.UpdateMedicalReports as umr
 import json
 import binascii
 
@@ -49,11 +49,10 @@ def donorHospitalRequestPage(requestID=None):
     recipient_userdata = None
     requestdata =rdo.OpenRequestDetails(requestID)
     request_userdata = requestdata.getOpenRequestData()
-    print(requestID)
-    print(request_userdata)
     donorEmail=request_userdata[0][0]
     recipientEmail=request_userdata[0][1]
     organ=request_userdata[0][2]
+    print(donorEmail)
     if(donorEmail):
         donor = do.Donor(donorEmail)
         donor_userdata = donor.donorHospitalRequestPage()
@@ -64,6 +63,21 @@ def donorHospitalRequestPage(requestID=None):
         if request.method == 'POST':
             request1= json.dumps(request.form.to_dict())
             request_json = json.loads(request1)
+            print(request_json) 
+            if('upload' in request_json):
+                if('reports' in request_json):
+                    flash("please insert a valid certificates")
+                else:
+                    data = request.files['reports']
+                    breport=data.read()
+                    report =binascii.hexlify(breport)
+                    userType= "d"
+                    donorReport= umr.UpdateMedicalReports(donorEmail, report, userType)
+                    donor_report_status = donorReport.updateReports()
+                    if(donor_report_status):
+                        flash("Updated Successfully")
+                    else:
+                        flash("Insertion Error!")  
             if('submit' in request_json):
                 updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID)
                 request_status = updateRequestStatus.setRequestsStatus()
@@ -97,15 +111,16 @@ def receiverHospitalRequestPage(recipientEmail=None):
         if request.method == 'POST':
             donor_data= json.dumps(request.form.to_dict())
             donor_json = json.loads(donor_data)
-            if(request.form['submit']=='submit'):
-                if(donor_json['reports']==""):
-                    flash("please enter a valid certificate")
+            print(donor_json)
+            if('upload' in donor_json):
+                if('reports' in donor_json):
+                    flash("please insert a valid certificates")
                 else:
                     data = request.files['reports']
                     breport=data.read()
                     report =binascii.hexlify(breport)
                     userType= "r"
-                    recipientReport= rro.UpdateMedicalReports(recipientEmail, report, userType)
+                    recipientReport= umr.UpdateMedicalReports(recipientEmail, report, userType)
                     recipient_report_status = recipientReport.updateReports()
                     if(recipient_report_status):
                         flash("Updated Successfully")
