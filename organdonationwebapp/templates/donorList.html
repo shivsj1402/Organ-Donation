@@ -16,7 +16,7 @@
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-12">
-             <form>
+             <form method="post">
                 <div class="row">
                     <div class="col-xs-2 col-sm-2 col-md-2">
                         <div class="form-group">
@@ -78,14 +78,14 @@
                      </div>
                     <div class="col-xs-2 col-sm-2 col-md-2">
                         <div class="form-group">
-                             <input type="button" class="btn btn-primary" value="View Request" onclick="location.href='#'"/>
+                             <button type="submit" class="btn btn-primary" name="view" value="{{item[2]}}">View Profile</button>
                         </div>
                      </div>
                 </div>
                 {% endfor %}
                 {% else %}
                 <p>No Donors Available</p>
-                 {% endif %}
+                {% endif %}
 
 
                  <div class="row">

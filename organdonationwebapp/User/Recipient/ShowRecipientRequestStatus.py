@@ -1,7 +1,7 @@
 from organdonationwebapp import ruc
 
 
-class ShowRequestsStatus(object):
+class ShowRecipientRequestStatus(object):
     def __init__(self,recipientEmail):
         self.recipientEmail = recipientEmail
 

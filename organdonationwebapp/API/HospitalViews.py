@@ -6,7 +6,6 @@ import organdonationwebapp.Hospital.HospitalDonorList as hdl
 import organdonationwebapp.Hospital.HospitalRecipientList as hrl
 import organdonationwebapp.Hospital.HospitalRequestList as hprl
 import organdonationwebapp.Hospital.ValidatePassword as val
-import organdonationwebapp.User.Donor.DonorProfile as dp
 import organdonationwebapp.Hospital.DBValidatePassword as DBval
 import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Recipient.ShowRecipientProfile as rpo
