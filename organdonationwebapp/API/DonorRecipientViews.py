@@ -13,8 +13,10 @@ import organdonationwebapp.User.Donor.UpdateRequestStatus as uro
 import organdonationwebapp.User.Recipient.NewDonationRequest as dro
 import organdonationwebapp.API.Register as res
 import organdonationwebapp.User.UpdateMedicalReports as umr
+import organdonationwebapp.User.ViewUserReports as vur
 import json
 import binascii
+from io import BytesIO
 
 
 @app.route('/signup/<usertype>', methods=['GET','POST'])
@@ -52,7 +54,6 @@ def donorHospitalRequestPage(requestID=None):
     donorEmail=request_userdata[0][0]
     recipientEmail=request_userdata[0][1]
     organ=request_userdata[0][2]
-    print(donorEmail)
     if(donorEmail):
         donor = do.Donor(donorEmail)
         donor_userdata = donor.donorHospitalRequestPage()
@@ -62,8 +63,14 @@ def donorHospitalRequestPage(requestID=None):
     if(recipient_userdata and donor_userdata):
         if request.method == 'POST':
             request1= json.dumps(request.form.to_dict())
-            request_json = json.loads(request1)
-            print(request_json) 
+            request_json = json.loads(request1) 
+            if('report' in request_json):
+                Email = request_json['report'] if 'report' in request_json else None
+                usertype = 'r'
+                reports =vur.ViewUserReports(Email,usertype)
+                report = reports.viewReports()
+                if(report):
+                    return send_file(BytesIO(report[0][0]), attachment_filename='reports.pdf')
             if('upload' in request_json):
                 if('reports' in request_json):
                     flash("please insert a valid certificates")
@@ -111,7 +118,6 @@ def receiverHospitalRequestPage(recipientEmail=None):
         if request.method == 'POST':
             donor_data= json.dumps(request.form.to_dict())
             donor_json = json.loads(donor_data)
-            print(donor_json)
             if('upload' in donor_json):
                 if('reports' in donor_json):
                     flash("please insert a valid certificates")

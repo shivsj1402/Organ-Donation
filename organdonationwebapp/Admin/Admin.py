@@ -14,7 +14,6 @@ class Admin(object):
     def login(self):
         if(ac.adminLoginAuthentication(self.emailID, self.password)):
             url = ('/adminhome/'+ self.emailID)
-            #url_for('adminHomepage', username=self.emailID)
             self.logger.debug("Admin " + self.emailID + " logged in Successfully." )
             return True, url
         else:
@@ -28,5 +27,4 @@ def build_Admin(cls,adminJson, logger):
     admin = cls()
     admin.initialize(adminJson)
     admin.setLogger(logger)
-    #validate certificate to add here
     return admin

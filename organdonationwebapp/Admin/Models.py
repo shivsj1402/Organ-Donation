@@ -35,3 +35,17 @@ class AdminModel(SqlClient):
         except Exception as err:
             print(err)
             return False
+
+    def getHospitalCertificate(self, hospitalEmail):
+        try:
+            self.cursor.callproc('gethospitalcertificate',[hospitalEmail])
+            res = self.cursor.stored_results()
+            for result in res:
+                hospitalcertificate= result.fetchall()
+                if(hospitalcertificate):
+                    return hospitalcertificate
+                else:
+                    return None
+        except Exception as err:
+            print(err)
+            return False

@@ -32,11 +32,16 @@ class UserModel(SqlClient):
             print(err)
             return None
 
-    def updateReport(self,emailID, report,userType):
+    def getReports(self,emailID,userType):
         try:
-            self.cursor.callproc('updatereports',[emailID, userType, report])
-            self.connection.commit()
-            return True
+            self.cursor.callproc('getuserreports',[emailID, userType])
+            res = self.cursor.stored_results()
+            for result in res:
+                userreports= result.fetchall()
+                if(userreports):
+                    return userreports
+                else:
+                    return None
         except Exception as err:
             print(err)
             return False
