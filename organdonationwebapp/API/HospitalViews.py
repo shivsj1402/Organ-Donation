@@ -50,7 +50,7 @@ def hospitalRegistration(usertype = None):
                 flash("Registration error") 
         else:
             g.logger.error("Incorrect Password Value")
-            flash("Incorrect Password Value") 
+            flash("Incorrect Password Value! \n Password should have 1 Upper case letter, 1 number, 1 special character and minimum 3 lower case letters") 
     return render_template('hospitalregistration.html')
 
 
@@ -134,9 +134,9 @@ def donorReceiverMapping():
             for item in recipient_organ_data:
                 donor_list = dpo.ShowRecommendedDonors(item[0])
                 recommended_donor_list.extend(donor_list.getrecommendedDonorList())
-            print()
-            return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recommended_donor_list=recommended_donor_list, recipientEmail=recipientEmail)
+            return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recipient_organ_data=recipient_organ_data, recommended_donor_list=recommended_donor_list, recipientEmail=recipientEmail)
     return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details)
+
 
 
 @app.route('/logout')

@@ -1,4 +1,4 @@
-from organdonationwebapp import hc
+from organdonationwebapp import ac
 
 class ValidateHospital(object):
     def __init__(self,hospitalJson):
@@ -6,7 +6,7 @@ class ValidateHospital(object):
             
 
     def updateValidateHospitalFlag(self):
-        if(hc.validateHospital(self.hospitalEmail)):
+        if(ac.validateHospital(self.hospitalEmail)):
             return True
         else:
             return False

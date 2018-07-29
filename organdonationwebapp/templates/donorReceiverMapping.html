@@ -20,23 +20,32 @@
         <div class="col-md-12">
              <form method="post">
                 <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div class="col-xs-4 col-sm-4 col-md-4">
                         <div class="form-group">
-                            <label>Receiver List</label>
+                            <label>Receiver List</label><br><br>
+
                         </div>
                      </div>
 
-                    <div class="col-xs-6 col-sm-6 col-md-6">
+                    <div class="col-xs-4 col-sm-4 col-md-4">
                         <div class="form-group">
                             {% if recommended_donor_list|length > 0 %}
-                            <label>Recipient: <b>{{ recipientEmail }}</b></label><br>
+                            <label>Requested Organs: </label>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-xs-4 col-sm-4 col-md-4">
+                        <div class="form-group">
+                            {% if recommended_donor_list|length > 0 %}
                             <label>Recommended Donors List </label>
+                            <label>Recipient: <b>{{ recipientEmail }}</b></label><br>                            
                             {% endif %}
                         </div>
                      </div>
                 </div>
                   <div class="row">
-                        <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="col-xs-4 col-sm-4 col-md-4">
                                 <ol>
                                         {% for item in rec_list_details %}
                                         <li> {{ item[0] }} {{ item[1] }} 
@@ -44,9 +53,21 @@
                                         {% endfor %}
                                 </ol>
                              </div>
-                       <div class="col-xs-6 col-sm-6 col-md-6">
+
+
+                             <div class="col-xs-4 col-sm-4 col-md-4">
+                                <ul>
+                                        {% for item in recipient_organ_data %}
+                                        <li> {{ item[0] }} 
+                                        <!-- <button type="submit" class="btn btn-primary btn-sm" name = "showdonor" value="{{ item[0] }}" >Matching Donors</button></li><br> -->
+                                        {% endfor %}
+                                </ul>
+                             </div>
+
+
+                       <div class="col-xs-4 col-sm-4 col-md-4">
                         {% if recommended_donor_list|length > 0 %}
-                            <table class="table table-striped">
+                            <table class="table table-striped table-sm">
                                 <tr>
                                     <th>Name</th>
                                     <th>Organ</th> 

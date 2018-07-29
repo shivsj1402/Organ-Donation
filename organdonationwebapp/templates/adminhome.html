@@ -26,31 +26,40 @@
                     
                         <div class="form-group">
                             <label>List of Hospitals Registered</label>
-                
                      </div>
                
                   <div >
                     <!-- <div class="col-xs-6 col-sm-6 col-md-6"> -->
 
-                        
-                        <ol>
-                            <div style="width: 100%">
+                    
+                            <div>
+                                <table class="table table-striped table-sm">
+                                    <tr>
+                                        <th>Hospital</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
                             {% for item in list %}
-                                <li>
-                                    <div style="width: 70%;">
-                                    {{ item[0] }}
-                                    <input type="submit" class="btn btn-primary" name = "viewcertificate" value="View Ceritficate" onclick=""/>
-                                    {% if item[8] != 1 %}
-                                        <button type="submit" class="btn btn-primary" name = "validate" id="validate" value="{{ item[1] }} "> Validate</button>
-                                    {% endif %}
-                                    <input type="submit" style= "float: right;" class="btn btn-primary" name = "delete" value="Delete" />
-                                    </div>
-                                </li>
-                                <br>
+                                <tr>
+                                    <td>{{ item[0] }}</td>
+                                    <td><input type="submit" class="btn btn-primary btn-sm" name = "viewcertificate" value="View Ceritficate" onclick=""/></td>
+                                    <td>{% if item[8] != 1 %}
+                                        <button type="submit" class="btn btn-primary btn-sm" name = "validate" id="validate" value="{{ item[1] }} "> Validate</button>
+                                    {% endif %}</td>
+                                    <td><button type="submit" style= "float: right;" class="btn btn-primary btn-sm" name = "delete" value="{{ item[1] }}" > Delete Hospital</button>
+                                    </td>
+                                </tr>
                             {% endfor %}
-                            </div>
-                        </ol>
-                
+                                    {% for item in recommended_donor_list %}
+                                <tr>
+                                    <td> {{ item[0] }}</td>
+                                    <td>  {{ item[1] }}</td>
+                                    <td>  {{ item[2] }}</td>
+                                </tr>
+                                    {% endfor %}
+                            </table>
+                        </div>
                 </div>
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}

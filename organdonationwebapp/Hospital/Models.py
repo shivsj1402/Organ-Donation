@@ -43,16 +43,6 @@ class HospitalModel(SqlClient):
             return None
 
 
-    def validateHospital(self, hospitalEmail):
-        try:
-            self.cursor.callproc('validatehospital',[hospitalEmail])
-            self.connection.commit()
-            return True
-        except Exception as err:
-            print(err)
-            return False
-
-
     def getHospitalList(self):
         try:
             self.cursor.callproc('hospitallist')
