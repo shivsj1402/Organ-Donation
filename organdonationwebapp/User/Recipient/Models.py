@@ -12,6 +12,7 @@ class RecipientModel(SqlClient):
             for result in res:
                 userdata= result.fetchall()
                 if(userdata):
+                    print("userdata",(userdata))
                     return userdata
                 else:
                     return None

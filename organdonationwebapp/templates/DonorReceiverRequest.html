@@ -100,13 +100,13 @@
                             </div>
                         </div>
                     </div> <br>
-
+                    {% if requestState == 0 %}
                     <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="form-group">
                                 
                                 <div class="form-group">
-                                  <button type="submit" class="btn btn-primary" name="submit" value="Accept"> Accept Request</button>
+                                  <button type="submit" class="btn btn-primary" name="submit" value="AcceptDonor"> Accept Request</button>
                                 </div>
                         </div>
                     </div>
@@ -115,13 +115,14 @@
                             <div class="form-group">
                                 
                                 <div class="form-group">
-                                  <button type="submit" class="btn btn-primary" name="submit" value="Decline">Decline Request</button>
+                                  <button type="submit" class="btn btn-primary" name="submit" value="DeclineDonor">Decline Request</button>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% endif %}
 
-                </div>
+
 
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
