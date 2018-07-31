@@ -12,18 +12,22 @@
 <body style="background-color:#f1f2f6">
 <div class="container" style="text-align: center">
 <h4>Receiver Profile</h4>
+</div><br>
+
+<div class="container" style="text-align: center">
+<p>Request for <b>"{{ organ }}" </b></p>
 </div>
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-12">
-             <form>
+            <form method="post">
                 <div class="row">
                     <div class="col-xs-6 col-sm-6 col-md-6">
                         <div class="form-group">
                             <b>Receiver Profile</b><br><br>
                                 <div class="form-group">
                                         <label>Name:</label>
-                                        <b>{{recipientdata[0][0]}}</b>
+                                        <b>{{recipientdata[0][0]}} {{recipientdata[0][1]}}</b>
                                     </div>
                                     <div class="form-group">
                                         <label>Email:</label>
@@ -34,18 +38,12 @@
                                         <b>{{recipientdata[0][3]}}</b>
                                     </div>
                                     <div class="form-group">
-                                        <label>Sex:</label>
+                                        <label>Gender:</label>
                                         <b>{{recipientdata[0][4]}}</b>
                                     </div>
                                     <div class="form-group">
-                                        <label>Receiving Organ:</label>
-                                        {% for item in organdata %}
-                                    <ul>
-                                        <li>
-                                                <b>{{ item[0] }}</b>
-                                        </li>
-                                    </ul>
-                                        {% endfor %}
+                                        <label>Hospital:</label>
+                                        <b>{{recipientdata[0][6]}}</b>
                                     </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
@@ -67,29 +65,23 @@
                             <b>Donor Profile</b><br><br>
                                 <div class="form-group">
                                         <label>Name:</label>
-                                        <b>{{recipientdata[0][0]}}</b>
+                                        <b>{{donordata[0][1]}} {{donordata[0][2]}}</b>
                                     </div>
                                     <div class="form-group">
                                         <label>Email:</label>
-                                        <b>{{recipientdata[0][2]}}</b>
+                                        <b>{{donordata[0][4]}}</b>
                                     </div>
                                     <div class="form-group">
                                         <label>Birthdate:</label>
-                                        <b>{{recipientdata[0][3]}}</b>
+                                        <b>{{donordata[0][6]}}</b>
                                     </div>
                                     <div class="form-group">
-                                        <label>Sex:</label>
-                                        <b>{{recipientdata[0][4]}}</b>
+                                        <label>Gender:</label>
+                                        <b>{{donordata[0][5]}}</b>
                                     </div>
                                     <div class="form-group">
-                                        <label>Donating Organ:</label>
-                                        {% for item in organdata %}
-                                    <ul>
-                                        <li>
-                                                <b>{{ item[0] }}</b>
-                                        </li>
-                                    </ul>
-                                        {% endfor %}
+                                        <label>Hospital:</label>
+                                        <b>{{donordata[0][10]}}</b>
                                     </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6">
                                 <div class="form-group">
@@ -110,21 +102,32 @@
                      </div>
                      </div>
 
-
+                     {% if requestState == 1 %}
                      <div class="row justify-content-md-center">
                         <div class="col-md-6">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Accept</button>
+                                    <button type="submit" class="btn btn-primary" name="submit" value="AcceptRecipient">Accept</button>
                                 </div>
                         </div>
 
                         <div class="col-md-6">
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Deny</button>
+                                    <button type="submit" class="btn btn-primary" name="submit" value="DeclineRecipient">Deny</button>
                                 </div>
                         </div>
                     </div>
-
+                    {% endif %}
+                    {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                    <script>
+                        var messages = {{ messages | safe }};
+                        for (var i=0; i<messages.length; i++) 
+                        {
+                            alert(messages[i]);
+                        }
+                    </script>
+                    {% endif %}
+                    {% endwith %}
                 </form>
             </div>
         </div>

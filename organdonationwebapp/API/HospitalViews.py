@@ -130,7 +130,6 @@ def donorReceiverMapping():
     return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details)
 
 
-
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there

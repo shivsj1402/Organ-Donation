@@ -8,6 +8,10 @@ import organdonationwebapp.User.UpdateMedicalReports as rro
 import organdonationwebapp.Hospital.HospitalHome as hho
 import organdonationwebapp.Hospital.DonorHospitalID as dho
 import organdonationwebapp.User.Recipient.NewDonationRequest as dro
+import organdonationwebapp.User.OpenRequestDetails as rdo
+import organdonationwebapp.User.Donor.Donor as do
+import organdonationwebapp.User.Recipient.Recipient as ro
+import organdonationwebapp.User.Donor.UpdateRequestStatus as uro
 import json
 import binascii
 
@@ -31,7 +35,7 @@ def receiverList():
 def receiverHospitalRequestPage(recipientEmail=None):
     recipient_data = rpo.ShowRecipientProfile(recipientEmail)
     recipient_profile = recipient_data.getRecipientProfile()
-    recipientEmail = recipient_profile[0][2] #Extracting recipient email from Recipient profile JSON
+    recipientEmail = recipient_profile[0][2] # Extracting recipient email from Recipient profile JSON
     recipient_organ_data = recipient_data.getRecipientOrgans()
     donor_organ_list = []
     for organ in recipient_organ_data:
@@ -46,34 +50,70 @@ def receiverHospitalRequestPage(recipientEmail=None):
         if request.method == 'POST':
             donor_data= json.dumps(request.form.to_dict())
             donor_json = json.loads(donor_data)
-            if(request.form['submit']=='submit'):
-                if(donor_json['reports']==""):
-                    flash("please enter a valid certificate")
+            if('upload' in donor_json):
+                if('reports' in donor_json):
+                    flash("Please insert a valid certificates")
                 else:
                     data = request.files['reports']
                     breport=data.read()
                     report =binascii.hexlify(breport)
                     userType= "r"
-                    recipientReport= rro.UpdateMedicalReports(recipientEmail, report, userType)
+                    recipientReport= umr.UpdateMedicalReports(recipientEmail, report, userType)
                     recipient_report_status = recipientReport.updateReports()
                     if(recipient_report_status):
                         flash("Updated Successfully")
                     else:
-                        flash("Insertion Error!") 
-            else:
-                donor_json_values = donor_json["submit"]
+                        flash("Insertion Error!")
+            if('create request' in donor_json):
+                donor_json_values = donor_json['create request']
                 donor_values_split = donor_json_values.split('_')
                 donorEmail = donor_values_split[0]
                 donatingOrgan = donor_values_split[1]
                 donorHospitalName = donor_values_split[2]
                 hospitalID = dho.DonorHospitalID(donorHospitalName)
                 donorHospital = hospitalID.getDonorHospitalID()
-                if('submit' in donor_json):
-                    newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0])
-                    if (newRequest.createDonationRequest()):
-                        print("Inserted successfully")
-                        flash ("Request Sent")
-                    else:
-                        print("Error creating request")
-                        flash ("Request Sending Error!")
+                newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0])
+                
+                if (newRequest.createDonationRequest()):
+                    print("Request data inserted successfully")
+                    flash ("Request Sent Successfully!!")
+                else:
+                    print("Error creating request")
+                    flash ("Error Sending Request!!")
+            if('view request' in donor_json):
+                requestID = request.form['view request']
+                return redirect(url_for('recipientShowApprovedRequest', requestID=requestID))
         return render_template('receiverProfile.html', recipient_data=recipient_profile, organ_data=recipient_organ_data, donor_organ_data=donor_organ_list, pending_requests=pending_requests, approved_requests=approved_requests, rejected_requests=rejected_requests)
+
+
+@app.route('/recipientapprovedrequest/<requestID>', methods=['GET','POST'])
+def recipientShowApprovedRequest(requestID=None):
+    donor_userdata = None
+    recipient_userdata = None
+    requestdata =rdo.OpenRequestDetails(requestID)
+    request_userdata = requestdata.getOpenRequestData()
+    donorEmail=request_userdata[0][0]
+    recipientEmail=request_userdata[0][1]
+    organ=request_userdata[0][2]
+    requestState=request_userdata[0][3]
+    if(donorEmail):
+        donor = do.Donor(donorEmail)
+        donor_userdata = donor.donorHospitalRequestPage()
+    if(recipientEmail):
+        recipient = ro.Recipient(recipientEmail)
+        recipient_userdata = recipient.donorHospitalPageRecipientList()
+    if(recipient_userdata and donor_userdata):
+        if request.method == 'POST':
+            request_data= json.dumps(request.form.to_dict())
+            request_json = json.loads(request_data)
+            if('submit' in request_json):
+                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID)
+                request_status = updateRequestStatus.setRequestsStatus()
+                if(request_status):
+                    flash("Request Status updated successfully")
+                else:
+                    flash("Error updating request status. Please try again later!")
+        return render_template('RecipientShowRequestStatus.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
+    else:
+        flash("No donor/reciever available for this Request!")
+        return render_template('RecipientShowRequestStatus.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ)
