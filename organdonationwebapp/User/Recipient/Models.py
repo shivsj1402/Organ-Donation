@@ -72,7 +72,7 @@ class RecipientModel(SqlClient):
 
     def getOpenRequestsStatus(self, recipientEmail):
         try:
-            self.cursor.callproc('openrequeststatus',[recipientEmail])
+            self.cursor.callproc('recipientOpenRequestStatus',[recipientEmail])
             res = self.cursor.stored_results()
             for result in res:
                 requeststatusdata= result.fetchall()

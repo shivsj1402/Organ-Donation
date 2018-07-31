@@ -6,8 +6,8 @@ CREATE PROCEDURE gethospitaldonorlist(IN P_name VARCHAR(50))
 BEGIN
 	select userFirstName, userLastName, emailID, city, province,
 	group_concat(organ) as organ, requestdate
-	from user
-	group by  emailID;
+	from user where donationType='d'
+	group by  emailID order by requestdate DESC;
 END $$
 
 DELIMITER ;

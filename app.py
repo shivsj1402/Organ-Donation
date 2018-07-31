@@ -1,5 +1,5 @@
 #Load up the app
-from organdonationwebapp import app, sc
+from organdonationwebapp import app, sc, ac, hc, uc, ruc, duc
 
 # Launching server
 if __name__ == '__main__':

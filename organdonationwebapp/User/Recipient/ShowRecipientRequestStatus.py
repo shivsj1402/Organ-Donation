@@ -1,7 +1,7 @@
 from organdonationwebapp import ruc
 
 
-class RequestsStatus(object):
+class ShowRecipientRequestStatus(object):
     def __init__(self,recipientEmail):
         self.recipientEmail = recipientEmail
 
@@ -18,8 +18,6 @@ class RequestsStatus(object):
                         request_data["rejected"].append(item)
                     elif(item[5] == 0 or item[5] == ""):
                         request_data["pending"].append(item)
-                return request_data
-            else:
-                return None
+            return request_data
         except Exception as err:
             return None

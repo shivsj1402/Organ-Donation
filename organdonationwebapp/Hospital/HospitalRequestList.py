@@ -8,5 +8,3 @@ class HospitalRequestList(object):
         request_list = hc.getHospitalRequestList(self.hospitalEmail)
         if(request_list):
             return request_list
-        else:
-            return None

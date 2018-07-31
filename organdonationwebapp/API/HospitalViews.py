@@ -82,7 +82,6 @@ def Login():
 def hospitalHome(emailID=None):
     if g.user:
         hemail=g.user
-        # print(hemail)
         hospitalhome = hho.HospitalHome(emailID)
         hospital_name = hospitalhome.getHospitalName()
         requestlist = hprl.HospitalRequestList(hemail)
@@ -104,7 +103,7 @@ def hospitalHome(emailID=None):
                     return redirect(url_for('receiverList'))
                 elif(request.form['submit']=='View Donor Receiver Mapping'):
                     return redirect(url_for('donorReceiverMapping'))
-        return render_template('hospitalHome.html',request = request_list,donor = donor_list, receiver = recipient_list)
+        return render_template('hospitalHome.html',request_list=request_list,donor_list = donor_list, receiver_list = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))
 
 
@@ -127,8 +126,9 @@ def donorReceiverMapping():
             for item in recipient_organ_data:
                 donor_list = dpo.ShowRecommendedDonors(item[0])
                 recommended_donor_list.extend(donor_list.getrecommendedDonorList())
-            return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recommended_donor_list=recommended_donor_list, recipientEmail=recipientEmail)
+            return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details, recipient_organ_data=recipient_organ_data, recommended_donor_list=recommended_donor_list, recipientEmail=recipientEmail)
     return render_template('donorReceiverMapping.html',rec_list_details = rec_list_details)
+
 
 
 @app.route('/logout')
