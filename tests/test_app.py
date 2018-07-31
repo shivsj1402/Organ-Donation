@@ -1,3 +1,4 @@
+'''
 from flask import Flask, render_template, request, redirect, session, url_for, g, send_file,flash, jsonify
 from flask import current_app
 import unittest
@@ -32,3 +33,4 @@ if __name__ == '__main__':
 
 	 #suite = unittest.TestLoader().loadTestsFromTestCase(hc.TestStringMethods)
 	 #unittest.TextTestRunner(verbosity=2).run(suite)
+     '''
