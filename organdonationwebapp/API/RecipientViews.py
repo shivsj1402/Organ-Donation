@@ -23,8 +23,8 @@ def receiverList():
     if g.user:
         hospitalhome = hho.HospitalHome(g.user)
         hospital_name = hospitalhome.getHospitalName()
-        recipientlist = rlo.RecipientListDetails(hospital_name[0])
-        rec_list_details = recipientlist.getRecipientsList(hospital_name[0])
+        recipientlist = rlo.RecipientListDetails(hospital_name)
+        rec_list_details = recipientlist.getRecipientsList(hospital_name)
         if(rec_list_details):
             if request.method == 'POST':
                 recipientEmail = request.form['view']

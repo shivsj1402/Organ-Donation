@@ -64,6 +64,7 @@ def Login():
             if(valid):
                 session['user']= login_json['emailID']
                 g.logger.info("Logged in")
+                flash("Logged in")
                 return redirect(url)
             else:   
                 g.logger.error("User did not register")
@@ -101,6 +102,9 @@ def hospitalHome(emailID=None):
                 elif(request.form['submit']=='View Receiver List'):
                     return redirect(url_for('receiverList'))
                 elif(request.form['submit']=='View Donor Receiver Mapping'):
+                    if(recipient_list is None):
+                        flash("No recipients available")
+                        return render_template('hospitalHome.html',request_list=request_list,donor_list = donor_list, receiver_list = recipient_list)
                     return redirect(url_for('donorReceiverMapping'))
         return render_template('hospitalHome.html',request_list=request_list,donor_list = donor_list, receiver_list = recipient_list)
     return redirect(url_for('hospitalLogin', emailID=emailID))
@@ -110,7 +114,7 @@ def hospitalHome(emailID=None):
 def donorReceiverMapping():
     hospitalhome = hho.HospitalHome(g.user)
     hospital_name = hospitalhome.getHospitalName()
-    recipientlist = hrl.HospitalRecipientList(hospital_name[0])
+    recipientlist = hrl.HospitalRecipientList(hospital_name)
     rec_list_details = recipientlist.getRecipientList()
     if request.method == 'POST':
         buttondata= json.dumps(request.form.to_dict())
