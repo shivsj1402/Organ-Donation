@@ -9,15 +9,26 @@ import organdonationwebapp.User.Donor.UpdateRequestStatus as uro
 import organdonationwebapp.API.Register as res
 import organdonationwebapp.User.UpdateMedicalReports as umr
 import organdonationwebapp.User.ViewUserReports as vur
+import organdonationwebapp.API.Logger as log
 import json
 import binascii
 from io import BytesIO
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
+app.config.from_pyfile('../config.cfg')
 
+@app.before_request
+def before_request():
+    g.logger = log.MyLogger.__call__().get_logger()
+
+
+
+mail = Mail(app)
 
 @app.route('/signup/<usertype>', methods=['GET','POST'])
 def registerUser(usertype = None):
     organ =[]
-    hospitalList = hlo.HospitalList()
+    hospitalList = hlo.HospitalList(g.logger)
     hospital_list = hospitalList.getGlobalHospitalList()
     if request.method == 'POST':
         user_dict = request.form.to_dict()
@@ -25,7 +36,7 @@ def registerUser(usertype = None):
         user_dict['organ'] = organ
         user_data= json.dumps(user_dict)
         registerJson = json.loads(user_data)
-        registerObject = res.Register(registerJson, None, usertype)
+        registerObject = res.Register(registerJson,g.logger, None, usertype)
         valid, url = registerObject.registerEntity()
         if(valid):
             if(g.user):
@@ -46,7 +57,6 @@ def donorHospitalRequestPage(requestID=None):
     recipient_userdata = None
     requestdata =rdo.OpenRequestDetails(requestID)
     request_userdata = requestdata.getOpenRequestData()
-    print("request_userdata",(request_userdata))
     donorEmail=request_userdata[0][0]
     recipientEmail=request_userdata[0][1]
     organ=request_userdata[0][2]
@@ -55,7 +65,7 @@ def donorHospitalRequestPage(requestID=None):
         donor = do.Donor(donorEmail)
         donor_userdata = donor.donorHospitalRequestPage()
     if(recipientEmail):
-        recipient = ro.Recipient(recipientEmail)
+        recipient = ro.Recipient(recipientEmail, g.logger)
         recipient_userdata = recipient.donorHospitalPageRecipientList()
     if(recipient_userdata and donor_userdata):
         if request.method == 'POST':
@@ -83,13 +93,22 @@ def donorHospitalRequestPage(requestID=None):
                     else:
                         flash("Insertion Error!")
             if('submit' in request_json):
-                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID)
+                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID,recipientEmail)
                 request_status = updateRequestStatus.setRequestsStatus()
-                if(request_status):
+                send_email= updateRequestStatus.sendEmail()
+                if(request_status and send_email):
                     return redirect(url_for('hospitalHome', emailID = g.user))
+                    flash("Request Status updated successfully")
+                    #return render_template('DonorReceiverRequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
                 else:
                     flash("Error updating request status. Please try again later!")
-        return render_template('donorreceiverrequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
+            if('email' in request_json):
+                Email = request_json['email'] if 'email' in request_json else None
+                msg = Message('Receiver Donor Request', sender= 'amcamcwinter@gmail.com', recipients=[Email])
+                msg.body = 'A New Request has been generated for your organ. Please contact your Hospital  as soon as possible'
+                mail.send(msg)
+                flash("Email Sent Successfully")
+        return render_template('DonorReceiverRequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
     else:
         flash("No donor/reciever available for this Request!")
-        return render_template('donorreceiverrequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
+        return render_template('DonorReceiverRequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)

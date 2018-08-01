@@ -8,18 +8,21 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <title> Login page</title>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <ul class="navbar-nav mr-auto">  
+                    <a class="navbar-brand" href="#home" >Organ Donation</a>
+            </ul>
+    </nav>
 </head>
 
-<body style="background-color:#f1f2f6">
-<div class="container" style="text-align: center">
-<h1> Organ Donation</h1>
-<h4>Pledge a Life Today!!</h4>
+<body style="background-color:#ffffff">
+<div class="card container" style="text-align: center">
 </div>
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-6">
                 <form method="post">
-                <h2 id="Display"><h2 id="label">Login As: Hospital</h2></h2>
+                <h3 id="Display"><h3 id="label">Login As: Hospital</h3></h3>
                 <select name="logintype" id="typeoption"class="form-control">
                    <option value="Hospital">Hospital</option>
                    <!-- <option value="donor">Donor</option>
@@ -43,7 +46,7 @@
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-1">
-	        <h1> OR</h1>
+	        <h3> OR</h3>
         </div>
     </div>
 </div>
@@ -83,4 +86,10 @@
         });  
   </script>
 </body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-bottom">
+        <footer style="color: white; text-align: center">
+            <a class="navbar-brand" href="#">Copyright©2018</a>
+        </footer>
+
+    </nav>
 </html>

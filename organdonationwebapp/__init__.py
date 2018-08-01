@@ -40,6 +40,7 @@ ruc = None
 if not ruc:
     ruc = RecipientModel()
 
+    
 
 app.secret_key = 'lfjsdlkfjdklsjfkl'
 app.config['SESSION'] = True
@@ -49,3 +50,4 @@ import organdonationwebapp.API.DonorRecipientViews
 import organdonationwebapp.API.RecipientViews
 import organdonationwebapp.API.DonorViews
 import organdonationwebapp.API.views
+

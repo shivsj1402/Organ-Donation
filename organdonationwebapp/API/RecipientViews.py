@@ -12,19 +12,26 @@ import organdonationwebapp.User.OpenRequestDetails as rdo
 import organdonationwebapp.User.Donor.Donor as do
 import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Donor.UpdateRequestStatus as uro
-#import organdonationwebapp.User.Recipient.CheckRecommendedDonor as cdo
+import organdonationwebapp.User.ViewUserReports as vur
+import organdonationwebapp.API.Logger as log
+import organdonationwebapp.User.UpdateMedicalReports as umr
 import json
 import binascii
+from io import BytesIO
+
+@app.before_request
+def before_request():
+    g.logger = log.MyLogger.__call__().get_logger()
 
 
 @app.route('/receiverList', methods=['GET', 'POST'])
 def receiverList():
     print("g.user",(g.user))
     if g.user:
-        hospitalhome = hho.HospitalHome(g.user)
+        hospitalhome = hho.HospitalHome(g.user,g.logger)
         hospital_name = hospitalhome.getHospitalName()
-        recipientlist = rlo.RecipientListDetails(hospital_name[0])
-        rec_list_details = recipientlist.getRecipientsList(hospital_name[0])
+        recipientlist = rlo.RecipientListDetails(hospital_name)
+        rec_list_details = recipientlist.getRecipientsList(hospital_name)
         if(rec_list_details):
             if request.method == 'POST':
                 recipientEmail = request.form['view']
@@ -36,14 +43,14 @@ def receiverList():
 
 @app.route('/receiverhospitalrequest/<recipientEmail>', methods=['GET','POST'])
 def receiverHospitalRequestPage(recipientEmail=None):
-    recipient_data = rpo.ShowRecipientProfile(recipientEmail)
+    recipient_data = rpo.ShowRecipientProfile(recipientEmail,g.logger)
     recipient_profile = recipient_data.getRecipientProfile()
     recipientEmail = recipient_profile[0][2] # Extracting recipient email from Recipient profile JSON
     recipient_organ_data = recipient_data.getRecipientOrgans()
     donor_organ_list = []
     only_organ_list = []
     for organ in recipient_organ_data:
-        donor_list = dpo.ShowRecommendedDonors(organ[0])
+        donor_list = dpo.ShowRecommendedDonors(organ[0], g.logger)
         donor_organ_list.extend(donor_list.getrecommendedDonorList())
     # for item in donor_organ_list:
     #     only_organ_list.append(item[1])
@@ -109,20 +116,37 @@ def recipientShowApprovedRequest(requestID=None):
         donor = do.Donor(donorEmail)
         donor_userdata = donor.donorHospitalRequestPage()
     if(recipientEmail):
-        recipient = ro.Recipient(recipientEmail)
+        recipient = ro.Recipient(recipientEmail,g.logger)
         recipient_userdata = recipient.donorHospitalPageRecipientList()
     if(recipient_userdata and donor_userdata):
         if request.method == 'POST':
             request_data= json.dumps(request.form.to_dict())
             request_json = json.loads(request_data)
             if('submit' in request_json):
-                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID)
+                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID, donorEmail)
                 request_status = updateRequestStatus.setRequestsStatus()
-                if(request_status):
+                send_email= updateRequestStatus.sendEmail()
+                if(request_status and send_email):
                     flash("Request Status updated successfully")
                     return redirect(url_for('receiverHospitalRequestPage',recipientEmail=recipientEmail))
                 else:
                     flash("Error updating request status. Please try again later!")
+            
+            if('dreport' in request_json):
+                Email = request_json['dreport'] if 'dreport' in request_json else None
+                usertype = 'd'
+                reports =vur.ViewUserReports(Email,usertype)
+                report = reports.viewReports()
+                if(report):
+                    return send_file(BytesIO(report[0][0]), attachment_filename='reports.pdf')
+                    
+            if('rreport' in request_json):
+                Email = request_json['rreport'] if 'rreport' in request_json else None
+                usertype = 'r'
+                reports =vur.ViewUserReports(Email,usertype)
+                report = reports.viewReports()
+                if(report):
+                    return send_file(BytesIO(report[0][0]), attachment_filename='reports.pdf')
         return render_template('RecipientShowRequestStatus.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
     else:
         flash("No donor/reciever available for this Request!")

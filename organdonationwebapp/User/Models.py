@@ -58,3 +58,16 @@ class UserModel(SqlClient):
             SqlClient.closeDBConnection(self)
             print(err)
             return False
+
+
+    def updateReport(self,emailID,userType, report):
+        try:
+            SqlClient.startDBConnection(self)
+            self.cursor.callproc('updatereports',[emailID, userType,report])
+            res = self.cursor.stored_results()
+            SqlClient.closeDBConnection(self)
+            return True
+        except Exception as err:
+            print(err)
+            SqlClient.closeDBConnection(self)
+            return False

@@ -44,9 +44,11 @@ class DonorModel(SqlClient):
             return None
 
 
-    def recommendedDonorList(self, organ):
+    def recommendedDonorList(self, organ, logger):
+        self.logger = logger
         try:
             SqlClient.startDBConnection(self)
+            self.logger.info("recommendedDonorList logger initilized")
             self.cursor.callproc('recommendeddonorlist',[organ])
             res = self.cursor.stored_results()
             for result in res:
@@ -59,6 +61,7 @@ class DonorModel(SqlClient):
                     return None
         except Exception as err:
             SqlClient.closeDBConnection(self)
+            self.logger.error(err)
             return None
 
 

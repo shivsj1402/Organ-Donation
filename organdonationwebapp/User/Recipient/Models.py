@@ -5,10 +5,12 @@ class RecipientModel(SqlClient):
         super(RecipientModel,self).__init__()
 
 
-    def donorHospitalShowReceiverProfile(self, recipientEmail):
+    def donorHospitalShowReceiverProfile(self, recipientEmail, logger):
+        self.logger = logger
         try:
             SqlClient.startDBConnection(self)
-            print("donorHospitalShowReceiverProfile")
+            self.logger.info("donorHospitalShowReceiverProfile logger initilized")
+
             self.cursor.callproc('donorhospitalshowreceiverprofile',[recipientEmail])
             res = self.cursor.stored_results()
             for result in res:
@@ -21,6 +23,7 @@ class RecipientModel(SqlClient):
                     return None
         except Exception as err:
             SqlClient.closeDBConnection(self)
+            self.logger.error(err)
             return None
 
 
@@ -56,9 +59,11 @@ class RecipientModel(SqlClient):
             return None
 
 
-    def receiverHospitalShowOrgan(self, recipientEmail):
+    def receiverHospitalShowOrgan(self, recipientEmail, logger):
+        self.logger = logger
         try:
             SqlClient.startDBConnection(self)
+            self.logger.info("receiverHospitalShowOrgan logger initilized")
             self.cursor.callproc('receiverhospitalshoworgan',[recipientEmail])
             res = self.cursor.stored_results()
             for result in res:
@@ -73,6 +78,7 @@ class RecipientModel(SqlClient):
                     return None
         except Exception as err:
             SqlClient.closeDBConnection(self)
+            self.logger.error(err)
             return None
 
 

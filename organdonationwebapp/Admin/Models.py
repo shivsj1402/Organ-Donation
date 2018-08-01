@@ -10,35 +10,44 @@ class AdminModel(SqlClient):
             SqlClient.startDBConnection(self)
             user1 = self.cursor.callproc('adminlogin',[emailID  ,password,0])
             if(user1[2]):
+                SqlClient.closeDBConnection(self)
                 return user1[2]
             else:
+                SqlClient.closeDBConnection(self)
                 return None
         except Exception as err:
             print(err)
+            SqlClient.closeDBConnection(self)
             return None
 
 
-    def validateHospital(self, hospitalEmail):
+    def validateHospital(self, hospitalEmail, logger):
+        self.logger = logger
         try:
             SqlClient.startDBConnection(self)
+            self.logger.info("validateHospital logger initilized")
             self.cursor.callproc('validatehospital',[hospitalEmail])
             self.connection.commit()
+            SqlClient.closeDBConnection(self)
             return True
         except Exception as err:
-            print(err)
+            self.logger.error(err)
+            SqlClient.closeDBConnection(self)
             return False
 
 
-    def deleteHospital(self, hospitalEmail):
+    def deleteHospital(self, hospitalEmail, logger):
+        self.logger = logger
         try:
             SqlClient.startDBConnection(self)
+            self.logger.info("deleteHospital logger initilized")
             self.cursor.callproc('deletehospital',[hospitalEmail])
             self.connection.commit()
             SqlClient.closeDBConnection(self)
             return True
         except Exception as err:
-            print(err)
             SqlClient.closeDBConnection(self)
+            self.logger.error(err)
             return False
 
     def getHospitalCertificate(self, hospitalEmail):

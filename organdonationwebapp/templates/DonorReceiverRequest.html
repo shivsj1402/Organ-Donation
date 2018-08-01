@@ -8,13 +8,21 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <title>Request Page</title>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <ul class="navbar-nav mr-auto">  
+                    <a class="navbar-brand" href="{{ url_for('hospitalHome', emailID = g.user)}}" >Organ Donation</a>
+            </ul>
+            <div>
+                <a href ="{{ url_for('logout')}}"><button class="btn btn-dark my-2 my-sm-0" type="submit" > Logout</button></a>
+            </div>
+    </nav>
 </head>
-<body style="background-color:#f1f2f6">
+<body style="background-color:#ffffff">
 <div class="container" style="text-align: center">
 <h4>Request Page</h4>
 </div>
 </div><br><br>
-<div class= "container" >
+<div class= "card container" >
     <div class="row justify-content-md-center">
         <div class="col-md-12">
              <form method="post" enctype="multipart/form-data">
@@ -68,7 +76,7 @@
                                         <b>{{donordata[0][4]}}</b>
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6">
-                                     <input type="button" class="btn btn-primary" value="Send Email" onclick="location.href='#'"/>
+                                    <button type="submit" class="btn btn-primary" name="email" value="{{donordata[0][4]}}">Send email</button>
                                 </div><br><br>
                                 <div class="col-xs-3 col-sm-3 col-md-3">
                                     <label>Contact Phone :</label>
@@ -141,4 +149,10 @@
     </div>
 </div>
 </body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-bottom">
+        <footer style="color: white; text-align: center">
+            <a class="navbar-brand" href="#">Copyright©2018</a>
+        </footer>
+    </nav>
+
 </html>

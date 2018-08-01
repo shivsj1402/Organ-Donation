@@ -39,10 +39,11 @@ class HospitalModel(SqlClient):
             return None        
 
 
-    def getHospitalName(self,hemail):
+    def getHospitalName(self,hemail,logger):
+        self.logger = logger
         try:
             SqlClient.startDBConnection(self)
-            print("getHospitalName")
+            self.logger.info(" getHospitalName logger intitlized")
             self.cursor.callproc('gethospitalname',[hemail])
             res = self.cursor.stored_results()
             for result in res:
@@ -55,12 +56,15 @@ class HospitalModel(SqlClient):
                     return None
         except Exception as err:
             SqlClient.closeDBConnection(self)
+            self.logger.error(err)
             return None
 
 
-    def getHospitalList(self):
+    def getHospitalList(self,logger):
+        self.logger = logger
         try:
             SqlClient.startDBConnection(self)
+            self.logger.info("getHospitalList logger initilized")
             self.cursor.callproc('hospitallist')
             res = self.cursor.stored_results()
             for result in res:
@@ -76,6 +80,7 @@ class HospitalModel(SqlClient):
                     return None
         except Exception as err:
             SqlClient.closeDBConnection(self)
+            self.logger.error(err)
             return None
 
 
@@ -97,37 +102,68 @@ class HospitalModel(SqlClient):
             return None
 
 
-    def getHospitalDonorList(self,hname):
-        SqlClient.startDBConnection(self)
-        print("getHospitalDonorList")
-        self.cursor.callproc('gethospitaldonorlist',[hname])
-        res = self.cursor.stored_results()
-        for result in res:
-            donorlist= result.fetchall()
-        SqlClient.closeDBConnection(self)
-        return donorlist
+    def getHospitalDonorList(self,hname, logger):
+        self.logger = logger
+        try:
+            SqlClient.startDBConnection(self)
+            self.logger.info("getHospitalDonorList logger initilized")
+            self.cursor.callproc('gethospitaldonorlist',[hname])
+            res = self.cursor.stored_results()
+            for result in res:
+                donorlist= result.fetchall()
+                if(donorlist):
+                    SqlClient.closeDBConnection(self)
+                    return donorlist
+                else:
+                    SqlClient.closeDBConnection(self)
+                    return None
+        except Exception as err:
+            self.logger.error(err)
+            SqlClient.closeDBConnection(self)
+            return None
 
 
-    def getHospitalRecipientList(self,hname):
-        SqlClient.startDBConnection(self)
-        print("getHospitalRecipientList")
-        self.cursor.callproc('gethospitalreceiverlist',[hname])
-        res = self.cursor.stored_results()
-        for result in res:
-            receiverlist= result.fetchall()
-        SqlClient.closeDBConnection(self)
-        return receiverlist
+    def getHospitalRecipientList(self,hname,logger):
+        self.logger = logger
+        try:
+            SqlClient.startDBConnection(self)
+            self.logger.info("getHospitalRecipientList logger initilized")
+            self.cursor.callproc('gethospitalreceiverlist',[hname])
+            res = self.cursor.stored_results()
+            for result in res:
+                receiverlist= result.fetchall()
+                if(receiverlist):
+                    SqlClient.closeDBConnection(self)
+                    return receiverlist
+                else:
+                    SqlClient.closeDBConnection(self)
+                    return None
+        except Exception as err:
+            self.logger.error(err)
+            SqlClient.closeDBConnection(self)
+            return None
 
 
-    def getHospitalRequestList(self,emailID):
-        SqlClient.startDBConnection(self)
-        print("getHospitalRequestList")
-        self.cursor.callproc('requestlist', [emailID])
-        res = self.cursor.stored_results()
-        for result in res:
-            requestlist= result.fetchall()
-        SqlClient.closeDBConnection(self)
-        return requestlist
+    def getHospitalRequestList(self,emailID, logger):
+        self.logger = logger
+        try:
+            SqlClient.startDBConnection(self)
+            self.logger.info("getHospitalRequestList called for emailID")
+            self.cursor.callproc('requestlist', [emailID])
+            res = self.cursor.stored_results()
+            for result in res:
+                requestlist= result.fetchall()
+                if(requestlist):
+                    self.logger.info("Values Fetched Successfully")
+                    SqlClient.closeDBConnection(self)
+                    return requestlist
+                else:
+                    SqlClient.closeDBConnection(self)
+                    return None
+        except Exception as err:
+            self.logger.error(err)
+            SqlClient.closeDBConnection(self)
+            return None   
 
 
     def hospitalexist(self, hemail):
@@ -149,8 +185,8 @@ class HospitalModel(SqlClient):
             for result in res:
                 passwordRules= result.fetchall()
                 print(passwordRules)
-            SqlClient.closeDBConnection(self)
-            return passwordRules
+                SqlClient.closeDBConnection(self)
+                return passwordRules
         except Exception as err:
             SqlClient.closeDBConnection(self)
             return None
