@@ -9,6 +9,10 @@ class SqlClient(object):
         self.password = "CSCI5308_16_DEVINT_16175"
         self.connect_timeout = 30
         self.dbname = "CSCI5308_16_DEVINT"
+        self.cursor = None
+        self.connection = None
+
+    def startDBConnection(self):
         try:
             self.connection = mysql.connector.connect(user=self.user,password=self.password,host=self.host,database=self.dbname)
             self.cursor = self.connection.cursor()
@@ -19,5 +23,7 @@ class SqlClient(object):
             exit(1)
     
     def closeDBConnection(self):
-        self.cursor.close()
-        self.connection.close()
+        if(self.cursor):
+            self.cursor.close()
+        if(self.connection):
+            self.connection.close()

@@ -10,7 +10,11 @@ class Register(object):
 
 
     def registerEntity(self):
-        objectFactory = factory.UserTypeFactory(self.json,self.logger,self.certificate, self.usertype)
-        inst = objectFactory.createObject()
-        valid, url = inst.register()
-        return valid, url
+        try:
+            objectFactory = factory.UserTypeFactory(self.json,self.logger,self.certificate, self.usertype)
+            inst = objectFactory.createObject()
+            valid, url = inst.register()
+            return valid, url
+        except Exception as err:
+            print(err)
+            return None

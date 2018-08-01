@@ -10,7 +10,11 @@ class Authenticator(object):
         self.logger = logger
 
     def validateLogin(self):
-        objectFactory = factory.UserTypeFactory(self.json,self.logger ,None, self.usertype,)
-        inst = objectFactory.createObject()
-        valid, url = inst.login()
-        return valid, url
+        try:
+            objectFactory = factory.UserTypeFactory(self.json,self.logger ,None, self.usertype,)
+            inst = objectFactory.createObject()
+            valid, url = inst.login()
+            return valid, url
+        except Exception as err:
+            print(err)
+            return None

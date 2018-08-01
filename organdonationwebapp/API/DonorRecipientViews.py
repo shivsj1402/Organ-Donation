@@ -86,8 +86,7 @@ def donorHospitalRequestPage(requestID=None):
                 updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID)
                 request_status = updateRequestStatus.setRequestsStatus()
                 if(request_status):
-                    flash("Request Status updated successfully")
-                    return render_template('donorreceiverrequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
+                    return redirect(url_for('hospitalHome', emailID = g.user))
                 else:
                     flash("Error updating request status. Please try again later!")
         return render_template('donorreceiverrequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)

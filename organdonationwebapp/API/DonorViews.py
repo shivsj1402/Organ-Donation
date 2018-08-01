@@ -10,6 +10,7 @@ import json
 
 @app.route('/donorList', methods=['GET','POST'])
 def donorList():
+    print("g.user",(g.user))
     if g.user:
         hospitalEmail = g.user
         hospitalhome = hho.HospitalHome(hospitalEmail)

@@ -10,11 +10,15 @@ class UserTypeFactory(object):
         self.logger = logger
 
     def createObject(self):
-        if(self.usertype == "Hospital"):
-            return ho.build_Hospital(ho.Hospital, self.json,self.logger, self.certificate)
-        elif(self.usertype == "Donor or Receiver"):
-            return us.build_User(us.User,self.json, self.logger)
-        elif(self.usertype == "Admin"):
-            return ao.build_Admin(ao.Admin,self.json, self.logger)
-        else:
+        try:
+            if(self.usertype == "Hospital"):
+                return ho.build_Hospital(ho.Hospital, self.json,self.logger, self.certificate)
+            elif(self.usertype == "Donor or Receiver"):
+                return us.build_User(us.User,self.json, self.logger)
+            elif(self.usertype == "Admin"):
+                return ao.build_Admin(ao.Admin,self.json, self.logger)
+            else:
+                return None
+        except Exception as err:
+            print(err)
             return None

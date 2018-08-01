@@ -20,10 +20,11 @@ def adminHomepage(username=None, hospitalEmail=None):
             if('validate' in hospital_json):
                 validate = vho.ValidateHospital(hospital_json)
                 hospitalEmail = validate.updateValidateHospitalFlag()
-                flash("Hospital validated")
-                return render_template('adminhome.html', list=hospital_list,username=username)
+                if(hospitalEmail):
+                    #flash("Hospital validated")
+                    return render_template('adminhome.html', username=username, list=hospital_list)
             if('delete' in hospital_json):
-                hospitalID = request.form['delete']
+                hospitalID = hospital_json['delete']
                 deleteHospital = dho.DeleteHospital(hospitalID)
                 delete_hospital_status = deleteHospital.deleteHospital()
                 if(delete_hospital_status):
@@ -34,7 +35,6 @@ def adminHomepage(username=None, hospitalEmail=None):
                 certificate = vc.ViewCertificate(hospitalEmail)
                 hospitalcertificate = certificate.getHospitalCerti()
                 if(hospitalcertificate):
-                    print(hospitalcertificate[0][0])
                     return send_file(BytesIO(hospitalcertificate[0][0]), attachment_filename='certificate.pdf')
         return render_template('adminhome.html', list=hospital_list,username=username)
     return render_template('adminhome.html', username=username)

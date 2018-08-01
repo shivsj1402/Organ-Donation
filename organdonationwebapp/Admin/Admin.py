@@ -12,13 +12,17 @@ class Admin(object):
         return NotImplementedError
 
     def login(self):
-        if(ac.adminLoginAuthentication(self.emailID, self.password)):
-            url = ('/adminhome/'+ self.emailID)
-            self.logger.debug("Admin " + self.emailID + " logged in Successfully." )
-            return True, url
-        else:
-            self.logger.error("Authentication Failed. Please register if not a registered User")
-            return False, "Authentication Failed. Please register if not a registered User"
+        try:
+            if(ac.adminLoginAuthentication(self.emailID, self.password)):
+                url = ('/adminhome/'+ self.emailID)
+                self.logger.debug("Admin " + self.emailID + " logged in Successfully." )
+                return True, url
+            else:
+                self.logger.error("Authentication Failed. Please register if not a registered User")
+                return False, "Authentication Failed. Please register if not a registered User"
+        except Exception as err:
+            print(err)
+            return False 
     
     def setLogger(self,logger):
         self.logger = logger
