@@ -13,15 +13,21 @@ import organdonationwebapp.User.Donor.Donor as do
 import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Donor.UpdateRequestStatus as uro
 import organdonationwebapp.User.ViewUserReports as vur
+import organdonationwebapp.API.Logger as log
+import organdonationwebapp.User.UpdateMedicalReports as umr
 import json
 import binascii
 from io import BytesIO
+
+@app.before_request
+def before_request():
+    g.logger = log.MyLogger.__call__().get_logger()
 
 
 @app.route('/receiverList', methods=['GET', 'POST'])
 def receiverList():
     if g.user:
-        hospitalhome = hho.HospitalHome(g.user)
+        hospitalhome = hho.HospitalHome(g.user,g.logger)
         hospital_name = hospitalhome.getHospitalName()
         recipientlist = rlo.RecipientListDetails(hospital_name)
         rec_list_details = recipientlist.getRecipientsList(hospital_name)
@@ -36,13 +42,13 @@ def receiverList():
 
 @app.route('/receiverhospitalrequest/<recipientEmail>', methods=['GET','POST'])
 def receiverHospitalRequestPage(recipientEmail=None):
-    recipient_data = rpo.ShowRecipientProfile(recipientEmail)
+    recipient_data = rpo.ShowRecipientProfile(recipientEmail,g.logger)
     recipient_profile = recipient_data.getRecipientProfile()
     recipientEmail = recipient_profile[0][2] # Extracting recipient email from Recipient profile JSON
     recipient_organ_data = recipient_data.getRecipientOrgans()
     donor_organ_list = []
     for organ in recipient_organ_data:
-        donor_list = dpo.ShowRecommendedDonors(organ[0])
+        donor_list = dpo.ShowRecommendedDonors(organ[0], g.logger)
         donor_organ_list.extend(donor_list.getrecommendedDonorList())
     requestStatus = sro.ShowRecipientRequestStatus(recipientEmail)
     request_status_data = requestStatus.getRequestsStatus()

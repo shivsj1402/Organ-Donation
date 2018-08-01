@@ -5,14 +5,19 @@ import organdonationwebapp.User.Donor.ShowDonorProfile as dop
 import organdonationwebapp.Hospital.HospitalHome as hho
 import organdonationwebapp.Hospital.HospitalDonorList as hdl
 import organdonationwebapp.User.Donor.ShowDonorRequestStatus as rso
+import organdonationwebapp.API.Logger as log
 import json
 
+
+@app.before_request
+def before_request():
+    g.logger = log.MyLogger.__call__().get_logger()
 
 @app.route('/donorList', methods=['GET','POST'])
 def donorList():
     if g.user:
         hospitalEmail = g.user
-        hospitalhome = hho.HospitalHome(hospitalEmail)
+        hospitalhome = hho.HospitalHome(hospitalEmail,g.logger)
         hospital_name = hospitalhome.getHospitalName()
         donorlist = dlo.DonorListDetails(hospital_name)
         don_list_details = donorlist.getDonorsList(hospital_name)

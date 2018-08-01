@@ -29,8 +29,10 @@ class HospitalModel(SqlClient):
             return None        
 
 
-    def getHospitalName(self,hemail):
+    def getHospitalName(self,hemail,logger):
+        self.logger = logger
         try:
+            self.logger.info(" getHospitalName logger intitlized")
             self.cursor.callproc('gethospitalname',[hemail])
             res = self.cursor.stored_results()
             for result in res:
@@ -40,11 +42,14 @@ class HospitalModel(SqlClient):
                 else:
                     return None
         except Exception as err:
+            self.logger.error(err)
             return None
 
 
-    def getHospitalList(self):
+    def getHospitalList(self,logger):
+        self.logger = logger
         try:
+            self.logger.info("getHospitalList logger initilized")
             self.cursor.callproc('hospitallist')
             res = self.cursor.stored_results()
             for result in res:
@@ -57,6 +62,7 @@ class HospitalModel(SqlClient):
                 else:
                     return None
         except Exception as err:
+            self.logger.error(err)
             return None
 
 
@@ -74,38 +80,56 @@ class HospitalModel(SqlClient):
             return None
 
 
-    def getHospitalDonorList(self,hname):
-        self.cursor.callproc('gethospitaldonorlist',[hname])
-        res = self.cursor.stored_results()
-        for result in res:
-            donorlist= result.fetchall()
-            if(donorlist):
-                return donorlist
-            else:
-                return None
+    def getHospitalDonorList(self,hname, logger):
+        self.logger = logger
+        try:
+            self.logger.info("getHospitalDonorList logger initilized")
+            self.cursor.callproc('gethospitaldonorlist',[hname])
+            res = self.cursor.stored_results()
+            for result in res:
+                donorlist= result.fetchall()
+                if(donorlist):
+                    return donorlist
+                else:
+                    return None
+        except Exception as err:
+            self.logger.error(err)
+            return None
 
 
-    def getHospitalRecipientList(self,hname):
-        self.cursor.callproc('gethospitalreceiverlist',[hname])
-        res = self.cursor.stored_results()
-        for result in res:
-            receiverlist= result.fetchall()
-            if(receiverlist):
-                return receiverlist
-            else:
-                return None
+    def getHospitalRecipientList(self,hname,logger):
+        self.logger = logger
+        try:
+            self.logger.info("getHospitalRecipientList logger initilized")
+            self.cursor.callproc('gethospitalreceiverlist',[hname])
+            res = self.cursor.stored_results()
+            for result in res:
+                receiverlist= result.fetchall()
+                if(receiverlist):
+                    return receiverlist
+                else:
+                    return None
+        except Exception as err:
+            self.logger.error(err)
+            return None
 
 
-    def getHospitalRequestList(self,emailID):
-        self.cursor.callproc('requestlist', [emailID])
-        res = self.cursor.stored_results()
-        for result in res:
-            requestlist= result.fetchall()
-            if(requestlist):
-                return requestlist
-            else:
-                return None
-            
+    def getHospitalRequestList(self,emailID, logger):
+        self.logger = logger
+        try:
+            self.logger.info("getHospitalRequestList called for emailID" + self.emailID)
+            self.cursor.callproc('requestlist', [emailID])
+            res = self.cursor.stored_results()
+            for result in res:
+                requestlist= result.fetchall()
+                if(requestlist):
+                    self.logger.info("Values Fetched Successfully")
+                    return requestlist
+                else:
+                    return None
+        except Exception as err:
+            self.logger.error(err)
+            return None   
 
 
     def hospitalexist(self, hemail):
