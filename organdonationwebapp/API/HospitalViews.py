@@ -64,7 +64,6 @@ def Login():
             if(valid):
                 session['user']= login_json['emailID']
                 g.logger.info("Logged in")
-                flash("Logged in")
                 return redirect(url)
             else:   
                 g.logger.error("User did not register")
@@ -107,7 +106,7 @@ def hospitalHome(emailID=None):
                         return render_template('hospitalHome.html',request_list=request_list,donor_list = donor_list, receiver_list = recipient_list)
                     return redirect(url_for('donorReceiverMapping'))
         return render_template('hospitalHome.html',request_list=request_list,donor_list = donor_list, receiver_list = recipient_list)
-    return redirect(url_for('hospitalLogin', emailID=emailID))
+    return redirect(url_for('Login'))
 
 
 @app.route('/donorreceivermapping', methods=['GET','POST'])
@@ -136,7 +135,9 @@ def donorReceiverMapping():
 @app.route('/logout')
 def logout():
    # remove the username from the session if it is there
-   session.pop('username', None)
-   g.logger.info("Logging logpout")
-   flash("User logged out Successfully")
-   return redirect(url_for('Login'))
+    session.pop('user', None)
+    session['user'] = None
+    g.user = None
+    g.logger.info("Logging logpout")
+    flash("User logged out Successfully")
+    return redirect(url_for('Login'))
