@@ -19,6 +19,7 @@ class DBValidatePassword(ValidatePassword):
         dbRuleDict = {}
         for item in dbRule:
             dbRuleDict[item[0]] = int(item[1])
+            print("dbRuleDict",(dbRuleDict))
         return dbRuleDict
 
     def validateCapitalLetters(self):
@@ -39,7 +40,7 @@ class DBValidatePassword(ValidatePassword):
         for i in self.password:
             if(i.islower()):
                 count = count+1
-        if(count < self.ruleDict["small_letters"]):
+        if(count != self.ruleDict["small_letters"]):
             return False
         else:
             return True
@@ -65,8 +66,8 @@ class DBValidatePassword(ValidatePassword):
             return True
 
 
-    def validateLength(self):
-        if(len(self.password) <= self.ruleDict["max_length"]  and len(self.password) > self.ruleDict["min_length"]):
-            return True
-        else:
-            return False
+    # def validateLength(self):
+    #     if(len(self.password) <= self.ruleDict["max_length"]  and len(self.password) > self.ruleDict["min_length"]):
+    #         return True
+    #     else:
+    #         return False
