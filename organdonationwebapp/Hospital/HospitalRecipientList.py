@@ -8,5 +8,3 @@ class HospitalRecipientList(object):
         recipient_list = hc.getHospitalRecipientList(self.hospitalName)
         if(recipient_list):
             return recipient_list
-        else:
-            return None

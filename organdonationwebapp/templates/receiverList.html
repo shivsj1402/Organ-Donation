@@ -20,14 +20,6 @@
 <body style="background-color:#ffffff">
 <div class="container" style="text-align: center">
 <h4>Receiver List</h4>
-    <form>
-            <div class="input-group">
-                <input type="text" class="form-control input-sm" placeholder="Search" name="srch-term" id="srch-term">
-                <div class="input-group-btn">
-                    <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-search"></span> Search</button>
-                </div>
-            </div>
-        </form>
 </div>
 <div class= "container" >
     <div class="row justify-content-md-center">
@@ -64,7 +56,7 @@
                         </div>
                      </div>
                 </div>
-                {% if rlist|length > 0 %}
+                {% if rlist %}
                 {% for item in rlist %}
                   <div class="row">
                     <div class="col-xs-2 col-sm-2 col-md-2">

@@ -12,8 +12,10 @@ import organdonationwebapp.User.OpenRequestDetails as rdo
 import organdonationwebapp.User.Donor.Donor as do
 import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Donor.UpdateRequestStatus as uro
+import organdonationwebapp.User.ViewUserReports as vur
 import json
 import binascii
+from io import BytesIO
 
 
 @app.route('/receiverList', methods=['GET', 'POST'])
@@ -28,6 +30,7 @@ def receiverList():
                 recipientEmail = request.form['view']
                 return redirect(url_for('receiverHospitalRequestPage',recipientEmail=recipientEmail))
             return render_template('receiverList.html', rlist=rec_list_details)
+        return render_template('receiverList.html')
     return redirect(url_for('Login'))
 
 
@@ -114,6 +117,22 @@ def recipientShowApprovedRequest(requestID=None):
                     flash("Request Status updated successfully")
                 else:
                     flash("Error updating request status. Please try again later!")
+            
+            if('dreport' in request_json):
+                Email = request_json['dreport'] if 'dreport' in request_json else None
+                usertype = 'd'
+                reports =vur.ViewUserReports(Email,usertype)
+                report = reports.viewReports()
+                if(report):
+                    return send_file(BytesIO(report[0][0]), attachment_filename='reports.pdf')
+                    
+            if('rreport' in request_json):
+                Email = request_json['rreport'] if 'rreport' in request_json else None
+                usertype = 'r'
+                reports =vur.ViewUserReports(Email,usertype)
+                report = reports.viewReports()
+                if(report):
+                    return send_file(BytesIO(report[0][0]), attachment_filename='reports.pdf')
         return render_template('RecipientShowRequestStatus.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
     else:
         flash("No donor/reciever available for this Request!")

@@ -31,7 +31,7 @@ def registerUser(usertype = None):
         user_dict['organ'] = organ
         user_data= json.dumps(user_dict)
         registerJson = json.loads(user_data)
-        registerObject = res.Register(registerJson, None, usertype)
+        registerObject = res.Register(registerJson,g.logger, None, usertype)
         valid, url = registerObject.registerEntity()
         if(valid):
             if(g.user):
@@ -52,7 +52,7 @@ def donorHospitalRequestPage(requestID=None):
     recipient_userdata = None
     requestdata =rdo.OpenRequestDetails(requestID)
     request_userdata = requestdata.getOpenRequestData()
-    print("request_userdata",(request_userdata))
+    # print("request_userdata",(request_userdata))
     donorEmail=request_userdata[0][0]
     recipientEmail=request_userdata[0][1]
     organ=request_userdata[0][2]
