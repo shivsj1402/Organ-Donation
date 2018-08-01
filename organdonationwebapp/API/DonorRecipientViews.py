@@ -97,7 +97,6 @@ def donorHospitalRequestPage(requestID=None):
                     return render_template('DonorReceiverRequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
                 else:
                     flash("Error updating request status. Please try again later!")
-
             if('email' in request_json):
                 Email = request_json['email'] if 'email' in request_json else None
                 msg = Message('Receiver Donor Request', sender= 'amcamcwinter@gmail.com', recipients=[Email])
