@@ -12,7 +12,13 @@ import organdonationwebapp.User.ViewUserReports as vur
 import json
 import binascii
 from io import BytesIO
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
+app.config.from_pyfile('../config.cfg')
 
+
+
+mail = Mail(app)
 
 @app.route('/signup/<usertype>', methods=['GET','POST'])
 def registerUser(usertype = None):
@@ -83,14 +89,22 @@ def donorHospitalRequestPage(requestID=None):
                     else:
                         flash("Insertion Error!")
             if('submit' in request_json):
-                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID)
+                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID,recipientEmail)
                 request_status = updateRequestStatus.setRequestsStatus()
-                if(request_status):
+                send_email= updateRequestStatus.sendEmail()
+                if(request_status and send_email):
                     flash("Request Status updated successfully")
-                    return render_template('donorreceiverrequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
+                    return render_template('DonorReceiverRequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
                 else:
                     flash("Error updating request status. Please try again later!")
-        return render_template('donorreceiverrequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
+
+            if('email' in request_json):
+                Email = request_json['email'] if 'email' in request_json else None
+                msg = Message('Receiver Donor Request', sender= 'amcamcwinter@gmail.com', recipients=[Email])
+                msg.body = 'A New Request has been generated for your organ. Please contact your Hospital  as soon as possible'
+                mail.send(msg)
+                flash("Email Sent Successfully")
+        return render_template('DonorReceiverRequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
     else:
         flash("No donor/reciever available for this Request!")
-        return render_template('donorreceiverrequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
+        return render_template('DonorReceiverRequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)

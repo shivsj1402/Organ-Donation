@@ -1,11 +1,5 @@
-<<<<<<< HEAD
-'''
-from flask import Flask, render_template, request, redirect, session, url_for, g, send_file,flash, jsonify
-from flask import current_app
-=======
 from flask import Flask
 from flask import app
->>>>>>> 3a14e22dab98c817f23ba4b3169320b72427abd5
 import unittest
 import organdonationwebapp.API.Logger as log
 import json
@@ -55,4 +49,4 @@ if __name__ == '__main__':
 
 	 #suite = unittest.TestLoader().loadTestsFromTestCase(hc.TestStringMethods)
 	 #unittest.TextTestRunner(verbosity=2).run(suite)
-     '''
+
