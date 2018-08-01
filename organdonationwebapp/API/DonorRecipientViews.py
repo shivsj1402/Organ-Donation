@@ -9,12 +9,17 @@ import organdonationwebapp.User.Donor.UpdateRequestStatus as uro
 import organdonationwebapp.API.Register as res
 import organdonationwebapp.User.UpdateMedicalReports as umr
 import organdonationwebapp.User.ViewUserReports as vur
+import organdonationwebapp.API.Logger as log
 import json
 import binascii
 from io import BytesIO
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
 app.config.from_pyfile('../config.cfg')
+
+@app.before_request
+def before_request():
+    g.logger = log.MyLogger.__call__().get_logger()
 
 
 
@@ -23,7 +28,7 @@ mail = Mail(app)
 @app.route('/signup/<usertype>', methods=['GET','POST'])
 def registerUser(usertype = None):
     organ =[]
-    hospitalList = hlo.HospitalList()
+    hospitalList = hlo.HospitalList(g.logger)
     hospital_list = hospitalList.getGlobalHospitalList()
     if request.method == 'POST':
         user_dict = request.form.to_dict()
@@ -60,7 +65,7 @@ def donorHospitalRequestPage(requestID=None):
         donor = do.Donor(donorEmail)
         donor_userdata = donor.donorHospitalRequestPage()
     if(recipientEmail):
-        recipient = ro.Recipient(recipientEmail)
+        recipient = ro.Recipient(recipientEmail, g.logger)
         recipient_userdata = recipient.donorHospitalPageRecipientList()
     if(recipient_userdata and donor_userdata):
         if request.method == 'POST':

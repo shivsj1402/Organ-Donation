@@ -17,23 +17,27 @@ class AdminModel(SqlClient):
             return None
 
 
-    def validateHospital(self, hospitalEmail):
+    def validateHospital(self, hospitalEmail, logger):
+        self.logger = logger
         try:
+            self.logger.info("validateHospital logger initilized")
             self.cursor.callproc('validatehospital',[hospitalEmail])
             self.connection.commit()
             return True
         except Exception as err:
-            print(err)
+            self.logger.error(err)
             return False
 
 
-    def deleteHospital(self, hospitalEmail):
+    def deleteHospital(self, hospitalEmail, logger):
+        self.logger = logger
         try:
+            self.logger.info("deleteHospital logger initilized")
             self.cursor.callproc('deletehospital',[hospitalEmail])
             self.connection.commit()
             return True
         except Exception as err:
-            print(err)
+            self.logger.error(err)
             return False
 
     def getHospitalCertificate(self, hospitalEmail):
