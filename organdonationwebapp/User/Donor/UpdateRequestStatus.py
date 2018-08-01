@@ -4,7 +4,7 @@ from organdonationwebapp import app
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadTimeSignature
 
-app.config.from_pyfile('config.cfg')
+app.config.from_pyfile('../config.cfg')
 
 mail = Mail(app)
 
