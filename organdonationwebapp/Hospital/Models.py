@@ -117,7 +117,7 @@ class HospitalModel(SqlClient):
     def getHospitalRequestList(self,emailID, logger):
         self.logger = logger
         try:
-            self.logger.info("getHospitalRequestList called for emailID" + self.emailID)
+            self.logger.info("getHospitalRequestList called for emailID")
             self.cursor.callproc('requestlist', [emailID])
             res = self.cursor.stored_results()
             for result in res:
