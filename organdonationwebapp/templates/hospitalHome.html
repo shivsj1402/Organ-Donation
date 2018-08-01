@@ -46,47 +46,47 @@
                 </div>
                   <div class="row">
                         <div class="col-xs-4 col-sm-4 col-md-4">
-<ul>
-                                    {% if request_list %}
-                                    <div class="table table-sm">
-                                            <div>
-                                                <label>Donor Name</label>
-                                            </div>
-                                            {% for item in request_list %}
-                                            <div>
-                                                <div> {{ item[1] }}</div>
-                                                <div>  <button type="submit" class="btn btn-primary btn-sm" name="requestID" value="{{ item[0] }}">View Request</button></div>
-                                            </div>
-                                            {% endfor %}
-                                        </div>
-</ul>>
+                    <ul class="list-group list-group-flush">
+                        {% if request_list %}
+                        <table class="table table-sm">
+                                <tr>
+                                    <th>Donor Name</th>
+                                    <th></th>
+                                </tr>
+                                {% for item in request_list %}
+                                <tr>
+                                    <td> {{ item[1] }}</td>
+                                    <td>  <button type="submit" class="btn btn-primary btn-sm" name="requestID" value="{{ item[0] }}">View Request</button></td>
+                                </tr>
+                                {% endfor %}
+                        </table>
+                    </ul>
                                     {% else %}
                                         <p>No Requests Available</p>
                                     {% endif %}
                              </div>
                     <div class="col-xs-4 col-sm-4 col-md-4">
-                        <ol>
+                        <ul class="list-group list-group-flush">
                             {% if donor_list %}
                                 {% for item in donor_list %}
-                                <li> {{ item[0]}} {{item[1]}} </li>
+                                <li class="list-group-item"> {{ item[0]}} {{item[1]}} </li>
                                 {% endfor %}
                             {% else %}
                                 <p>No Donors Available</p>
                             {% endif %}
 
-                        </ol>
+                        </ul>
                     </div>
                        <div class="col-xs-4 col-sm-4 col-md-4">
-                            <ol>
-
+                            <ul class="list-group list-group-flush">
                                 {% if receiver_list %}
                                     {% for item in receiver_list %}
-                                    <li> {{ item[0]}} {{item[1]}} </li>
+                                    <li class="list-group-item"> {{ item[0]}} {{item[1]}} </li>
                                     {% endfor %}
                                 {% else %}
                                     <p>No Receivers Available</p>
                                 {% endif %}
-                            </ol>
+                            </ul>
                        </div>
                      </div>
                      <div class="row">
@@ -122,18 +122,7 @@
         <footer style="color: white; text-align: center">
             <a class="navbar-brand" href="#">Copyright©2018</a>
         </footer>
-        <footer style="color: white; text-align: center">
-            <a class="navbar-brand" href="https://www.dal.ca">Dalhouise University</a>
-        </footer>
-        <footer style="color: white; text-align: center">
-            <a class="navbar-brand" href="http://flask.pocoo.org">Flask</a>
-        </footer>
-        <footer style="color: white; text-align: center">
-            <a class="navbar-brand" href="https://www.python.org">Python</a>
-        </footer>
-        <footer style="color: white; text-align: center">
-            <a class="navbar-brand" href="https://getbootstrap.com">Bootstrap</a>
-        </footer>
+
     </nav>
 
 </html>

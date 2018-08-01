@@ -13,7 +13,6 @@
                 <a class="navbar-brand" href="{{ url_for('adminHomepage', username = g.user)}}" >Organ Donation</a>
             </ul>
             <div>
-                <h4>Welcome, {{username}}</h4>
                 <a href ="{{ url_for('logout')}}"><button class="btn btn-outline-warning my-2 my-sm-0" type="submit" > Logout</button></a>
             </div>
     </nav>
@@ -23,24 +22,17 @@
 <h4>Admin Home</h4>
 </div>
 
-<div class="container" style="text-align: centerl">
+<div class=" container" style="text-align: center">
 <h4>Welcome, {{username}}</h4>
 </div>
-
-<div class= "container" >
+<div class= " card container" >
     <div class="row justify-content-md-center">
         <div class="col-md-12">
              <form method="post">
-               
-                    
                         <div class="form-group">
                             <label>List of Hospitals Registered</label>
-                     </div>
-               
+                     </div>            
                   <div >
-                    <!-- <div class="col-xs-6 col-sm-6 col-md-6"> -->
-
-                    
                             <div>
                                 <table class="table table-striped table-sm">
                                     <tr>
@@ -86,21 +78,9 @@
     </div>
 </div>
 </body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-bottom">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-bottom" style="height: 2.5em">
         <footer style="color: white; text-align: center">
             <a class="navbar-brand" href="#">Copyright©2018</a>
-        </footer>
-        <footer style="color: white; text-align: center">
-            <a class="navbar-brand" href="https://www.dal.ca">Dalhouise University</a>
-        </footer>
-        <footer style="color: white; text-align: center">
-            <a class="navbar-brand" href="http://flask.pocoo.org">Flask</a>
-        </footer>
-        <footer style="color: white; text-align: center">
-            <a class="navbar-brand" href="https://www.python.org">Python</a>
-        </footer>
-        <footer style="color: white; text-align: center">
-            <a class="navbar-brand" href="https://getbootstrap.com">Bootstrap</a>
         </footer>
     </nav>
 

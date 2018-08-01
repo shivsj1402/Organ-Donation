@@ -22,6 +22,7 @@ RUN apk add --update build-base gcc python-dev \
 # Copying required files
 COPY ./setup.py /home/organdonation/
 COPY ./app.py /home/organdonation/
+COPY ./config.cfg /home/organdonation/
 COPY ./organdonationwebapp /home/organdonation/organdonationwebapp
 
 # Running initial setup
