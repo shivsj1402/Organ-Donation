@@ -79,7 +79,10 @@ class HospitalModel(SqlClient):
         res = self.cursor.stored_results()
         for result in res:
             donorlist= result.fetchall()
-            return donorlist
+            if(donorlist):
+                return donorlist
+            else:
+                return None
 
 
     def getHospitalRecipientList(self,hname):
@@ -87,7 +90,10 @@ class HospitalModel(SqlClient):
         res = self.cursor.stored_results()
         for result in res:
             receiverlist= result.fetchall()
-            return receiverlist
+            if(receiverlist):
+                return receiverlist
+            else:
+                return None
 
 
     def getHospitalRequestList(self,emailID):
@@ -95,7 +101,11 @@ class HospitalModel(SqlClient):
         res = self.cursor.stored_results()
         for result in res:
             requestlist= result.fetchall()
-            return requestlist
+            if(requestlist):
+                return requestlist
+            else:
+                return None
+            
 
 
     def hospitalexist(self, hemail):
@@ -112,7 +122,7 @@ class HospitalModel(SqlClient):
             res = self.cursor.stored_results()
             for result in res:
                 passwordRules= result.fetchall()
-                print(passwordRules)
+                # print(passwordRules)
                 return passwordRules
         except Exception as err:
             return None

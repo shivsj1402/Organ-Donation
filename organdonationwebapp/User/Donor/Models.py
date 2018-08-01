@@ -59,8 +59,8 @@ class DonorModel(SqlClient):
 
     def setRequestsStatus(self, requestID, requeststate):
         try:
-            print("requestID",(requestID))
-            print("requeststate",(requeststate))
+            # print("requestID",(requestID))
+            # print("requeststate",(requeststate))
             self.cursor.callproc('updaterequeststate',[requestID,requeststate])
             self.connection.commit()
             return True

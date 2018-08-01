@@ -64,7 +64,6 @@ def Login():
             if(valid):
                 session['user']= login_json['emailID']
                 g.logger.info("Logged in")
-                flash("Logged in")
                 return redirect(url)
             else:   
                 g.logger.error("User did not register")
@@ -86,9 +85,9 @@ def hospitalHome(emailID=None):
         hospital_name = hospitalhome.getHospitalName()
         requestlist = hprl.HospitalRequestList(hemail)
         request_list = requestlist.getPendingRequestList()
-        donorlist = hdl.HospitalDonorList(hospital_name[0])
+        donorlist = hdl.HospitalDonorList(hospital_name)
         donor_list = donorlist.getDonorList()
-        recipientlist = hrl.HospitalRecipientList(hospital_name[0])
+        recipientlist = hrl.HospitalRecipientList(hospital_name)
         recipient_list = recipientlist.getRecipientList()
         if request.method == 'POST':
             data= json.dumps(request.form.to_dict())

@@ -30,6 +30,7 @@ def receiverList():
                 recipientEmail = request.form['view']
                 return redirect(url_for('receiverHospitalRequestPage',recipientEmail=recipientEmail))
             return render_template('receiverList.html', rlist=rec_list_details)
+        return render_template('receiverList.html')
     return redirect(url_for('Login'))
 
 
