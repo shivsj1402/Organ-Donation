@@ -107,9 +107,10 @@ def recipientShowApprovedRequest(requestID=None):
             request_data= json.dumps(request.form.to_dict())
             request_json = json.loads(request_data)
             if('submit' in request_json):
-                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID)
+                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID, donorEmail)
                 request_status = updateRequestStatus.setRequestsStatus()
-                if(request_status):
+                send_email= updateRequestStatus.sendEmail()
+                if(request_status and send_email):
                     flash("Request Status updated successfully")
                 else:
                     flash("Error updating request status. Please try again later!")

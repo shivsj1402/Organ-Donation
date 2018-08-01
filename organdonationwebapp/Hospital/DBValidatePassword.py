@@ -21,7 +21,6 @@ class DBValidatePassword(ValidatePassword):
             dbRuleDict[item[0]] = int(item[1])
         return dbRuleDict
 
-
     def validateCapitalLetters(self):
         count=0
         if "capital_letters" not in self.ruleDict:

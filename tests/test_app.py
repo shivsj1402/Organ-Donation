@@ -49,3 +49,4 @@ if __name__ == '__main__':
 
 	 #suite = unittest.TestLoader().loadTestsFromTestCase(hc.TestStringMethods)
 	 #unittest.TextTestRunner(verbosity=2).run(suite)
+
