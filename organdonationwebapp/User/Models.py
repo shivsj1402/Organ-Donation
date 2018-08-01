@@ -45,3 +45,13 @@ class UserModel(SqlClient):
         except Exception as err:
             print(err)
             return False
+
+
+    def updateReport(self,emailID,userType, report):
+        try:
+            self.cursor.callproc('updatereports',[emailID, userType,report])
+            res = self.cursor.stored_results()
+            return True
+        except Exception as err:
+            print(err)
+            return False
