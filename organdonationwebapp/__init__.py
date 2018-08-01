@@ -40,6 +40,7 @@ ruc = None
 if not ruc:
     ruc = RecipientModel()
 
+    
 
 app.secret_key = 'lfjsdlkfjdklsjfkl'
 app.config['SESSION'] = True
