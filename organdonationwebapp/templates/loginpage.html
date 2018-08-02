@@ -8,32 +8,37 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <title> Login page</title>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <ul class="navbar-nav mr-auto">  
+                    <a class="navbar-brand" href="#home" >Organ Donation</a>
+            </ul>
+    </nav>
 </head>
 
-<body style="background-color:#f1f2f6">
-<div class="container" style="text-align: center">
-<h1> Organ Donation</h1>
-<h4>Pledge a Life Today!!</h4>
+<body style="background-color:#ffffff;">
+<div class="card container" style="text-align: center">
 </div>
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-6">
-	        <h2> Login as Hospital:</h2>
-            <form method="post">
+                <form method="post">
+                <h3 id="Display"><h3 id="label">Login As: Hospital</h3></h3>
+                <select name="logintype" id="typeoption"class="form-control">
+                   <option value="Hospital">Hospital</option>
+                   <!-- <option value="donor">Donor</option>
+                   <option value="receiver">Reciever</option> -->
+                   <option value="Admin">Admin</option>
+                 </select>
                 <div class="form-group">
-                    <label>Email address</label>
-                    <input type="email" name="hemail" class="form-control" id="InputEmail1" placeholder="Enter email">
+                    <label style="padding-top: 10px">Email address</label>
+                    <input type="email" name="emailID" class="form-control" id="InputEmail1" placeholder="Enter email">
                  </div>
                 <div class="form-group">
                     <label>Password</label>
-                <input type="password" name="hpassword" class="form-control" id="InputPassword1" placeholder="Password">
+                <input type="password" name="password" class="form-control" id="InputPassword1" placeholder="Password">
                  </div>
-                 <div class="form-check">
-                    <input type="checkbox" class="form-check-input">
-                     <label class="form-check-label">Remember me</label>
-                 </div>
+                 
                 <input type="submit" name="submit" class="btn btn-primary" value="submit" />
-                <input type="button" class="btn btn-primary" value="cancel" onclick="location.href='#'"/>
         </div>
     </div>
 </div>
@@ -41,7 +46,7 @@
 <div class= "container" >
     <div class="row justify-content-md-center">
         <div class="col-md-1">
-	        <h1> OR</h1>
+	        <h3> OR</h3>
         </div>
     </div>
 </div>
@@ -52,19 +57,39 @@
              <div class="form-group">
               <label>Select Here:</label>
               <select class="form-control" name="type">
-                <option>Donor/Receiver</option>
+                <option>Donor or Receiver</option>
                 <option>Hospital</option>
               </select>
                  <br>
                  <input type="submit" name="submit" class="btn btn-primary" value="SignUp"/>
             </div>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <script>
+                    var messages = {{ messages | safe }};
+                    for (var i=0; i<messages.length; i++) 
+                    {
+                        alert(messages[i]);
+                    }
+                </script>
+            {% endif %}
+         {% endwith %}
          </form>
         </div>
     </div>
 </div>
-
-
-
-
+ 
+<script>    
+        $( "select" ) .change(function () {  
+        document.getElementById('label').style.display='none';  
+        document.getElementById("Display").innerHTML="Login As: "+document.getElementById("typeoption").value;  
+        });  
+  </script>
 </body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-bottom" style="height: 2em">
+        <footer style="color: white; text-align: center">
+            <a class="navbar-brand" href="#">Copyright©2018</a>
+        </footer>
+
+    </nav>
 </html>
