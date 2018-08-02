@@ -6,8 +6,11 @@ class Donor(object):
         self.donorEmail = donorEmail
 
     def donorHospitalRequestPage(self):
-        donor_data = duc.donorHospitalShowDonorProfile(self.donorEmail)
-        if(donor_data):
-            return donor_data
-        else:
-            return None
+        try:
+            donor_data = duc.donorHospitalShowDonorProfile(self.donorEmail)
+            if(donor_data):
+                return donor_data
+            else:
+                return None
+        except Exception as err:
+            return err
