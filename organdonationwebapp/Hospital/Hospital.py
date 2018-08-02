@@ -27,6 +27,7 @@ class Hospital(object):
                 return False, "Registration Failed."
         except Exception as err:
             print(err)
+            return False
 
     def setLogger(self,logger):
         self.logger = logger
