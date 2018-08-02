@@ -10,15 +10,15 @@
     <title> Admin Home</title>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <ul class="navbar-nav mr-auto">  
-                    <a class="navbar-brand" href="#home" >Organ Donation</a>
+                <a class="navbar-brand" href="{{ url_for('adminHomepage', username = g.user)}}" >Organ Donation</a>
             </ul>
             <div>
-                <button class="btn btn-dark my-2 my-sm-0" onclick="location.href = '#login';" type="submit">Logout</button>
+                <a href ="{{ url_for('logout')}}"><button class="btn btn-outline-warning my-2 my-sm-0" type="submit" > Logout</button></a>
             </div>
     </nav>
 </head>
 <body style="background-color:#fFFFFF">
-<div class="container" style="text-align: center">
+<div class="container" style="text-align: center"></div>
 <h4>Admin Home</h4>
 </div>
 
@@ -62,7 +62,7 @@
                             </table>
                         </div>
                 </div>
-                {% with messages = get_flashed_messages() %}
+                <!-- {% with messages = get_flashed_messages() %}
                 {% if messages %}
                     <script>
                         var messages = {{ messages | safe }};
@@ -72,7 +72,7 @@
                         }
                     </script>
                 {% endif %}
-             {% endwith %}
+             {% endwith %} -->
             </form>
         </div>
     </div>

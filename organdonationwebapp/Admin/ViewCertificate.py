@@ -6,8 +6,12 @@ class ViewCertificate(object):
             
 
     def getHospitalCerti(self):
-        Result = ac.getHospitalCertificate(self.hospitalEmail)
-        if(Result):
-            return Result
-        else:
-            return "No ertificate Found"
+        try:
+            Result = ac.getHospitalCertificate(self.hospitalEmail)
+            if(Result):
+                return Result
+            else:
+                return None
+        except Exception as err:
+            print(err)
+            return None

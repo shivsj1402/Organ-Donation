@@ -7,7 +7,11 @@ class ValidateHospital(object):
             
 
     def updateValidateHospitalFlag(self):
-        if(ac.validateHospital(self.hospitalEmail, self.logger)):
-            return True
-        else:
+        try:
+            if(ac.validateHospital(self.hospitalEmail,self.logger)):
+                return True
+            else:
+                return False
+        except Exception as err:
+            self.logger.error(err)
             return False
