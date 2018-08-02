@@ -74,7 +74,7 @@ def receiverHospitalRequestPage(recipientEmail=None):
                     breport=data.read()
                     report =binascii.hexlify(breport)
                     userType= "r"
-                    recipientReport= umr.UpdateMedicalReports(recipientEmail, report, userType)
+                    recipientReport= umr.UpdateMedicalReports(recipientEmail,userType,report)
                     recipient_report_status = recipientReport.updateReports()
                     if(recipient_report_status):
                         flash("Updated Successfully")
