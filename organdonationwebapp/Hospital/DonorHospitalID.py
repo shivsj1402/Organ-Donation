@@ -13,4 +13,4 @@ class DonorHospitalID(object):
             else:
                 return None
         except Exception as err:
-            return None
+            return err

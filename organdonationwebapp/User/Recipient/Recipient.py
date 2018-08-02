@@ -7,8 +7,11 @@ class Recipient(object):
         self.logger = logger
 
     def donorHospitalPageRecipientList(self):
-        recipient_data = ruc.donorHospitalShowReceiverProfile(self.recipientEmail,self.logger)
-        if(recipient_data):
-            return recipient_data
-        else:
-            return None
+        try:
+            recipient_data = ruc.donorHospitalShowReceiverProfile(self.recipientEmail,self.logger)
+            if(recipient_data):
+                return recipient_data
+            else:
+                return None
+        except Exception as err:
+            return err

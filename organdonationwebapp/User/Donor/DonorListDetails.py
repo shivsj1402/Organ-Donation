@@ -6,9 +6,12 @@ class DonorListDetails(object):
 
 
     def getDonorsList(self, hname):
-        self.hname = hname
-        donor_list = duc.getDonorList(self.hname)
-        if(donor_list):
-            return donor_list
-        else:
-            return None
+        try:
+            self.hname = hname
+            donor_list = duc.getDonorList(self.hname)
+            if(donor_list):
+                return donor_list
+            else:
+                return None
+        except Exception as err:
+            return err
