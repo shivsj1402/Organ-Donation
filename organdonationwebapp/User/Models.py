@@ -47,10 +47,10 @@ class UserModel(SqlClient):
             return False
 
 
-    def updateReport(self,emailID,userType, report):
+    def updateReport(self,emailID,userType,report):
         try:
-            self.cursor.callproc('updatereports',[emailID, userType,report])
-            res = self.cursor.stored_results()
+            self.cursor.callproc('updatereports',[emailID,userType,report])
+            self.connection.commit()
             return True
         except Exception as err:
             print(err)
