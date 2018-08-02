@@ -97,8 +97,9 @@ def donorHospitalRequestPage(requestID=None):
                 request_status = updateRequestStatus.setRequestsStatus()
                 send_email= updateRequestStatus.sendEmail()
                 if(request_status and send_email):
+                    return redirect(url_for('hospitalHome', emailID = g.user))
                     flash("Request Status updated successfully")
-                    return render_template('DonorReceiverRequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
+                    #return render_template('DonorReceiverRequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
                 else:
                     flash("Error updating request status. Please try again later!")
             if('email' in request_json):

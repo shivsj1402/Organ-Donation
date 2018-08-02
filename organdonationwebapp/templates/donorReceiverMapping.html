@@ -10,14 +10,15 @@
     <title> Hospital Home</title>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <ul class="navbar-nav mr-auto">  
-                    <a class="navbar-brand" href="#home" >Organ Donation</a>
+                    <a class="navbar-brand" href="{{ url_for('hospitalHome', emailID = g.user)}}" >Organ Donation</a>
             </ul>
             <div>
-                <button class="btn btn-dark my-2 my-sm-0" onclick="location.href = '#login';" type="submit">Logout</button>
+                <a href ="{{ url_for('logout')}}"><button class="btn btn-dark my-2 my-sm-0" type="submit" > Logout</button></a>
             </div>
     </nav>
 </head>
-<body style="background-color:#fFFFFF">
+<body style="background-color:#fFFFFF; overflow: scroll;">
+    <style type="text/css">html,body{overflow-y: scroll; }</style>
 <div class="container" style="text-align: center">
         <h4>Welcome {{session.user}}</h4>
 
@@ -99,7 +100,7 @@
 </div>
 
 </body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-bottom">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-bottom" style="height: 2em">
         <footer style="color: white; text-align: center">
             <a class="navbar-brand" href="#">Copyright©2018</a>
         </footer>

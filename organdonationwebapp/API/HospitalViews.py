@@ -48,7 +48,7 @@ def hospitalRegistration(usertype = None):
                 flash("Registration error") 
         else:
             g.logger.error("Incorrect Password Value")
-            flash("Incorrect Password Value! \n Password should have 1 Upper case letter, 1 number, 1 special character and minimum 3 lower case letters") 
+            flash("Incorrect Password Value! \n Password should have 1 Upper case letter, 1 number, 1 special character and minimum 5 lower case letters") 
     return render_template('hospitalregistration.html')
 
 

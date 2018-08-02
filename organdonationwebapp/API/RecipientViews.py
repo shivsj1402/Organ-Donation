@@ -26,6 +26,7 @@ def before_request():
 
 @app.route('/receiverList', methods=['GET', 'POST'])
 def receiverList():
+    print("g.user",(g.user))
     if g.user:
         hospitalhome = hho.HospitalHome(g.user,g.logger)
         hospital_name = hospitalhome.getHospitalName()
@@ -47,9 +48,15 @@ def receiverHospitalRequestPage(recipientEmail=None):
     recipientEmail = recipient_profile[0][2] # Extracting recipient email from Recipient profile JSON
     recipient_organ_data = recipient_data.getRecipientOrgans()
     donor_organ_list = []
+    only_organ_list = []
     for organ in recipient_organ_data:
         donor_list = dpo.ShowRecommendedDonors(organ[0], g.logger)
         donor_organ_list.extend(donor_list.getrecommendedDonorList())
+    # for item in donor_organ_list:
+    #     only_organ_list.append(item[1])
+    # print("only_organ_list",(only_organ_list))
+    # checkDonor = cdo.CheckRecommendedDonor(recipientEmail, only_organ_list)
+    # request_status_data = checkDonor.getRequestsStatus()
     requestStatus = sro.ShowRecipientRequestStatus(recipientEmail)
     request_status_data = requestStatus.getRequestsStatus()
     approved_requests = request_status_data["approved"]
@@ -82,10 +89,10 @@ def receiverHospitalRequestPage(recipientEmail=None):
                 hospitalID = dho.DonorHospitalID(donorHospitalName)
                 donorHospital = hospitalID.getDonorHospitalID()
                 newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0])
-                
                 if (newRequest.createDonationRequest()):
                     print("Request data inserted successfully")
                     flash ("Request Sent Successfully!!")
+                    return render_template('receiverProfile.html', recipient_data=recipient_profile, organ_data=recipient_organ_data, donor_organ_data=donor_organ_list, pending_requests=pending_requests, approved_requests=approved_requests, rejected_requests=rejected_requests)
                 else:
                     print("Error creating request")
                     flash ("Error Sending Request!!")
@@ -109,7 +116,7 @@ def recipientShowApprovedRequest(requestID=None):
         donor = do.Donor(donorEmail)
         donor_userdata = donor.donorHospitalRequestPage()
     if(recipientEmail):
-        recipient = ro.Recipient(recipientEmail)
+        recipient = ro.Recipient(recipientEmail,g.logger)
         recipient_userdata = recipient.donorHospitalPageRecipientList()
     if(recipient_userdata and donor_userdata):
         if request.method == 'POST':
@@ -121,6 +128,7 @@ def recipientShowApprovedRequest(requestID=None):
                 send_email= updateRequestStatus.sendEmail()
                 if(request_status and send_email):
                     flash("Request Status updated successfully")
+                    return redirect(url_for('receiverHospitalRequestPage',recipientEmail=recipientEmail))
                 else:
                     flash("Error updating request status. Please try again later!")
             
