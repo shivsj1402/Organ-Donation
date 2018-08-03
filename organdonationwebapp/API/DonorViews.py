@@ -43,8 +43,6 @@ def donorProfilePage(hospitalEmail=None,donorEmail=None):
     request_status_data = requestStatus.getRequestsStatus()
     approved_requests = request_status_data["approved"]
     pending_requests = request_status_data["pending"]
-    # requestlist = rso.ShowDonorRequestStatus(hospitalEmail,donorEmail)
-    # pending_requests = requestlist.getPendingRequestList()
     if(donor_userdata and donor_organ_data):
         if request.method == 'POST':
             data= json.dumps(request.form.to_dict())
