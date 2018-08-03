@@ -4,7 +4,6 @@ class ViewCertificate(object):
     def __init__(self,email):
         self.hospitalEmail = email
             
-
     def getHospitalCerti(self):
         try:
             Result = ac.getHospitalCertificate(self.hospitalEmail)

@@ -4,13 +4,15 @@ class AdminModel(SqlClient):
     def __init__(self):
         super(AdminModel,self).__init__()
     
-
-    def adminLoginAuthentication(self,emailID,password):
+    def adminLoginAuthentication(self, emailID, password, logger):
+        self.logger = logger
         try:
+            self.logger.info("adminLoginAuthentication logger initialized")
             SqlClient.startDBConnection(self)
             user1 = self.cursor.callproc('adminlogin',[emailID  ,password,0])
             if(user1[2]):
                 SqlClient.closeDBConnection(self)
+                self.logger.info("adminLoginAuthentication DB connection ended");
                 return user1[2]
             else:
                 SqlClient.closeDBConnection(self)

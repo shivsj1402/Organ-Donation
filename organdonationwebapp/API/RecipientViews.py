@@ -26,12 +26,13 @@ def before_request():
 
 @app.route('/receiverList', methods=['GET', 'POST'])
 def receiverList():
-    print("g.user",(g.user))
     if g.user:
         hospitalhome = hho.HospitalHome(g.user,g.logger)
         hospital_name = hospitalhome.getHospitalName()
-        recipientlist = rlo.RecipientListDetails(hospital_name)
-        rec_list_details = recipientlist.getRecipientsList(hospital_name)
+        print("hospital_name",(hospital_name))
+        recipientlist = rlo.RecipientListDetails(hospital_name,g.logger)
+        rec_list_details = recipientlist.getRecipientsList(hospital_name,g.logger)
+        print("rec_list_details",(rec_list_details))
         if(rec_list_details):
             if request.method == 'POST':
                 recipientEmail = request.form['view']

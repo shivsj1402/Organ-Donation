@@ -16,7 +16,7 @@ class Admin(object):
             self.logger.info("admin logger initiliazed")
             if(ac.adminLoginAuthentication(self.emailID, self.password)):
                 url = ('/adminhome/'+ self.emailID)
-                self.logger.debug("Admin " + self.emailID + " logged in Successfully." )
+                self.logger.debug("Admin " + self.emailID + " logged in Successfully.")
                 return True, url
             else:
                 self.logger.error("Authentication Failed. Please register if not a registered User")
