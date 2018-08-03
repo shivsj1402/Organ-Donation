@@ -21,22 +21,13 @@ class ValidatePassword(abc.ABC):
     def validateSpecialCharacters(self):
         pass
 
-    # @abc.abstractmethod
-    # def validateLength(self):
-    #     pass
-
     @abc.abstractmethod
     def parsePasswordRules(self):
         pass
+
 
     def isValid(self):
         if(self.validateCapitalLetters() and self.validateSmallLetters() and self.validateDigits() and self.validateSpecialCharacters()):
             return True
         else:
             return False
-
-    # def isValid(self):
-    #     if(self.validateCapitalLetters() and self.validateSmallLetters() and self.validateDigits() and self.validateSpecialCharacters() and self.validateLength()):
-    #         return True
-    #     else:
-    #         return False

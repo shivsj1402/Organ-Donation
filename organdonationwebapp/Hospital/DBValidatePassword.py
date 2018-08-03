@@ -19,8 +19,8 @@ class DBValidatePassword(ValidatePassword):
         dbRuleDict = {}
         for item in dbRule:
             dbRuleDict[item[0]] = int(item[1])
-            print("dbRuleDict",(dbRuleDict))
         return dbRuleDict
+
 
     def validateCapitalLetters(self):
         count=0
@@ -37,6 +37,8 @@ class DBValidatePassword(ValidatePassword):
 
     def validateSmallLetters(self):
         count=0
+        if "small_letters" not in self.ruleDict:
+            return True
         for i in self.password:
             if(i.islower()):
                 count = count+1
@@ -48,6 +50,8 @@ class DBValidatePassword(ValidatePassword):
 
     def validateDigits(self):
         count=0
+        if "digits" not in self.ruleDict:
+            return True
         for i in self.password:
             if(i.isdigit()):
                 count = count+1
@@ -58,16 +62,11 @@ class DBValidatePassword(ValidatePassword):
 
 
     def validateSpecialCharacters(self):
+        if "special_characters" not in self.ruleDict:
+            return True
         SpecialCharacters = re.compile(REGEX_PATTERN)
         match = re.findall(SpecialCharacters, self.password)
         if(len(match) != self.ruleDict["special_characters"]):
             return False
         else:
             return True
-
-
-    # def validateLength(self):
-    #     if(len(self.password) <= self.ruleDict["max_length"]  and len(self.password) > self.ruleDict["min_length"]):
-    #         return True
-    #     else:
-    #         return False

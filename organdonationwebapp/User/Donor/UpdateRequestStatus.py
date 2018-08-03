@@ -41,6 +41,7 @@ class UpdateRequestStatus(object):
             self.logger.error(err)
             return False
 
+
     def sendEmail(self):
         try:
             if(self.request == "AcceptDonor"):

@@ -93,13 +93,12 @@ def donorHospitalRequestPage(requestID=None):
                     else:
                         flash("Insertion Error!")
             if('submit' in request_json):
-                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID,recipientEmail, g.logger)
+                updateRequestStatus = uro.UpdateRequestStatus(request_json['submit'], requestID,recipientEmail, g.logger)
                 request_status = updateRequestStatus.setRequestsStatus()
                 send_email= updateRequestStatus.sendEmail()
                 if(request_status and send_email):
-                    return redirect(url_for('hospitalHome', emailID = g.user))
                     flash("Request Status updated successfully")
-                    #return render_template('DonorReceiverRequest.html', recipientdata=recipient_userdata, donordata=donor_userdata, organ=organ, requestState=requestState)
+                    return redirect(url_for('hospitalHome', emailID = g.user))
                 else:
                     flash("Error updating request status. Please try again later!")
             if('email' in request_json):

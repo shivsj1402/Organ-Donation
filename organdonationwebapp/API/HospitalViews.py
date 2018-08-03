@@ -45,7 +45,7 @@ def hospitalRegistration(usertype = None):
                 return redirect(url_for('Login'))
             else:
                 g.logger.error("Error Inserting Data") 
-                flash("Registration error") 
+                flash("Registration error")
         else:
             g.logger.error("Incorrect Password Value")
             flash("Incorrect Password Value! \n Password should have 1 Upper case letter, 1 number, 1 special character and minimum 5 lower case letters") 

@@ -76,7 +76,7 @@ class fakeUpdateRequestStatus(object):
     def __init__(self, request, 
                  requestid, emailid, body, 
                  reqstatus, emailsent):
-        sel.requestid = requestid
+        self.requestid = requestid
         self.request = request
         self.emailid = emailid
         self.body = body

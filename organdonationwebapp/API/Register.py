@@ -1,4 +1,3 @@
-
 import organdonationwebapp.API.UserTypeFactory as factory
 
 class Register(object):
