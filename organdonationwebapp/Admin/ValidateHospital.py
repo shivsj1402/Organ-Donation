@@ -5,7 +5,6 @@ class ValidateHospital(object):
         self.hospitalEmail = hospitalJson['validate'] if 'validate' in hospitalJson else None
         self.logger = logger
             
-
     def updateValidateHospitalFlag(self):
         try:
             self.logger.info("updateValidateHospitalFlag logger initialized")

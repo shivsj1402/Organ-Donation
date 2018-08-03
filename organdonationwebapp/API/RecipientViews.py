@@ -25,7 +25,6 @@ def before_request():
 
 @app.route('/receiverList', methods=['GET', 'POST'])
 def receiverList():
-    print("g.user",(g.user))
     if g.user:
         hospitalhome = hho.HospitalHome(g.user,g.logger)
         hospital_name = hospitalhome.getHospitalName()
