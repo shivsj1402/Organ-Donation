@@ -13,8 +13,7 @@ class ShowRecipientProfile(object):
             else:
                 return None
         except Exception as err:
-            return False
-
+            return err
 
     def getRecipientOrgans(self):
         try:
@@ -24,4 +23,4 @@ class ShowRecipientProfile(object):
             else:
                 return None
         except Exception as err:
-            return False
+            return err
