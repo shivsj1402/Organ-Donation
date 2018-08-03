@@ -82,15 +82,19 @@ class RecipientModel(SqlClient):
             return None
 
 
-    def createRequest(self, donorEmail, recipientEmail, donatingOrgan, donorHospital):
+    def createRequest(self, donorEmail, recipientEmail, donatingOrgan, donorHospital, logger):
+        self.logger = logger
         try:
+            self.logger.info("createRequest logger initilaized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('createrequest',[donorEmail,recipientEmail,donatingOrgan,donorHospital,0])
             self.connection.commit()
             SqlClient.closeDBConnection(self)
+            self.logger.info("createRequest DB connection closed")
             return True
         except Exception as err:
             SqlClient.closeDBConnection(self)
+            self.logger.debug("createRequest DB connection closed")
             print(err)
             return False
 
