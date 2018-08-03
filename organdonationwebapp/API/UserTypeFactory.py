@@ -11,6 +11,7 @@ class UserTypeFactory(object):
 
     def createObject(self):
         try:
+            self.logger.info("createObject logger initialized")
             if(self.usertype == "Hospital"):
                 return ho.build_Hospital(ho.Hospital, self.json,self.logger, self.certificate)
             elif(self.usertype == "Donor or Receiver"):
@@ -20,5 +21,5 @@ class UserTypeFactory(object):
             else:
                 return None
         except Exception as err:
-            print(err)
-            return None
+            self.logger.error(err)
+            return err

@@ -22,8 +22,10 @@ class UserModel(SqlClient):
             return False
 
 
-    def organRequest(self, requestID):
+    def organRequest(self, requestID, logger):
+        self.logger= logger
         try:
+            self.logger.info("organRequest logger initialized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('organrequest',[requestID])
             res = self.cursor.stored_results()
@@ -31,18 +33,22 @@ class UserModel(SqlClient):
                 requestdata= result.fetchall()
                 if(requestdata):
                     SqlClient.closeDBConnection(self)
+                    self.logger.info("getOpenRequestData DBconn Closed")
                     return requestdata
                 else:
                     SqlClient.closeDBConnection(self)
+                    self.logger.info("getOpenRequestData DBconn Closed")
                     return None
         except Exception as err:
-            print(err)
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
             return None
 
 
-    def getReports(self,emailID,userType):
+    def getReports(self,emailID,userType,logger):
+        self.logger = logger
         try:
+            self.logger.info("getReports logger initialized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('getuserreports',[emailID, userType])
             res = self.cursor.stored_results()
@@ -50,24 +56,31 @@ class UserModel(SqlClient):
                 userreports= result.fetchall()
                 if(userreports):
                     SqlClient.closeDBConnection(self)
+                    self.logger.debug("getReports DBconn closed")
                     return userreports
                 else:
                     SqlClient.closeDBConnection(self)
+                    self.logger.debug("getReports DBconn closed")
                     return None
         except Exception as err:
             SqlClient.closeDBConnection(self)
-            print(err)
+            self.logger.debug("getReports DBconn closed")
+            self.logger.error(err)
             return False
 
 
-    def updateReport(self,emailID,userType,report):
+    def updateReport(self,emailID,userType,report,logger):
+        self.logger = logger
         try:
+            self.logger.info(" updateReport logger initialized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('updatereports',[emailID,userType,report])
             self.connection.commit()
             SqlClient.closeDBConnection(self)
+            self.logger.info("updateReport DBconn closed")
             return True
         except Exception as err:
-            print(err)
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
-            return False
+            self.logger.info(" updateReport logger initialized")
+            return err

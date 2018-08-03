@@ -14,7 +14,6 @@ import organdonationwebapp.User.Recipient.Recipient as ro
 import organdonationwebapp.User.Donor.UpdateRequestStatus as uro
 import organdonationwebapp.User.ViewUserReports as vur
 import organdonationwebapp.API.Logger as log
-import organdonationwebapp.User.UpdateMedicalReports as umr
 import json
 import binascii
 from io import BytesIO
@@ -30,8 +29,8 @@ def receiverList():
     if g.user:
         hospitalhome = hho.HospitalHome(g.user,g.logger)
         hospital_name = hospitalhome.getHospitalName()
-        recipientlist = rlo.RecipientListDetails(hospital_name)
-        rec_list_details = recipientlist.getRecipientsList(hospital_name)
+        recipientlist = rlo.RecipientListDetails(hospital_name,g.logger)
+        rec_list_details = recipientlist.getRecipientsList(hospital_name,g.logger)
         if(rec_list_details):
             if request.method == 'POST':
                 recipientEmail = request.form['view']
@@ -45,6 +44,7 @@ def receiverList():
 def receiverHospitalRequestPage(recipientEmail=None):
     recipient_data = rpo.ShowRecipientProfile(recipientEmail,g.logger)
     recipient_profile = recipient_data.getRecipientProfile()
+    print(recipient_profile)
     recipientEmail = recipient_profile[0][2] # Extracting recipient email from Recipient profile JSON
     recipient_organ_data = recipient_data.getRecipientOrgans()
     donor_organ_list = []
@@ -74,7 +74,7 @@ def receiverHospitalRequestPage(recipientEmail=None):
                     breport=data.read()
                     report =binascii.hexlify(breport)
                     userType= "r"
-                    recipientReport= umr.UpdateMedicalReports(recipientEmail,userType,report)
+                    recipientReport= rro.UpdateMedicalReports(recipientEmail,userType,report, g.logger)
                     recipient_report_status = recipientReport.updateReports()
                     if(recipient_report_status):
                         flash("Updated Successfully")
@@ -88,7 +88,7 @@ def receiverHospitalRequestPage(recipientEmail=None):
                 donorHospitalName = donor_values_split[2]
                 hospitalID = dho.DonorHospitalID(donorHospitalName)
                 donorHospital = hospitalID.getDonorHospitalID()
-                newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0])
+                newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0],g.logger)
                 if (newRequest.createDonationRequest()):
                     print("Request data inserted successfully")
                     flash ("Request Sent Successfully!!")
@@ -106,14 +106,14 @@ def receiverHospitalRequestPage(recipientEmail=None):
 def recipientShowApprovedRequest(requestID=None):
     donor_userdata = None
     recipient_userdata = None
-    requestdata =rdo.OpenRequestDetails(requestID)
+    requestdata =rdo.OpenRequestDetails(requestID,g.logger)
     request_userdata = requestdata.getOpenRequestData()
     donorEmail=request_userdata[0][0]
     recipientEmail=request_userdata[0][1]
     organ=request_userdata[0][2]
     requestState=request_userdata[0][3]
     if(donorEmail):
-        donor = do.Donor(donorEmail)
+        donor = do.Donor(donorEmail,g.logger)
         donor_userdata = donor.donorHospitalRequestPage()
     if(recipientEmail):
         recipient = ro.Recipient(recipientEmail,g.logger)
@@ -123,7 +123,7 @@ def recipientShowApprovedRequest(requestID=None):
             request_data= json.dumps(request.form.to_dict())
             request_json = json.loads(request_data)
             if('submit' in request_json):
-                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID, donorEmail)
+                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID, donorEmail,g.logger)
                 request_status = updateRequestStatus.setRequestsStatus()
                 send_email= updateRequestStatus.sendEmail()
                 if(request_status and send_email):
@@ -135,7 +135,7 @@ def recipientShowApprovedRequest(requestID=None):
             if('dreport' in request_json):
                 Email = request_json['dreport'] if 'dreport' in request_json else None
                 usertype = 'd'
-                reports =vur.ViewUserReports(Email,usertype)
+                reports =vur.ViewUserReports(Email,usertype,g.logger)
                 report = reports.viewReports()
                 if(report):
                     return send_file(BytesIO(report[0][0]), attachment_filename='reports.pdf')
@@ -143,7 +143,7 @@ def recipientShowApprovedRequest(requestID=None):
             if('rreport' in request_json):
                 Email = request_json['rreport'] if 'rreport' in request_json else None
                 usertype = 'r'
-                reports =vur.ViewUserReports(Email,usertype)
+                reports =vur.ViewUserReports(Email,usertype,g.logger)
                 report = reports.viewReports()
                 if(report):
                     return send_file(BytesIO(report[0][0]), attachment_filename='reports.pdf')

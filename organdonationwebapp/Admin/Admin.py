@@ -13,6 +13,7 @@ class Admin(object):
 
     def login(self):
         try:
+            self.logger.info("admin logger initiliazed")
             if(ac.adminLoginAuthentication(self.emailID, self.password)):
                 url = ('/adminhome/'+ self.emailID)
                 self.logger.debug("Admin " + self.emailID + " logged in Successfully." )
@@ -21,8 +22,9 @@ class Admin(object):
                 self.logger.error("Authentication Failed. Please register if not a registered User")
                 return False, "Authentication Failed. Please register if not a registered User"
         except Exception as err:
-            print(err)
-            return False 
+            self.logger.error(err)
+            return err
+ 
     
     def setLogger(self,logger):
         self.logger = logger

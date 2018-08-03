@@ -6,8 +6,14 @@ class ShowRecommendedDonors(object):
         self.logger = logger
 
     def getrecommendedDonorList(self):
-        matching_donors = duc.recommendedDonorList(self.donororgan, self.logger)
-        if(matching_donors):
-            return matching_donors
-        else:
-            return None
+        try:
+            self.logger.info("getrecommendedDonorList logger initialized")
+            matching_donors = duc.recommendedDonorList(self.donororgan, self.logger)
+            if(matching_donors):
+                return matching_donors
+            else:
+                self.logger.debug("getrecommendedDonorList returned None")
+                return None
+        except Exception as err:
+            self.logger.error(err)
+            return err
