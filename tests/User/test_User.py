@@ -39,21 +39,27 @@ def test_register_failed(mock_logger, mock_user_reg):
     mock_user_reg.return_value = False
     assert aUser.register() == (False, "Registration Failed.")
 
+
 @mock.patch.object(user.uc, 'userRegistration')
-def test_register_exception(mock_user_reg):
+@mock.patch.object(logger, 'MyLogger')
+def test_register_exception(mock_logger, mock_user_reg):
     aUser = user.User()
     aUser.initialize(user_json)
+    aUser.setLogger(mock_logger)
     mock_user_reg.side_effect = Exception("register exception")
     aUser.register()
+
 
 @mock.patch.object(logger, 'MyLogger')
 def test_setlogger(mock_logger):
     aUser = user.User()
     aUser.setLogger(mock_logger)
 
+
 def test_login():
     aUser = user.User()
     assert aUser.login() == NotImplementedError
+
 
 @mock.patch.object(logger, 'MyLogger')
 def test_build_User(mock_logger):

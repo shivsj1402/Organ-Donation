@@ -16,6 +16,7 @@ def test_getOpenRequestData_nodata(mock_user_organreq):
     openReq = ored.OpenRequestDetails("request1",logging.getLogger())
     assert openReq.getOpenRequestData() == None
 
+
 @mock.patch.object(ored.uc, 'organRequest')
 def test_getOpenRequestData_exception(mock_user_organreq):
     mock_user_organreq.side_effect = Exception("createRequest exception")

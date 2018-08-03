@@ -25,19 +25,19 @@ request_data = {
 @mock.patch.object(donorstatus.duc, 'getOpenRequestsStatus')
 def test_getRequestsStatus(mock_donorstatus):
     mock_donorstatus.return_value = request_status_data
-    donorobj = donorstatus.ShowDonorRequestStatus("user1@test.com", "user2@test.com")
+    donorobj = donorstatus.ShowDonorRequestStatus("user1@test.com", "user2@test.com", logging.getLogger())
     assert donorobj.getRequestsStatus() == request_data
 
 
 @mock.patch.object(donorstatus.duc, 'getOpenRequestsStatus')
 def test_getRequestsStatus_nodata(mock_donorstatus):
     mock_donorstatus.return_value = []
-    donorobj = donorstatus.ShowDonorRequestStatus("user1@test.com", "user2@test.com")
+    donorobj = donorstatus.ShowDonorRequestStatus("user1@test.com", "user2@test.com",logging.getLogger())
     assert donorobj.getRequestsStatus() == {"approved": [], "pending": []}
 
 
 @mock.patch.object(donorstatus.duc, 'getOpenRequestsStatus')
 def test_getRequestsStatus_exception(mock_donorstatus):
     mock_donorstatus.side_effect = Exception("db error")
-    donorobj = donorstatus.ShowDonorRequestStatus("user1@test.com", "user2@test.com")
+    donorobj = donorstatus.ShowDonorRequestStatus("user1@test.com", "user2@test.com",logging.getLogger())
     assert str(donorobj.getRequestsStatus()) == "db error"
