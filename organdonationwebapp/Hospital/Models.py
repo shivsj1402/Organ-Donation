@@ -152,7 +152,7 @@ class HospitalModel(SqlClient):
         self.logger = logger
         try:
             SqlClient.startDBConnection(self)
-            self.logger.info("getHospitalRequestList called for emailID")
+            self.logger.info("getHospitalRequestList called for emailID" + emailID + "!!")
             self.cursor.callproc('requestlist', [emailID])
             res = self.cursor.stored_results()
             for result in res:
