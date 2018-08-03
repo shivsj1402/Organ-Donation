@@ -9,7 +9,7 @@ class DeleteHospital(object):
         try:
             self.logger.info("deleteHospital logger initialized")
             if(ac.deleteHospital(self.hospitalEmail, self.logger)):
-                self.logger.info("Hospital " + self.emailID + " deleted Successfully." )
+                self.logger.info("Hospital " + self.hospitalEmail + " deleted Successfully." )
                 return True
             else:
                 self.logger.error("error deleting Hospital")

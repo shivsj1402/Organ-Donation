@@ -15,7 +15,7 @@ def test_deleteHospital_fail(mock_deleteHosp):
     assert adminobj.deleteHospital()  == False
 
 @mock.patch.object(admindelete.ac, 'deleteHospital')
-def test_deleteHospital_execption(mock_deleteHosp):
+def test_deleteHospital_exeption(mock_deleteHosp):
     mock_deleteHosp.side_effect = Exception("createRequest exception")
     adminobj = admindelete.DeleteHospital("",logging.getLogger())
     adminobj.deleteHospital()

@@ -51,11 +51,6 @@ def receiverHospitalRequestPage(recipientEmail=None):
     for organ in recipient_organ_data:
         donor_list = dpo.ShowRecommendedDonors(organ[0], g.logger)
         donor_organ_list.extend(donor_list.getrecommendedDonorList())
-    # for item in donor_organ_list:
-    #     only_organ_list.append(item[1])
-    # print("only_organ_list",(only_organ_list))
-    # checkDonor = cdo.CheckRecommendedDonor(recipientEmail, only_organ_list)
-    # request_status_data = checkDonor.getRequestsStatus()
     requestStatus = sro.ShowRecipientRequestStatus(recipientEmail)
     request_status_data = requestStatus.getRequestsStatus()
     approved_requests = request_status_data["approved"]
