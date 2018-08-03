@@ -29,10 +29,12 @@ class AdminModel(SqlClient):
             self.cursor.callproc('validatehospital',[hospitalEmail])
             self.connection.commit()
             SqlClient.closeDBConnection(self)
+            self.logger.debug("validateHospital DBconn closed")
             return True
         except Exception as err:
             self.logger.error(err)
             SqlClient.closeDBConnection(self)
+            self.logger.debug("validateHospital DBconn closed")
             return False
 
 
@@ -44,14 +46,17 @@ class AdminModel(SqlClient):
             self.cursor.callproc('deletehospital',[hospitalEmail])
             self.connection.commit()
             SqlClient.closeDBConnection(self)
+            self.logger.debug(" deleteHospital DBconn closed")
             return True
         except Exception as err:
             SqlClient.closeDBConnection(self)
             self.logger.error(err)
-            return False
+            return err
 
-    def getHospitalCertificate(self, hospitalEmail):
+    def getHospitalCertificate(self, hospitalEmail, logger):
+        self.logger = logger
         try:
+            self.logger.info("getHospitalCertificate logger initialized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('gethospitalcertificate',[hospitalEmail])
             res = self.cursor.stored_results()
@@ -59,11 +64,14 @@ class AdminModel(SqlClient):
                 hospitalcertificate= result.fetchall()
                 if(hospitalcertificate):
                     SqlClient.closeDBConnection(self)
+                    self.logger.debug("getHospitalCertificate DBconn closed")
                     return hospitalcertificate
                 else:
                     SqlClient.closeDBConnection(self)
+                    self.logger.debug("getHospitalCertificate DBconn closed")
                     return None
         except Exception as err:
-            print(err)
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
+            self.logger.debug("getHospitalCertificate DBconn closed")
             return False

@@ -8,10 +8,12 @@ class ValidateHospital(object):
 
     def updateValidateHospitalFlag(self):
         try:
+            self.logger.info("updateValidateHospitalFlag logger initialized")
             if(ac.validateHospital(self.hospitalEmail,self.logger)):
                 return True
             else:
+                self.logger.info("updateValidateHospitalFlag returned False")
                 return False
         except Exception as err:
             self.logger.error(err)
-            return False
+            return err

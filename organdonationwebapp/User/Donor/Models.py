@@ -68,12 +68,15 @@ class DonorModel(SqlClient):
                 organ_data= result.fetchall()
                 if(organ_data):
                     SqlClient.closeDBConnection(self)
+                    self.logger.debug("recommendedDonorList DBconn closed")
                     return organ_data
                 else:
                     SqlClient.closeDBConnection(self)
+                    self.logger.debug("recommendedDonorList DBconn closed")
                     return None
         except Exception as err:
             SqlClient.closeDBConnection(self)
+            self.logger.debug("recommendedDonorList DBconn closed")
             self.logger.error(err)
             return None
 
@@ -97,21 +100,27 @@ class DonorModel(SqlClient):
             return err
 
 
-    def setRequestsStatus(self, requestID, requeststate):
+    def setRequestsStatus(self, requestID, requeststate, logger):
+        self.logger = logger
         try:
+            self.logger.info("setRequestsStatus logger initialized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('updaterequeststate',[requestID,requeststate])
             self.connection.commit()
             SqlClient.closeDBConnection(self)
+            self.logger.debug("setRequestsStatus DBconn closed")
             return True
         except Exception as err:
-            print(err)
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
+            self.logger.debug("setRequestsStatus DBconn closed")
             return False
 
 
-    def getOpenRequestsStatus(self, hospitalEmail, donorEmail):
+    def getOpenRequestsStatus(self, hospitalEmail, donorEmail, logger):
+        self.logger = logger
         try:
+            self.logger.info("getOpenRequestsStatus logger initialized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('donorOpenRequestStatus',[hospitalEmail,donorEmail])
             res = self.cursor.stored_results()
@@ -119,10 +128,14 @@ class DonorModel(SqlClient):
                 requeststatusdata= result.fetchall()
                 if(requeststatusdata):
                     SqlClient.closeDBConnection(self)
+                    self.logger.debug("getOpenRequestsStatus DBconn closed")
                     return requeststatusdata
                 else:
                     SqlClient.closeDBConnection(self)
+                    self.logger.debug("getOpenRequestsStatus DBconn closed")
                     return None
         except Exception as err:
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
+            self.logger.debug("getOpenRequestsStatus DBconn closed")
             return None
