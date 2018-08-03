@@ -20,8 +20,8 @@ def donorList():
         hospitalEmail = g.user
         hospitalhome = hho.HospitalHome(hospitalEmail,g.logger)
         hospital_name = hospitalhome.getHospitalName()
-        donorlist = dlo.DonorListDetails(hospital_name)
-        don_list_details = donorlist.getDonorsList(hospital_name)
+        donorlist = dlo.DonorListDetails(hospital_name,g.logger)
+        don_list_details = donorlist.getDonorsList(hospital_name,g.logger)
         if(don_list_details):
             if request.method == 'POST':
                 data= json.dumps(request.form.to_dict())
@@ -36,7 +36,7 @@ def donorList():
 
 @app.route('/donorprofile/<hospitalEmail>/<donorEmail>', methods=['GET','POST'])
 def donorProfilePage(hospitalEmail=None,donorEmail=None):
-    donorprofile = dop.ShowDonorProfile(donorEmail)
+    donorprofile = dop.ShowDonorProfile(donorEmail,g.logger)
     donor_userdata = donorprofile.getDonorProfile()
     donor_organ_data = donorprofile.getDonorOrgans()
     requestStatus = rso.ShowDonorRequestStatus(hospitalEmail,donorEmail)

@@ -55,14 +55,14 @@ def registerUser(usertype = None):
 def donorHospitalRequestPage(requestID=None):
     donor_userdata = None
     recipient_userdata = None
-    requestdata =rdo.OpenRequestDetails(requestID)
+    requestdata =rdo.OpenRequestDetails(requestID,g.logger)
     request_userdata = requestdata.getOpenRequestData()
     donorEmail=request_userdata[0][0]
     recipientEmail=request_userdata[0][1]
     organ=request_userdata[0][2]
     requestState=request_userdata[0][3]
     if(donorEmail):
-        donor = do.Donor(donorEmail)
+        donor = do.Donor(donorEmail,g.logger)
         donor_userdata = donor.donorHospitalRequestPage()
     if(recipientEmail):
         recipient = ro.Recipient(recipientEmail, g.logger)
