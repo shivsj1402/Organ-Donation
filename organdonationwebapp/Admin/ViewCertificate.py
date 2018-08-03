@@ -5,7 +5,6 @@ class ViewCertificate(object):
         self.hospitalEmail = email
         self.logger = logger
             
-
     def getHospitalCerti(self):
         try:
             self.logger.info("getHospitalCerti logger initialized")
