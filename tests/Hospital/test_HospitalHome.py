@@ -21,4 +21,4 @@ def test_getHospitalName_nodata(mock_hospital_home):
 def test_getHospitalName_exception(mock_hospital_home):
     hosHome = hho.HospitalHome("",logging.getLogger())
     mock_hospital_home.side_effect = Exception("Hospital name exception")
-    hosHome.getHospitalName()
+    assert str(hosHome.getHospitalName()) == "Hospital name exception"

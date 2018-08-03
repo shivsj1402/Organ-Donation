@@ -7,8 +7,10 @@ class HospitalRecipientList(object):
 
     def getRecipientList(self):
         try:
+            self.logger.info("getRecipientList logger initilized")
             recipient_list = hc.getHospitalRecipientList(self.hospitalName, self.logger)
             if(recipient_list):
                 return recipient_list
         except Exception as err:
+            self.logger.error("getRecipientList",err)
             return err

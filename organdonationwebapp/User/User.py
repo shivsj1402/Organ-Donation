@@ -29,6 +29,7 @@ class User(object):
                 return False, "Registration Failed."
         except Exception as err:
             print(err)
+            return err
 
 
     def setLogger(self,logger):

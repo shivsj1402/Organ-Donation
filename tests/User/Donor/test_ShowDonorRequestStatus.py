@@ -1,24 +1,39 @@
-# import mock
-# import organdonationwebapp.User.Donor.ShowDonorRequestStatus as donorstatus
+import mock
+import logging
+import organdonationwebapp.User.Donor.ShowDonorRequestStatus as donorstatus
 
-# @mock.patch.object(donor.duc, 'donorHospitalShowDonorProfile')
-# def test_donorHospitalRequestPage_pass(mock_donormail):
-#     mock_donormail.return_value = [("pratik","Kapoor","pratik@gmail.com"),("shivkumar","jaiswal","shivsj1402@gmail.com")]
-#     donorobj = donor.Donor("abc@gmail.com")
-#     assert donorobj.donorHospitalRequestPage() == [("pratik","Kapoor","pratik@gmail.com"),("shivkumar","jaiswal","shivsj1402@gmail.com")]
+request_status_data = [
+    ("aitem", "aitem", "aitem", "aitem", "aitem", 1),
+    ("aitem", "aitem", "aitem", "aitem", "aitem", 1),
+    ("pitem", "pitem", "pitem", "pitem", "pitem", 0),
+    ("pitem", "pitem", "pitem", "pitem", "pitem", 0),
+    ("noitem", "noitem", "noitem", "noitem", "noitem", ""),
+    ("noitem", "noitem", "noitem", "noitem", "noitem", "")
+]
 
-# @mock.patch.object(donor.duc, 'donorHospitalShowDonorProfile')
-# def test_donorHospitalRequestPage_fail(mock_donormail):
-#     mock_donormail.return_value = None
-#     donorobj = donor.Donor("abc@gmail.com")
-#     assert donorobj.donorHospitalRequestPage()  == None
+request_data = {
+    "approved": [("aitem", "aitem", "aitem", "aitem", "aitem", 1),
+                 ("aitem", "aitem", "aitem", "aitem", "aitem", 1)],
+    "pending": [("pitem", "pitem", "pitem", "pitem", "pitem", 0),
+                ("pitem", "pitem", "pitem", "pitem", "pitem", 0),
+                ("noitem", "noitem", "noitem", "noitem", "noitem", ""),
+                ("noitem", "noitem", "noitem", "noitem", "noitem", "")]
+}
+    
+@mock.patch.object(donorstatus.duc, 'getOpenRequestsStatus')
+def test_getRequestsStatus(mock_donorstatus):
+    mock_donorstatus.return_value = request_status_data
+    donorobj = donorstatus.ShowDonorRequestStatus("user1@test.com", "user2@test.com")
+    assert donorobj.getRequestsStatus() == request_data
 
-# @mock.patch.object(donor.duc, 'donorHospitalShowDonorProfile')
-# def test_donorHospitalRequestPage_execption(mock_donormail):
-#     mock_donormail.side_effect = Exception("createRequest exception")
-#     donorobj = donor.Donor("")
-#     donorobj.donorHospitalRequestPage()
+@mock.patch.object(donorstatus.duc, 'getOpenRequestsStatus')
+def test_getRequestsStatus_nodata(mock_donorstatus):
+    mock_donorstatus.return_value = []
+    donorobj = donorstatus.ShowDonorRequestStatus("user1@test.com", "user2@test.com")
+    assert donorobj.getRequestsStatus() == {"approved": [], "pending": []}
 
-
-
-#     # {'approved': [], 'pending': [(...)]}
+@mock.patch.object(donorstatus.duc, 'getOpenRequestsStatus')
+def test_getRequestsStatus_exception(mock_donorstatus):
+    mock_donorstatus.side_effect = Exception("db error")
+    donorobj = donorstatus.ShowDonorRequestStatus("user1@test.com", "user2@test.com")
+    assert str(donorobj.getRequestsStatus()) == "db error"
