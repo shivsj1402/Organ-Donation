@@ -6,12 +6,13 @@ class HospitalList(object):
 
     def getGlobalHospitalList(self):
         try:
-            self.logger.info("getGlobalHospitalList logger initialized")
+            self.logger.info("getGlobalHospitalList logger initilized")
             hospital_list = hc.getHospitalList(self.logger)
             if(hospital_list):
                 return hospital_list
             else:
+                self.logger.debug("getGlobalHospitalList returned None values")
                 return None
         except Exception as err:
-            self.logger.error(err)
-            return err        
+            self.logger.error("getGlobalHospitalList",err)
+            return err
