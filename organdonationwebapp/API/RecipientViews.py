@@ -29,8 +29,8 @@ def receiverList():
     if g.user:
         hospitalhome = hho.HospitalHome(g.user,g.logger)
         hospital_name = hospitalhome.getHospitalName()
-        recipientlist = rlo.RecipientListDetails(hospital_name)
-        rec_list_details = recipientlist.getRecipientsList(hospital_name)
+        recipientlist = rlo.RecipientListDetails(hospital_name,g.logger)
+        rec_list_details = recipientlist.getRecipientsList(hospital_name,g.logger)
         if(rec_list_details):
             if request.method == 'POST':
                 recipientEmail = request.form['view']
@@ -44,6 +44,7 @@ def receiverList():
 def receiverHospitalRequestPage(recipientEmail=None):
     recipient_data = rpo.ShowRecipientProfile(recipientEmail,g.logger)
     recipient_profile = recipient_data.getRecipientProfile()
+    print(recipient_profile)
     recipientEmail = recipient_profile[0][2] # Extracting recipient email from Recipient profile JSON
     recipient_organ_data = recipient_data.getRecipientOrgans()
     donor_organ_list = []
@@ -87,7 +88,7 @@ def receiverHospitalRequestPage(recipientEmail=None):
                 donorHospitalName = donor_values_split[2]
                 hospitalID = dho.DonorHospitalID(donorHospitalName)
                 donorHospital = hospitalID.getDonorHospitalID()
-                newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0])
+                newRequest = dro.NewDonationRequest(donorEmail, recipientEmail, donatingOrgan, donorHospital[0],g.logger)
                 if (newRequest.createDonationRequest()):
                     print("Request data inserted successfully")
                     flash ("Request Sent Successfully!!")
