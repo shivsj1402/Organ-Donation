@@ -29,14 +29,14 @@ def adminHomepage(username=None, hospitalEmail=None):
                     return render_template('adminhome.html', username=username, list=hospital_list)
             if('delete' in hospital_json):
                 hospitalID = hospital_json['delete']
-                deleteHospital = dho.DeleteHospital(hospitalID, g.logger)
+                deleteHospital = dho.DeleteHospital(hospitalID,g.logger)
                 delete_hospital_status = deleteHospital.deleteHospital()
                 if(delete_hospital_status):
                     flash("deleted successfully")
                     return render_template('adminhome.html', list=hospital_list,username=username)
             if('certificate' in hospital_json):
                 hospitalEmail = hospital_json['certificate'] if 'certificate' in hospital_json else None
-                certificate = vc.ViewCertificate(hospitalEmail)
+                certificate = vc.ViewCertificate(hospitalEmail,g.logger)
                 hospitalcertificate = certificate.getHospitalCerti()
                 if(hospitalcertificate):
                     return send_file(BytesIO(hospitalcertificate[0][0]), attachment_filename='certificate.pdf')

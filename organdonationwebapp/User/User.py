@@ -22,14 +22,14 @@ class User(object):
         try:
             if(uc.userRegistration(self)):
                 url = url_for('Login')
-                self.logger.debug("User " + self.first_name + " registered Successfully." )
+                self.logger.debug("User " + self.email + " registered Successfully.")
                 return True, url
             else:
-                self.logger.error("Registration failed." )
+                self.logger.error("Registration failed for user" + self.email + "!!")
                 return False, "Registration Failed."
         except Exception as err:
+            self.logger.error(err)
             return err
-
 
 
     def setLogger(self,logger):

@@ -1,39 +1,6 @@
 import mock
 import organdonationwebapp.API.AdminViews as adminviews
-
-class fakeViewCertificate(object):
-    def __init__(self, emailid, certificate):
-        self.emailid = emailid
-        self.certificate = certificate
-    def getHospitalCerti(self):
-        return self.certificate
-
-class fakeDeleteHospital(object):
-    def __init__(self, emailid, isdeleted):
-        self.emailid = emailid
-        self.isdeleted = isdeleted
-    def deleteHospital(self):
-        return self.isdeleted
-
-class fakeValidateHospital(object):
-    def __init__(self, body,logger, isvalidated):
-        self.body = body
-        self.logger = logger
-        self.isvalidated = isvalidated
-    def updateValidateHospitalFlag(self):
-        return self.isvalidated
-
-class fakeHospitalList(object):
-    def __init__(self, body):
-        self.body = body
-    def getGlobalHospitalList(self):
-        return self.body
-
-class mock_request_form(object):
-    def __init__(self, body):
-        self.body = body
-    def to_dict(self):
-        return self.body
+from test_helpers import fakeViewCertificate, fakeHospitalList, fakeDeleteHospital, fakeValidateHospital, mock_request_form
 
 @mock.patch.object(adminviews.hlo, 'HospitalList')
 @mock.patch.object(adminviews, 'render_template')

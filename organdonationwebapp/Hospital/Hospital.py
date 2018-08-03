@@ -24,11 +24,12 @@ class Hospital(object):
                 self.logger.debug("Hospital " + self.emailID + " registered Successfully." )
                 return True, url
             else:
-                self.logger.error("Registration failed." )
+                self.logger.error("Registration failed for hospital" + self.emailID + "!!")
                 return False, "Registration Failed."
         except Exception as err:
             self.logger.error(err)
-            return False
+            return err
+
 
     def setLogger(self,logger):
         self.logger = logger

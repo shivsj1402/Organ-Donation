@@ -39,7 +39,7 @@ def donorProfilePage(hospitalEmail=None,donorEmail=None):
     donorprofile = dop.ShowDonorProfile(donorEmail,g.logger)
     donor_userdata = donorprofile.getDonorProfile()
     donor_organ_data = donorprofile.getDonorOrgans()
-    requestStatus = rso.ShowDonorRequestStatus(hospitalEmail,donorEmail)
+    requestStatus = rso.ShowDonorRequestStatus(hospitalEmail,donorEmail, g.logger)
     request_status_data = requestStatus.getRequestsStatus()
     approved_requests = request_status_data["approved"]
     pending_requests = request_status_data["pending"]

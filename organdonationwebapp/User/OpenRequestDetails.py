@@ -12,6 +12,7 @@ class OpenRequestDetails(object):
             if(request_userdata):
                 return request_userdata
             else:
+                self.logger.debug("getOpenRequestData returned None")
                 return None
         except Exception as err:
             self.logger.error(err)

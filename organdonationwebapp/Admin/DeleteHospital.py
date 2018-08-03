@@ -7,14 +7,13 @@ class DeleteHospital(object):
             
     def deleteHospital(self):
         try:
-            self.logger.info("deleteHospital logger initiliazed")
+            self.logger.info("deleteHospital logger initialized")
             if(ac.deleteHospital(self.hospitalEmail, self.logger)):
                 self.logger.info("Hospital " + self.emailID + " deleted Successfully." )
                 return True
             else:
-                self.logger.Error("Issue in deleting hospital")
-                print("Error deleting hospital",(self.hospitalEmail))
+                self.logger.error("error deleting Hospital")
                 return False
         except Exception as err:
             self.logger.error(err)
-            return False
+            return err

@@ -27,22 +27,29 @@ class RecipientModel(SqlClient):
             return None
 
 
-    def getRecepientList(self, hname):
+    def getRecepientList(self, hname, logger):
+        self.logger = logger
         try:
+            self.logger.info("getRecepientList logger initialized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('gethospitalreceiverlist',[hname])
             res = self.cursor.stored_results()
             for result in res:
                 recipientlist= result.fetchall()
             SqlClient.closeDBConnection(self)
+            self.logger.debug("getRecepientList DBconn closed")
             return recipientlist
         except Exception as err:
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
+            self.logger.debug("getRecepientList DBconn closed")
             return None
 
 
-    def receiverHospitalShowProfile(self, recipientEmail):
+    def receiverHospitalShowProfile(self, recipientEmail,logger):
+        self.logger = logger
         try:
+            self.logger.info("receiverHospitalShowProfile logger initialized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('receiverhospitalshowprofile',[recipientEmail])
             res = self.cursor.stored_results()
@@ -50,13 +57,17 @@ class RecipientModel(SqlClient):
                 userdata= result.fetchall()
                 if(userdata):
                     SqlClient.closeDBConnection(self)
+                    self.logger.debug("receiverHospitalShowProfile DBconn closed")
                     return userdata
                 else:
                     SqlClient.closeDBConnection(self)
+                    self.logger.debug("receiverHospitalShowProfile DBconn closed")
                     return None
         except Exception as err:
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
-            return None
+            self.logger.debug("receiverHospitalShowProfile DBconn closed")
+            return err
 
 
     def receiverHospitalShowOrgan(self, recipientEmail, logger):

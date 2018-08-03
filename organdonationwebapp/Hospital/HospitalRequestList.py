@@ -6,6 +6,11 @@ class HospitalRequestList(object):
         self.logger = logger
 
     def getPendingRequestList(self):
-        request_list = hc.getHospitalRequestList(self.hospitalEmail, self.logger)
-        if(request_list):
-            return request_list
+        try:
+            self.logger.info("getPendingRequestList logger initilized")
+            request_list = hc.getHospitalRequestList(self.hospitalEmail, self.logger)
+            if(request_list):
+                return request_list
+        except Exception as err:
+            self.logger.error("getPendingRequestList",err)
+            return err

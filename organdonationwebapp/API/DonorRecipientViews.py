@@ -74,7 +74,7 @@ def donorHospitalRequestPage(requestID=None):
             if('report' in request_json):
                 Email = request_json['report'] if 'report' in request_json else None
                 usertype = 'r'
-                reports =vur.ViewUserReports(Email,usertype)
+                reports =vur.ViewUserReports(Email,usertype,g.logger)
                 report = reports.viewReports()
                 if(report):
                     return send_file(BytesIO(report[0][0]), attachment_filename='reports.pdf')
@@ -86,14 +86,14 @@ def donorHospitalRequestPage(requestID=None):
                     breport=data.read()
                     report =binascii.hexlify(breport)
                     userType= "d"
-                    donorReport= umr.UpdateMedicalReports(donorEmail, report, userType)
+                    donorReport= umr.UpdateMedicalReports(donorEmail,userType, report,g.logger)
                     donor_report_status = donorReport.updateReports()
                     if(donor_report_status):
                         flash("Updated Successfully")
                     else:
                         flash("Insertion Error!")
             if('submit' in request_json):
-                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID,recipientEmail)
+                updateRequestStatus = uro.UpdateRequestStatus(request.form['submit'], requestID,recipientEmail, g.logger)
                 request_status = updateRequestStatus.setRequestsStatus()
                 send_email= updateRequestStatus.sendEmail()
                 if(request_status and send_email):
