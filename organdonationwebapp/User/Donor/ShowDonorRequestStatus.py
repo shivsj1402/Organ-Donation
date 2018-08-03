@@ -19,4 +19,4 @@ class ShowDonorRequestStatus(object):
                         request_data["pending"].append(item)
             return request_data
         except Exception as err:
-            return None
+            return err

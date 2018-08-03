@@ -14,7 +14,8 @@ def test_getDonorHospitalID_nodata(mock_hospital_ID):
     assert hosID.getDonorHospitalID() == None
 
 
-# @mock.patch.object(odh.hc, 'getHospitalID')
-# def test_getDonorHospitalID_except():
-#     mock_hospital_ID.side_effect = Exception("hospital ID exception")
-#     hosID.getDonorHospitalID()
+@mock.patch.object(odh.hc, 'getHospitalID')
+def test_getDonorHospitalID_exception(mock_hospital_ID):
+    mock_hospital_ID.side_effect = Exception("hospital ID exception")
+    hosID = odh.DonorHospitalID("")
+    hosID.getDonorHospitalID()
