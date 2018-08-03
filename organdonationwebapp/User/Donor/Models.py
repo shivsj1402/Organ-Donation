@@ -5,27 +5,35 @@ class DonorModel(SqlClient):
         super(DonorModel,self).__init__()
 
 
-    def donorHospitalShowDonorProfile(self, donorEmail):
+    def donorHospitalShowDonorProfile(self, donorEmail, logger):
+        self.logger = logger
         try:
+            self.logger.info("donorHospitalShowDonorProfile logger initialized")
             SqlClient.startDBConnection(self)
-            print("donorHospitalShowDonorProfile")
             self.cursor.callproc('donorhospitalshowdonorprofile',[donorEmail])
             res = self.cursor.stored_results()
             for result in res:
                 userdata= result.fetchall()
                 if(userdata):
                     SqlClient.closeDBConnection(self)
+                    self.logger.info("donorHospitalShowDonorProfile DBconn closed")
                     return userdata
                 else:
+                    self.logger.debug("donorHospitalShowDonorProfile returned None")
                     SqlClient.closeDBConnection(self)
+                    self.logger.info("donorHospitalShowDonorProfile DBconn closed")
                     return None
         except Exception as err:
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
-            return None
+            self.logger.info("donorHospitalShowDonorProfile DBconn closed")
+            return err
 
 
-    def showDonorOrgan(self, donorEmail):
+    def showDonorOrgan(self, donorEmail, logger):
+        self.logger = logger
         try:
+            self.logger.info("showDonorOrgan logger initialized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('donorshoworgan',[donorEmail])
             res = self.cursor.stored_results()
@@ -35,13 +43,18 @@ class DonorModel(SqlClient):
                     organ = row[0]
                 if(userdata_organ):
                     SqlClient.closeDBConnection(self)
+                    self.logger.info("showDonorOrgan DBconn closed")
                     return userdata_organ
                 else:
+                    self.logger.debug("showDonorOrgan returned None")
                     SqlClient.closeDBConnection(self)
+                    self.logger.info("showDonorOrgan DBconn closed")
                     return None
         except Exception as err:
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
-            return None
+            self.logger.info("donorHospitalShowDonorProfile DBconn closed")
+            return err
 
 
     def recommendedDonorList(self, organ, logger):
@@ -65,14 +78,23 @@ class DonorModel(SqlClient):
             return None
 
 
-    def getDonorList(self, hname):
-        SqlClient.startDBConnection(self)
-        self.cursor.callproc('gethospitaldonorlist',[hname])
-        res = self.cursor.stored_results()
-        for result in res:
-            donorlist= result.fetchall()
+    def getDonorList(self, hname, logger):
+        self.logger = logger
+        try:
+            self.logger.info("getDonorList logger initialized")
+            SqlClient.startDBConnection(self)
+            self.cursor.callproc('gethospitaldonorlist',[hname])
+            res = self.cursor.stored_results()
+            for result in res:
+                donorlist= result.fetchall()
+                SqlClient.closeDBConnection(self)
+                self.logger.debug("getDonorList DBconn closed")
+                return donorlist
+        except Exception as err:
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
-            return donorlist
+            self.logger.info("getDonorList DBconn closed")
+            return err
 
 
     def setRequestsStatus(self, requestID, requeststate):

@@ -22,8 +22,10 @@ class UserModel(SqlClient):
             return False
 
 
-    def organRequest(self, requestID):
+    def organRequest(self, requestID, logger):
+        self.logger= logger
         try:
+            self.logger.info("organRequest logger initialized")
             SqlClient.startDBConnection(self)
             self.cursor.callproc('organrequest',[requestID])
             res = self.cursor.stored_results()
@@ -31,12 +33,14 @@ class UserModel(SqlClient):
                 requestdata= result.fetchall()
                 if(requestdata):
                     SqlClient.closeDBConnection(self)
+                    self.logger.info("getOpenRequestData DBconn Closed")
                     return requestdata
                 else:
                     SqlClient.closeDBConnection(self)
+                    self.logger.info("getOpenRequestData DBconn Closed")
                     return None
         except Exception as err:
-            print(err)
+            self.logger.error(err)
             SqlClient.closeDBConnection(self)
             return None
 

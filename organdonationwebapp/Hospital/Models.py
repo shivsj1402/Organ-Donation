@@ -50,9 +50,11 @@ class HospitalModel(SqlClient):
                 hname= result.fetchall()
                 if(hname):
                     SqlClient.closeDBConnection(self)
+                    self.logger.info(" getHospitalName DBconn closed")
                     return hname[0]
                 else:
                     SqlClient.closeDBConnection(self)
+                    self.logger.info(" getHospitalName DBconn closed")
                     return None
         except Exception as err:
             SqlClient.closeDBConnection(self)
@@ -74,9 +76,11 @@ class HospitalModel(SqlClient):
                     validateFlag = row[1]
                 if(hospitallist):
                     SqlClient.closeDBConnection(self)
+                    self.logger.info("getHospitalList DBConn Closed")
                     return hospitallist
                 else:
                     SqlClient.closeDBConnection(self)
+                    self.logger.info("getHospitalList DBConn Closed")
                     return None
         except Exception as err:
             SqlClient.closeDBConnection(self)
