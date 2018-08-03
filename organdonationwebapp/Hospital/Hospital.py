@@ -18,6 +18,7 @@ class Hospital(object):
     
     def register(self):
         try:
+            self.logger.info("register logger initialized")
             if(hc.hospitalRegistration(self)):
                 url = url_for('Login')
                 self.logger.debug("Hospital " + self.emailID + " registered Successfully." )
@@ -26,21 +27,27 @@ class Hospital(object):
                 self.logger.error("Registration failed." )
                 return False, "Registration Failed."
         except Exception as err:
-            print(err)
+            self.logger.error(err)
             return False
 
     def setLogger(self,logger):
         self.logger = logger
             
     def login(self):
-        result = hc.hospitalLoginAuthentication(self.emailID,self.password)
-        if(result):
-            url = ('/hospitalHome/' + self.emailID)
-            self.logger.debug("Hospital " + self.emailID + " logged in Successfully." )
-            return result, url
-        else:
-            self.logger.error("Hospital " + self.emailID + " log in failed." )
-            return False, "Authentication Failed"
+        try:
+            self.logger.info("login logger initilized")
+            result = hc.hospitalLoginAuthentication(self.emailID,self.password)
+            if(result):
+                url = ('/hospitalHome/' + self.emailID)
+                self.logger.debug("Hospital " + self.emailID + " logged in Successfully." )
+                return result, url
+            else:
+                self.logger.error("Hospital " + self.emailID + " log in failed." )
+                return False, "Authentication Failed"  
+        except Exception as err:
+                    self.logger.error(err)
+                    return err
+
 
 
 #Adding factory for complex operation of initialization of hospital and validating certificate

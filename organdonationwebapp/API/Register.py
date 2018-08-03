@@ -11,10 +11,11 @@ class Register(object):
 
     def registerEntity(self):
         try:
+            self.logger.info("registerEntity logger initialized")
             objectFactory = factory.UserTypeFactory(self.json,self.logger,self.certificate, self.usertype)
             inst = objectFactory.createObject()
             valid, url = inst.register()
             return valid, url
         except Exception as err:
-            print(err)
-            return None
+            self.logger.error(err)
+            return err

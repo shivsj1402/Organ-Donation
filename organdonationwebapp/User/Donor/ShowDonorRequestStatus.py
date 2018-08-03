@@ -2,14 +2,16 @@ from organdonationwebapp import duc
 
 
 class ShowDonorRequestStatus(object):
-    def __init__(self,hospitalEmail,donorEmail):
+    def __init__(self,hospitalEmail,donorEmail, logger):
         self.hospitalEmail = hospitalEmail
         self.donorEmail = donorEmail
+        self.logger = logger
 
 
     def getRequestsStatus(self):
         try:
-            request_status_data = duc.getOpenRequestsStatus(self.hospitalEmail,self.donorEmail)
+            self.logger.info("getRequestsStatus logger initialized")
+            request_status_data = duc.getOpenRequestsStatus(self.hospitalEmail,self.donorEmail, self.logger)
             request_data = {"approved": [], "pending": []}
             if(request_status_data):
                 for item in request_status_data:
@@ -19,4 +21,5 @@ class ShowDonorRequestStatus(object):
                         request_data["pending"].append(item)
             return request_data
         except Exception as err:
+            self.logger.error(err)
             return err

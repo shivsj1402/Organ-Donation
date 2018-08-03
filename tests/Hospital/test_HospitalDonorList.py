@@ -18,6 +18,6 @@ def test_getDonorList_nodata(mock_hos_donorlist):
 
 @mock.patch.object(hdl.hc, 'getHospitalDonorList')
 def test_getDonorList_exception(mock_hos_donorlist):
-    donorList = hdl.HospitalDonorList("","")
-    mock_hos_donorlist.side_effect = Exception("register exception")
-    donorList.getDonorList()
+    donList = hdl.HospitalDonorList("","")
+    mock_hos_donorlist.side_effect = Exception("Donor list exception")
+    donList.getDonorList()
