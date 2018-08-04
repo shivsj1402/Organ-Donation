@@ -14,7 +14,7 @@ class Admin(object):
     def login(self):
         try:
             self.logger.info("admin logger initiliazed")
-            if(ac.adminLoginAuthentication(self.emailID, self.password)):
+            if(ac.adminLoginAuthentication(self.emailID, self.password,self.logger)):
                 url = ('/adminhome/'+ self.emailID)
                 self.logger.debug("Admin " + self.emailID + " logged in Successfully.")
                 return True, url
