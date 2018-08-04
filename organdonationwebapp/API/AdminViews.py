@@ -25,7 +25,6 @@ def adminHomepage(username=None, hospitalEmail=None):
                 validate = vho.ValidateHospital(hospital_json, g.logger)
                 hospitalEmail = validate.updateValidateHospitalFlag()
                 if(hospitalEmail):
-                    #flash("Hospital validated")
                     return render_template('adminhome.html', username=username, list=hospital_list)
             if('delete' in hospital_json):
                 hospitalID = hospital_json['delete']

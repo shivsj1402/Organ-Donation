@@ -27,13 +27,13 @@ class Hospital(object):
                 self.logger.error("Registration failed for hospital" + self.emailID + "!!")
                 return False, "Registration Failed."
         except Exception as err:
-            self.logger.error(err)
             return err
 
 
     def setLogger(self,logger):
         self.logger = logger
             
+
     def login(self):
         try:
             self.logger.info("login logger initilized")
@@ -46,9 +46,7 @@ class Hospital(object):
                 self.logger.error("Hospital " + self.emailID + " log in failed." )
                 return False, "Authentication Failed"  
         except Exception as err:
-                    self.logger.error(err)
                     return err
-
 
 
 #Adding factory for complex operation of initialization of hospital and validating certificate

@@ -66,4 +66,4 @@ def test_build_User(mock_logger):
     aUser = user.User()
     aUser.initialize(user_json)
     aUser.setLogger(logger)
-    assert user.build_User(user.User, user_json, logger) == aUser
+    assert type(user.build_User(user.User, user_json, logger)).__name__ == type(aUser).__name__
